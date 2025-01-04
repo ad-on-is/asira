@@ -8,14 +8,9 @@
 
 import { App, Astal } from "astal/gtk3";
 import style from "./scss/main.scss";
-import TopBar from "core/bar/TopBar";
 import Calendar from "plugins/builtin/calendar/Widgets";
 import SystemMenuWindow from "core/systemMenu/SystemMenuWindow";
-import DateTime from "plugins/builtin/datetime/Widgets";
 
-import { VolumeOSD } from "plugins/builtin/audio/OSD";
-import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
-import SideBar from "core/bar/SideBar";
 import { exec } from "astal/process";
 import NotificationPopups from "core/notification/NotificationPopups";
 import AppLauncher, {
@@ -29,23 +24,18 @@ import Screenshare, {
   updateResponse,
   updateWindows,
 } from "plugins/screenshare/Screenshare";
-import Hyprland from "gi://AstalHyprland";
-import options from "options";
+import { init } from "options";
 
 App.start({
   css: style,
   main(...args: Array<string>) {
-    const hyprland = Hyprland.get_default();
-    const mainMonitor = hyprland.monitors.find((monitor) => monitor.id === 0);
-    VolumeOSD();
     Calendar(Astal.WindowAnchor.TOP);
     SystemMenuWindow();
-    BrightnessOSD();
     // ChargingAlertSound();
-    App.get_monitors().map(TopBar);
-    App.get_monitors().map(NotificationPopups);
+    //
     Screenshot();
     Screenshare();
+    init();
   },
   requestHandler(request: string, res: (response: any) => void) {
     if (request === "theme") {

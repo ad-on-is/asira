@@ -38,11 +38,7 @@ export default function (anchor: Astal.WindowAnchor) {
       }}
       setup={(self) => {
         bind(self, "hasToplevelFocus").subscribe((hasFocus) => {
-          if (hasFocus) {
-            self.className = "focusedWindow";
-          } else {
-            self.className = "window";
-          }
+          self.className = `calendar window ${hasFocus ? "focused" : ""}`;
         });
       }}
     >

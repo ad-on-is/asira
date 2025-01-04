@@ -1,18 +1,18 @@
-import { App, Astal, Gtk } from "astal/gtk3";
+import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import { Binding, GLib } from "astal";
 
 export default function OSD({
+  gdkmonitor,
   iconLabel,
   label,
   sliderValue,
   windowName,
-  monitor,
 }: {
+  gdkmonitor?: Gdk.Monitor;
   iconLabel: Binding<string>;
   label: string;
   sliderValue: Binding<number>;
   windowName: string;
-  monitor?: number;
 }) {
   let windowVisibilityTimeout: GLib.Source | null = null;
 
@@ -20,6 +20,7 @@ export default function OSD({
     <window
       name={`${windowName}OSD`}
       application={App}
+      gdkmonitor={gdkmonitor}
       anchor={Astal.WindowAnchor.BOTTOM}
       exclusivity={Astal.Exclusivity.NORMAL}
       layer={Astal.Layer.OVERLAY}

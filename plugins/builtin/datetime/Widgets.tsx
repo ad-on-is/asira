@@ -28,10 +28,10 @@ export default function DateTime({
       }}
     >
       <box>
-        <label label="󰸗 " className="icon" />
-        <label label={date()} />
-        <label label="  " className="icon" />
-        <label label={time()} />
+        <label label="󰸗 " className="date icon" />
+        <label className="date" label={date()} />
+        <label label="  " className="time icon" />
+        <label className="time" label={time()} />
 
         {showWeather ? <MiniWeather /> : <></>}
       </box>

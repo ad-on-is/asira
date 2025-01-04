@@ -1,83 +1,62 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
+import { Gdk } from "astal/gtk3";
 import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
+import options from "options";
 
-export function VolumeButton({
-  showDescription = true,
-}: {
-  showDescription?: boolean;
-}) {
-  const defaultSpeaker = Wp.get_default()!.audio.default_speaker;
-
-  const speakerVar = Variable.derive([
-    bind(defaultSpeaker, "description"),
-    bind(defaultSpeaker, "volume"),
-    bind(defaultSpeaker, "mute"),
+function AudioButton(
+  device: Wp.Endpoint,
+  gdkmonitor?: Gdk.Monitor,
+  label?: string,
+) {
+  const listener = Variable.derive([
+    bind(device, "description"),
+    bind(device, "volume"),
+    bind(device, "mute"),
   ]);
 
+  const showDescription =
+    options.audio.showDescriptionOnMonitors.includes(
+      gdkmonitor?.model || "*",
+    ) || options.audio.showDescriptionOnMonitors.includes("*");
+
   return (
-    <box className="panelButton">
-      <label
-        className="icon"
-        label={speakerVar(() => getVolumeIcon(defaultSpeaker))}
-      />
-      {showDescription ? (
-        <box>
-          <label label=" " />
-          <label
-            label={speakerVar(() =>
-              truncateDescription(defaultSpeaker.description),
-            )}
-          />
-        </box>
-      ) : (
-        <></>
-      )}
-      <label label=" " />
-      <label
-        label={speakerVar(() => `${Math.round(defaultSpeaker.volume * 100)}%`)}
-      />
-    </box>
+    <button className={`panelButton audio ${label}`}>
+      <box>
+        {" "}
+        <label className="icon" label={listener(() => getVolumeIcon(device))} />
+        {showDescription ? (
+          <box>
+            <label label=" " />
+            <label
+              className="description"
+              label={listener(() => truncateDescription(device.description))}
+            />
+          </box>
+        ) : (
+          <></>
+        )}
+        <label label=" " />
+        <label
+          className="volume"
+          label={listener(() => `${Math.round(device.volume * 100)}%`)}
+        />
+      </box>
+    </button>
   );
 }
 
-export function MicrophoneButton({
-  showDescription = true,
-}: {
-  showDescription?: boolean;
-}) {
-  const { defaultMicrophone } = Wp.get_default()!.audio;
-
-  const micVar = Variable.derive([
-    bind(defaultMicrophone, "description"),
-    bind(defaultMicrophone, "volume"),
-    bind(defaultMicrophone, "mute"),
-  ]);
-
-  return (
-    <box className="panelButton">
-      <label
-        className="icon"
-        label={micVar(() => getMicrophoneIcon(defaultMicrophone))}
-      />
-
-      {showDescription ? (
-        <box>
-          <label label=" " />
-          <label
-            label={micVar(() =>
-              truncateDescription(defaultMicrophone.description),
-            )}
-          />
-        </box>
-      ) : (
-        <></>
-      )}
-
-      <label label=" " />
-      <label
-        label={micVar(() => `${Math.round(defaultMicrophone.volume * 100)}%`)}
-      />
-    </box>
+export function VolumeButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+  return AudioButton(
+    Wp.get_default()!.audio.default_speaker,
+    gdkmonitor,
+    "speaker",
+  );
+}
+export function MicrophoneButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+  return AudioButton(
+    Wp.get_default()!.audio.default_microphone,
+    gdkmonitor,
+    "microphone",
   );
 }

@@ -2,17 +2,43 @@
 
 .panelButton {
   all: unset;
+  font-size: 0.9rem;
   background-color: vars.$bg;
   color: vars.$fg;
-  padding: 4px 4px 4px 2px;
+  padding: 0px 8px 0px 8px;
   border: none;
   min-height: 25px;
   min-width: 30px;
-  border-radius: 8px;
-}
+  border-radius: 4px;
+  &.dateTime {
+    .icon {
+      color: #fab387;
+    }
+  }
+  &.audio {
+    .icon,
+    .volume {
+      color: #74c7ec;
+    }
+    &.microphone {
+      .icon,
+      .volume {
+        color: #89dceb;
+      }
+    }
+  }
 
-.dateTime .icon {
-  color: vars.$primary;
+  &.workspace {
+    font-size: 1.2rem;
+    padding: 0 3px;
+    &.active {
+      color: #cba6f7;
+      background-color: rgba(203, 166, 247, 0.1);
+    }
+    &.empty:not(.active) {
+      opacity: 0.2;
+    }
+  }
 }
 
 .panelButton:hover {
@@ -56,8 +82,4 @@
 
 .transparentButton:hover {
   background-color: vars.$bgHover;
-}
-
-.workspaces .panelButton.active {
-  color: vars.$primary;
 }
