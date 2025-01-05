@@ -1,6 +1,7 @@
 @use "../variables" as vars;
 
 label {
+  color: vars.$fg;
   &.icon {
     margin: 0 0.7rem;
   }
@@ -9,6 +10,13 @@ label {
   }
   &.xlarge {
     font-size: 1.6rem;
+  }
+  &.xxlarge {
+    font-size: 2rem;
+  }
+
+  &.xxxlarge {
+    font-size: 3rem;
   }
   &.small {
     font-size: 0.8rem;

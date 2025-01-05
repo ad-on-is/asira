@@ -1,6 +1,8 @@
 @use "variables" as vars;
 
 @use "core/window";
+@use "core/scroll";
+@use "core/divider";
 @use "core/buttons";
 @use "core/labels";
 @use "core/slider";
@@ -8,13 +10,14 @@
 @use "core/bar";
 @use "core/notification";
 @use "widgets/systemMenu";
-// @use "widgets/labels";
 @use "widgets/calendar";
 @use "theme";
 // @use "widgets/appLauncher";
 // @use "widgets/mediaPlayer";
-// @use "widgets/scroll";
-// @use "widgets/divider";
-.weather .icon {
+.weather.mini .icon {
   font-size: 20px;
+}
+
+.weather.big .icon {
+  font-size: 50px;
 }

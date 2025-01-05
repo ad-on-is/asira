@@ -1,14 +1,10 @@
 @use "../variables" as vars;
 
-.scrollWindow {
+scrollable {
   .frame {
     border-style: none;
   }
   .trough {
     border-style: none;
   }
-}
-
-.scrollWindow trough slider {
-  all: unset;
 }

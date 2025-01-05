@@ -1,3 +1,5 @@
+@use "variables" as vars;
+
 .panelButton {
   &.dateTime {
     .icon {
@@ -28,5 +30,35 @@
     &.empty:not(.active) {
       opacity: 0.2;
     }
+  }
+}
+
+.calendar {
+  &.button {
+    color: vars.$fg;
+  }
+
+  .highlight {
+    color: vars.$accent;
+  }
+  .indeterminate {
+    color: vars.$fg;
+  }
+  .header {
+    color: vars.$fg;
+  }
+}
+
+.notification {
+  box-shadow: 5px 5px #000;
+  .icon {
+    color: vars.$primary;
+  }
+  .appname,
+  .time {
+    color: transparentize(vars.$fg, 0.5);
+  }
+  .message {
+    color: transparentize(vars.$fg, 0.5);
   }
 }

@@ -3,6 +3,7 @@ import { Astal, Gtk, Gdk } from "astal/gtk3";
 import { type EventBox } from "astal/gtk3/widget";
 import Notifd from "gi://AstalNotifd";
 import { insertNewlines } from "core/utils/strings";
+import options from "options";
 
 import { type Subscribable } from "astal/binding";
 
@@ -71,7 +72,6 @@ class NotifiationMap implements Subscribable {
               hideTimeout = null;
             }, TIMEOUT_DELAY);
           },
-          useHistoryCss: false,
         }),
       );
     });
@@ -129,7 +129,6 @@ type Props = {
   onHoverLost(self: EventBox): void;
   onHover(self: EventBox): void;
   notification: Notifd.Notification;
-  useHistoryCss: boolean;
 };
 
 function NotificationIcon({
@@ -137,18 +136,19 @@ function NotificationIcon({
 }: {
   notification: Notifd.Notification;
 }) {
-  const image = notification.image || notification.get_image();
+  const image = notification.image || notification.appIcon;
   if (image) {
-    console.log(image);
     return (
       <box
+        className="icon"
         css={`
           background-image: url("${image}");
           background-size: cover;
           background-repeat: no-repeat;
-          background-position: center;
-          min-width: 50px;
-          min-height: 50px;
+          background-position: 0 0;
+          min-width: 4rem;
+          min-height: 4rem;
+          margin-right: 1rem;
         `}
       ></box>
     );
@@ -157,14 +157,12 @@ function NotificationIcon({
 }
 
 export function Notification(props: Props) {
-  const { notification: n, onHoverLost, onHover, setup, useHistoryCss } = props;
+  const { notification: n, onHoverLost, onHover, setup } = props;
   const { START, END } = Gtk.Align;
 
   return (
     <eventbox
-      className={
-        useHistoryCss ? `Notification history` : `Notification ${urgency(n)}`
-      }
+      className={`notification ${urgency(n)}`}
       setup={setup}
       onHoverLost={onHoverLost}
       onHover={onHover}
@@ -172,10 +170,12 @@ export function Notification(props: Props) {
     >
       <box vertical={true}>
         <box vertical={false}>
+          <label className="icon" label="" />
           <label
             css={`
               margin-left: 8px;
             `}
+            className="small appname"
             halign={START}
             truncate
             label={n.appName || "Unknown"}
@@ -185,14 +185,11 @@ export function Notification(props: Props) {
               margin-right: 4px;
             `}
             hexpand
+            className="small time"
             halign={END}
             label={time(n.time)}
           />
-          <button
-            className="panelButton"
-            onClicked={() => n.dismiss()}
-            label=""
-          />
+          <button className="icon" onClicked={() => n.dismiss()} label="" />
         </box>
         <box
           vertical={true}
@@ -201,26 +198,29 @@ export function Notification(props: Props) {
           `}
         >
           <box vertical={false}>
-            {/* <NotificationIcon notification={n} /> */}
-            <label
-              halign={START}
-              xalign={0}
-              label={insertNewlines(n.summary, 33)} // wrap causes issues with scrollable height so split lines manually
-            />
-            {n.body && (
+            <NotificationIcon notification={n} />
+            <box vertical={true}>
               <label
+                className="summary"
                 halign={START}
                 xalign={0}
-                label={insertNewlines(n.body, 40)}
+                label={insertNewlines(n.summary, 33)} // wrap causes issues with scrollable height so split lines manually
               />
-            )}
+              {n.body && (
+                <label
+                  className="message"
+                  halign={START}
+                  xalign={0}
+                  label={insertNewlines(n.body, 40)}
+                />
+              )}
+            </box>
           </box>
         </box>
         {n.get_actions().length > 0 && (
           <box vertical={true}>
             {n.get_actions().map(({ label, id }) => (
               <button
-                className="primaryButton"
                 hexpand={true}
                 css={`
                   margin: 4px 8px 8px 8px;
@@ -237,17 +237,92 @@ export function Notification(props: Props) {
 }
 
 export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
-  const { TOP, RIGHT } = Astal.WindowAnchor;
   const notifs = new NotifiationMap();
 
   return (
     <window
-      className="NotificationPopups"
+      className="window"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
-      anchor={TOP | RIGHT}
+      margin_top={options.notification.margin[0]}
+      margin_right={options.notification.margin[1]}
+      margin_bottom={options.notification.margin[2]}
+      margin_left={options.notification.margin[3]}
+      anchor={options.notification.position}
     >
       <box vertical={true}>{bind(notifs)}</box>
     </window>
+  );
+}
+
+export function NotificationHistory() {
+  const notifications = Notifd.get_default();
+
+  return (
+    <box vertical={true}>
+      <box vertical={false}>
+        <button
+          onClicked={() => {
+            notifications.set_dont_disturb(!notifications.dontDisturb);
+          }}
+        >
+          <box>
+            <label
+              className="icon"
+              label={bind(notifications, "dontDisturb").as((dnd) => {
+                return dnd ? "󰂛" : "󰂚";
+              })}
+            />
+            <label label="DND" />
+          </box>
+        </button>
+        <box hexpand={true} />
+        <button
+          className="panelButton"
+          onClicked={() => {
+            notifications.notifications.forEach((notification) => {
+              notification.dismiss();
+            });
+          }}
+        >
+          <box>
+            <label className="icon" label="" />
+            <label label="Clear all" />
+          </box>
+        </button>
+      </box>
+
+      <scrollable vexpand={true} hscroll={Gtk.PolicyType.NEVER}>
+        <box vertical={true}>
+          {bind(notifications, "notifications").as((notificationsList) => {
+            if (notificationsList.length === 0) {
+              return (
+                <box
+                  vertical={true}
+                  css={`
+                    margin-top: 5rem;
+                  `}
+                >
+                  <label className="icon xxxlarge" label="󱇦" />
+                  <label className="xlarge" label="All caught up" />
+                  <label label="No new notifications" />
+                </box>
+              );
+            } else {
+              return notificationsList.map((notification) => {
+                return (
+                  <Notification
+                    setup={() => {}}
+                    onHoverLost={() => {}}
+                    onHover={() => {}}
+                    notification={notification}
+                  />
+                );
+              });
+            }
+          })}
+        </box>
+      </scrollable>
+    </box>
   );
 }

@@ -9,7 +9,6 @@ import { Gtk, Gdk } from "astal/gtk3";
 import PowerOptions from "./PowerOptions";
 import ThemeOptions from "./ThemeOptions";
 import MediaPlayers from "./MediaPlayers";
-import NotificationHistory from "./NotificationHistory";
 import NetworkControls from "plugins/builtin/connection/NetworkControls";
 import BluetoothControls from "plugins/builtin/connection/BluetoothControls";
 import Divider from "common/Divider";
@@ -75,8 +74,6 @@ export default function () {
             {/* <Divider css={"margin: 0 60px 0 60px;"} /> */}
             {/* <box css={"margin-top: 20px;"} /> */}
             {/* <box css={"margin-top: 20px;"} /> */}
-
-            <NotificationHistory />
           </box>
         </box>
         <box vexpand={true} />

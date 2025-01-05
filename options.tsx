@@ -17,10 +17,17 @@ import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
 import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
 
 const options = {
+  notification: {
+    position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
+    margin: [0, 50, 50, 0],
+  },
   dateTime: {
     showWeather: true,
     timeFormat: "%H:%M:%S",
     dateFormat: "%a, %d.%b %Y",
+  },
+  overview: {
+    position: Astal.WindowAnchor.TOP,
   },
   osd: {
     position: Astal.WindowAnchor.BOTTOM,
