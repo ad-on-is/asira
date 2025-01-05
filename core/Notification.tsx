@@ -139,18 +139,17 @@ function NotificationIcon({
   const image = notification.image || notification.appIcon;
   if (image) {
     return (
-      <box
-        className="icon"
-        css={`
-          background-image: url("${image}");
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: 0 0;
-          min-width: 4rem;
-          min-height: 4rem;
-          margin-right: 1rem;
-        `}
-      ></box>
+      <box vertical={true}>
+        <box
+          className="image"
+          css={`
+            background-image: url("${image}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+          `}
+        ></box>
+      </box>
     );
   }
   return <box></box>;
@@ -169,7 +168,7 @@ export function Notification(props: Props) {
       onClick={() => n.dismiss()}
     >
       <box vertical={true}>
-        <box vertical={false}>
+        <box vertical={false} className="header">
           <label className="icon" label="" />
           <label
             css={`
@@ -204,7 +203,7 @@ export function Notification(props: Props) {
                 className="summary"
                 halign={START}
                 xalign={0}
-                label={insertNewlines(n.summary, 33)} // wrap causes issues with scrollable height so split lines manually
+                label={insertNewlines(n.summary, 30)} // wrap causes issues with scrollable height so split lines manually
               />
               {n.body && (
                 <label
@@ -259,7 +258,7 @@ export function NotificationHistory() {
   const notifications = Notifd.get_default();
 
   return (
-    <box vertical={true}>
+    <box vertical={true} className="notificationHistory">
       <box vertical={false}>
         <button
           onClicked={() => {
@@ -293,7 +292,7 @@ export function NotificationHistory() {
       </box>
 
       <scrollable vexpand={true} hscroll={Gtk.PolicyType.NEVER}>
-        <box vertical={true}>
+        <box vertical={true} className="list">
           {bind(notifications, "notifications").as((notificationsList) => {
             if (notificationsList.length === 0) {
               return (

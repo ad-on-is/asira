@@ -20,7 +20,7 @@ class CalendarWidget extends astalify(Gtk.Calendar) {
   }
 }
 
-export default function ({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
+export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   const time = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
     1000,
     () => GLib.DateTime.new_now_local(),
@@ -33,17 +33,14 @@ export default function ({ gdkmonitor }: { gdkmonitor: Gdk.Monitor }) {
       anchor={options.overview.position}
       layer={Astal.Layer.TOP}
       margin={5}
+      className="window"
+      gdkmonitor={gdkmonitor}
       visible={false}
       keymode={Astal.Keymode.ON_DEMAND}
       onKeyPressEvent={function (self, event: Gdk.Event) {
         if (event.get_keyval()[1] === Gdk.KEY_Escape) {
           self.hide();
         }
-      }}
-      setup={(self) => {
-        bind(self, "hasToplevelFocus").subscribe((hasFocus) => {
-          self.className = `window overview ${hasFocus ? "focused" : ""}`;
-        });
       }}
     >
       <box vertical={false} className="overview">

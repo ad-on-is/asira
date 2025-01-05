@@ -10,8 +10,15 @@ eventbox.notification {
     min-width: 300px;
     border-radius: vars.$borderRadius;
     background-color: vars.$bg;
-    // margin: 5px;
+    margin: 0.3rem;
     // border: 2px solid vars.$primary;
+    //
+    .image {
+      border-radius: 0.5rem;
+      min-width: 5rem;
+      min-height: 5rem;
+      margin-right: 1rem;
+    }
   }
 
   &.critical > box {
@@ -26,5 +33,11 @@ eventbox.notification {
         color: vars.$warning;
       }
     }
+  }
+}
+
+.notificationHistory {
+  .notification > box {
+    border: 1px solid transparentize(vars.$fg, 0.9);
   }
 }
