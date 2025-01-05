@@ -3,6 +3,7 @@ import { bind, Binding, Variable } from "astal";
 import { App, Gtk } from "astal/gtk3";
 import { SystemMenuWindowName } from "constants";
 import { getMicrophoneIcon, getVolumeIcon, toggleMuteEndpoint } from "./audio";
+import { DropDownArrowButton } from "core/Button";
 
 export function SpeakerControls() {
   const { audio } = Wp.get_default()!;
@@ -11,6 +12,7 @@ export function SpeakerControls() {
     defaultEndpoint: audio.default_speaker,
     endpointsBinding: bind(audio, "speakers"),
     getIcon: getVolumeIcon,
+    label: "speakers",
   });
 }
 export function MicrophoneControls() {
@@ -19,6 +21,7 @@ export function MicrophoneControls() {
     defaultEndpoint: audio.default_microphone,
     endpointsBinding: bind(audio, "microphones"),
     getIcon: getMicrophoneIcon,
+    label: "microphones",
   });
 }
 
@@ -33,10 +36,12 @@ function EndpointControls({
   defaultEndpoint,
   getIcon,
   endpointsBinding,
+  label,
 }: {
   defaultEndpoint: Wp.Endpoint;
   getIcon: (endpoint: Wp.Endpoint) => string;
   endpointsBinding: Binding<Wp.Endpoint[]>;
+  label: string;
 }) {
   const endpointChooserRevealed = Variable(false);
 
@@ -58,30 +63,22 @@ function EndpointControls({
 
   return (
     <box vertical={true}>
-      <box vertical={false} className="row">
+      <box vertical={false} className={`controls audio ${label}`}>
         <button
-          className="systemMenuIconButton"
+          className="icon"
           label={endpointLabelVar(() => getIcon(defaultEndpoint))}
           onClicked={() => {
             toggleMuteEndpoint(defaultEndpoint);
           }}
         />
         <slider
-          className="systemMenuVolumeProgress"
+          className="slider"
           hexpand={true}
           onDragged={({ value }) => (defaultEndpoint.volume = value)}
           value={bind(defaultEndpoint, "volume")}
         />
-        <button
-          className="panelButton"
-          label={endpointChooserRevealed((revealed): string => {
-            if (revealed) {
-              return "";
-            } else {
-              return "";
-            }
-          })}
-          onClicked={() => {
+        <DropDownArrowButton
+          onClick={() => {
             endpointChooserRevealed.set(!endpointChooserRevealed.get());
           }}
         />
@@ -98,14 +95,12 @@ function EndpointControls({
               return (
                 <button
                   hexpand={true}
-                  className="transparentButton"
                   onClicked={() => {
                     endpoint.set_is_default(true);
                   }}
                 >
                   <label
                     halign={Gtk.Align.START}
-                    className="labelSmall"
                     truncate={true}
                     label={bind(endpoint, "isDefault").as((isDefault) => {
                       if (isDefault) {

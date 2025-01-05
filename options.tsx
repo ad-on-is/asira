@@ -1,25 +1,31 @@
 import DateTime from "plugins/builtin/datetime/Widgets";
+
 import OsButton from "core/systemMenu/OsButton";
-import { App } from "astal/gtk3";
-import { TopBar, BottomBar, SideBarLeft, SideBarRight } from "core/bar/Bar";
+import { App, Astal } from "astal/gtk3";
+import { TopBar, BottomBar, SideBarLeft, SideBarRight } from "core/Bar";
 
 import {
   ScreenRecordingButton,
   BatteryButton,
 } from "plugins/builtin/battery/Widgets";
-import {
-  BluetoothButton,
-  VpnButton,
-  NetworkButton,
-} from "plugins/builtin/connection/Widgets";
+import { ConnectionButton } from "plugins/builtin/connection/Widgets";
 import HyprlandWorkspaces from "plugins/builtin/hyprland/Workspaces";
 import { MicrophoneButton, VolumeButton } from "plugins/builtin/audio/Widgets";
-import DisplayNotifications from "core/notification/NotificationPopups";
+import { DisplayNotifications } from "core/Notification";
 
 import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
 import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
 
 const options = {
+  dateTime: {
+    showWeather: true,
+    timeFormat: "%H:%M:%S",
+    dateFormat: "%a, %d.%b %Y",
+  },
+  osd: {
+    position: Astal.WindowAnchor.BOTTOM,
+    margin: [0, 0, 100, 0],
+  },
   audio: {
     // use "*" for all monitors
     showDescriptionOnMonitors: ["34GP950G", "LG ULTRAWIDE"],
@@ -49,9 +55,7 @@ const options = {
         VolumeButton,
         MicrophoneButton,
         ScreenRecordingButton,
-        BluetoothButton,
-        VpnButton,
-        NetworkButton,
+        ConnectionButton,
         BatteryButton,
       ],
     },

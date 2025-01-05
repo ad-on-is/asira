@@ -1,4 +1,5 @@
 import { bind } from "astal";
+import { Gdk } from "astal/gtk3";
 
 import { getNetworkIconBinding } from "./network";
 
@@ -8,7 +9,7 @@ import Bluetooth from "gi://AstalBluetooth";
 export function VpnButton() {
   return (
     <label
-      className="panelButton"
+      className="icon vpn"
       label="󰯄"
       visible={activeVpnConnections().as((connections) => {
         return connections.length !== 0;
@@ -21,7 +22,7 @@ export function BluetoothButton() {
   const bluetooth = Bluetooth.get_default();
   return (
     <label
-      className="panelButton"
+      className="icon bluetooth"
       label="󰂯"
       visible={bind(bluetooth, "isPowered").as((isPowered) => {
         return isPowered;
@@ -31,5 +32,17 @@ export function BluetoothButton() {
 }
 
 export function NetworkButton() {
-  return <label className="panelButton" label={getNetworkIconBinding()} />;
+  return <label className="icon network" label={getNetworkIconBinding()} />;
+}
+
+export function ConnectionButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+  return (
+    <button className="panelButton connection">
+      <box>
+        <BluetoothButton />
+        <NetworkButton />
+        <VpnButton />
+      </box>
+    </button>
+  );
 }

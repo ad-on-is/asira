@@ -1,22 +1,20 @@
-@use "variables";
+@use "variables" as vars;
 
-@use "widgets/buttons";
+@use "core/window";
+@use "core/buttons";
+@use "core/labels";
+@use "core/slider";
+@use "core/osd";
+@use "core/bar";
+@use "core/notification";
 @use "widgets/systemMenu";
-@use "widgets/alerts";
-@use "widgets/window";
-@use "widgets/labels";
+// @use "widgets/labels";
 @use "widgets/calendar";
-@use "widgets/notification";
-@use "widgets/appLauncher";
-@use "widgets/mediaPlayer";
-@use "widgets/scroll";
-@use "widgets/divider";
-
-* {
-  font-family: "Maple Mono NF";
-  font-weight: 700;
-}
-
+@use "theme";
+// @use "widgets/appLauncher";
+// @use "widgets/mediaPlayer";
+// @use "widgets/scroll";
+// @use "widgets/divider";
 .weather .icon {
-  // font-size: 15px;
+  font-size: 20px;
 }

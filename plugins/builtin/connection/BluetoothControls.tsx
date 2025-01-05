@@ -3,6 +3,7 @@ import { Gtk, App } from "astal/gtk3";
 import { SystemMenuWindowName } from "constants";
 import { getBluetoothIcon, getBluetoothName } from "./bluetooth";
 import Bluetooth from "gi://AstalBluetooth";
+import { DropDownArrowButton } from "core/Button";
 
 function BluetoothDevices() {
   const bluetooth = Bluetooth.get_default();
@@ -11,7 +12,7 @@ function BluetoothDevices() {
     <box vertical={true}>
       {bind(bluetooth, "devices").as((devices) => {
         if (devices.length === 0) {
-          return <label className="labelMedium" label="No devices" />;
+          return <label label="No devices" />;
         }
         return devices
           .filter((device) => {
@@ -43,11 +44,7 @@ function BluetoothDevices() {
                     buttonsRevealed.set(!buttonsRevealed.get());
                   }}
                 >
-                  <label
-                    halign={Gtk.Align.START}
-                    className="labelSmall"
-                    label={`  ${device.name}`}
-                  />
+                  <label halign={Gtk.Align.START} label={`  ${device.name}`} />
                 </button>
                 <revealer
                   revealChild={buttonsRevealed()}
@@ -153,33 +150,21 @@ export default function () {
         if (!isPowered) return <box />;
         return (
           <box vertical={true}>
-            <box vertical={false} className="row">
+            <box vertical={false} className="controls bluetooth">
+              <label className="icon" label={getBluetoothIcon()} />
               <label
-                className="systemMenuIconButton"
-                label={getBluetoothIcon()}
-              />
-              <label
-                className="labelMediumBold"
                 halign={Gtk.Align.START}
                 hexpand={true}
                 label={getBluetoothName()}
               />
-              <button
-                className="panelButton"
-                label={bluetoothChooserRevealed((revealed): string => {
-                  if (revealed) {
-                    return "";
-                  } else {
-                    return "";
-                  }
-                })}
-                onClicked={() => {
+
+              <DropDownArrowButton
+                onClick={() => {
                   bluetoothChooserRevealed.set(!bluetoothChooserRevealed.get());
                 }}
               />
             </box>
             <revealer
-              className="rowRevealer"
               revealChild={bluetoothChooserRevealed()}
               transitionDuration={200}
               transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
@@ -190,10 +175,8 @@ export default function () {
                     halign={Gtk.Align.START}
                     hexpand={true}
                     label="Devices"
-                    className="labelLargeBold"
                   />
                   <button
-                    className="transparentButton"
                     css={`
                       padding-left: 8px;
                       padding-right: 8px;

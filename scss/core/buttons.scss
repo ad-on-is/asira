@@ -1,0 +1,41 @@
+@use "../variables" as vars;
+
+button {
+  background-color: vars.$buttonBg;
+  color: vars.$buttonFg;
+  padding: 0px 8px 0px 8px;
+  border: none;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: vars.$buttonBgHover;
+    color: vars.$buttonFgHover;
+  }
+  &.icon {
+    border-radius: 100%;
+  }
+
+  &.primary {
+    background-color: vars.$buttonPrimaryBg;
+    color: vars.$buttonPrimaryFg;
+    &:hover {
+      color: vars.$buttonPrimaryFgHover;
+      background-color: vars.$buttonPrimaryBgHover;
+    }
+  }
+  &.accent {
+    background-color: vars.$buttonAccentBg;
+    color: vars.$buttonAccentFg;
+    &:hover {
+      color: vars.$buttonAccentFgHover;
+      background-color: vars.$buttonAccentBgHover;
+    }
+  }
+}
+
+.controls {
+  button.icon {
+    min-width: 0.8rem;
+    min-height: 2rem;
+  }
+}

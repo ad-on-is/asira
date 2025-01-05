@@ -50,44 +50,34 @@ export default function () {
           setup={(self) => {
             setTimeout(() => {
               bind(window, "hasToplevelFocus").subscribe((hasFocus) => {
-                if (hasFocus) {
-                  self.className = "focusedWindow";
-                } else {
-                  self.className = "window";
-                }
+                self.className = `system window ${hasFocus ? "focused" : ""}`;
               });
             }, 1_000);
           }}
         >
-          <scrollable
-            className="scrollWindow"
-            vscroll={Gtk.PolicyType.AUTOMATIC}
-            propagateNaturalHeight={true}
-            widthRequest={400}
+          <box
+            css={`
+              margin: 0 10px 0 10px;
+            `}
+            vertical={true}
           >
-            <box
-              css={`
-                margin: 0 10px 0 10px;
-              `}
-              vertical={true}
-            >
-              <box css={"margin-top: 20px;"} />
-              <PowerOptions />
-              <Divider css={"margin: 0 60px 0 60px;"} />
-              <NetworkControls />
-              <BluetoothControls />
-              <SpeakerControls />
-              <MicrophoneControls />
-              {/*Disabling Media players while this bug persists https://github.com/Aylur/astal/issues/226*/}
-              {/*<MediaPlayers/>*/}
-              <box css={"margin-top: 20px;"} />
-              <box css={"margin-top: 20px;"} />
-              <Divider css={"margin: 0 60px 0 60px;"} />
-              <box css={"margin-top: 20px;"} />
-              <box css={"margin-top: 20px;"} />
-              <NotificationHistory />
-            </box>
-          </scrollable>
+            <box css={"margin-top: 20px;"} />
+            <PowerOptions />
+            {/* <Divider css={"margin: 0 60px 0 60px;"} /> */}
+            <NetworkControls />
+            <BluetoothControls />
+            <SpeakerControls />
+            <MicrophoneControls />
+            {/*Disabling Media players while this bug persists https://github.com/Aylur/astal/issues/226*/}
+            {/*<MediaPlayers/>*/}
+            {/* <box css={"margin-top: 20px;"} /> */}
+            {/* <box css={"margin-top: 20px;"} /> */}
+            {/* <Divider css={"margin: 0 60px 0 60px;"} /> */}
+            {/* <box css={"margin-top: 20px;"} /> */}
+            {/* <box css={"margin-top: 20px;"} /> */}
+
+            <NotificationHistory />
+          </box>
         </box>
         <box vexpand={true} />
       </box>

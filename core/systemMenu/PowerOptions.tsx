@@ -4,9 +4,9 @@ import { execAsync } from "astal/process";
 
 export default function () {
   return (
-    <box vertical={false} className="row" halign={Gtk.Align.CENTER}>
+    <box vertical={false} className="powerOptions" halign={Gtk.Align.CENTER}>
       <button
-        className="systemMenuIconButton"
+        className="logout icon"
         label="󰍃"
         onClicked={() => {
           App.toggle_window(SystemMenuWindowName);
@@ -14,7 +14,7 @@ export default function () {
         }}
       />
       <button
-        className="systemMenuIconButton"
+        className="lock icon"
         label=""
         onClicked={() => {
           App.toggle_window(SystemMenuWindowName);
@@ -22,7 +22,7 @@ export default function () {
         }}
       />
       <button
-        className="systemMenuIconButton"
+        className="restart icon"
         label=""
         onClicked={() => {
           App.toggle_window(SystemMenuWindowName);
@@ -30,7 +30,7 @@ export default function () {
         }}
       />
       <button
-        className="systemMenuIconButton"
+        className="shutdown icon"
         label="⏻"
         onClicked={() => {
           App.toggle_window(SystemMenuWindowName);
@@ -40,4 +40,3 @@ export default function () {
     </box>
   );
 }
-

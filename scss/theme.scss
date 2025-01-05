@@ -1,0 +1,32 @@
+.panelButton {
+  &.dateTime {
+    .icon {
+      color: #fab387;
+    }
+  }
+  &.audio {
+    .icon,
+    .volume {
+      color: #74c7ec;
+    }
+    &.microphone {
+      .icon,
+      .volume {
+        color: #89dceb;
+      }
+    }
+  }
+
+  &.workspace {
+    font-size: 1.2rem;
+    padding: 0 3px;
+    min-width: 25px;
+    &.active {
+      color: #cba6f7;
+      background-color: rgba(203, 166, 247, 0.1);
+    }
+    &.empty:not(.active) {
+      opacity: 0.2;
+    }
+  }
+}

@@ -8,7 +8,7 @@
 
 import { App, Astal } from "astal/gtk3";
 import style from "./scss/main.scss";
-import Calendar from "plugins/builtin/calendar/Widgets";
+import Overview from "plugins/builtin/overview/Widgets";
 import SystemMenuWindow from "core/systemMenu/SystemMenuWindow";
 
 import { exec } from "astal/process";
@@ -29,7 +29,7 @@ import { init } from "options";
 App.start({
   css: style,
   main(...args: Array<string>) {
-    Calendar(Astal.WindowAnchor.TOP);
+    Overview(Astal.WindowAnchor.TOP);
     SystemMenuWindow();
     // ChargingAlertSound();
     //

@@ -72,4 +72,3 @@ export function getMicrophoneIcon(mic?: Wp.Endpoint): string {
 export function toggleMuteEndpoint(endpoint?: Wp.Endpoint) {
   endpoint?.set_mute(!endpoint?.mute);
 }
-

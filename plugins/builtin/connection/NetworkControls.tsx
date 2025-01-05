@@ -8,6 +8,7 @@ import { bind, Variable } from "astal";
 import { Gtk, App } from "astal/gtk3";
 import { execAsync } from "astal/process";
 import { SystemMenuWindowName } from "constants";
+import { DropDownArrowButton } from "core/Button";
 
 const wifiConnections = Variable<string[]>([]);
 const activeWifiConnections = Variable<string[]>([]);
@@ -177,11 +178,7 @@ function PasswordEntry({
     >
       {accessPoint.flags !== 0 && (
         <box vertical={true}>
-          <label
-            halign={Gtk.Align.START}
-            className="labelSmall"
-            label="Password"
-          />
+          <label halign={Gtk.Align.START} label="Password" />
           <entry
             className="networkPasswordEntry"
             text={text()}
@@ -205,11 +202,7 @@ function WifiConnections() {
 
   return (
     <box vertical={true}>
-      <label
-        halign={Gtk.Align.START}
-        className="labelLargeBold"
-        label="Saved networks"
-      />
+      <label halign={Gtk.Align.START} label="Saved networks" />
       {wifiConnections((connectionsValue) => {
         return connectionsValue.map((connection) => {
           const buttonsRevealed = Variable(false);
@@ -246,11 +239,7 @@ function WifiConnections() {
                   buttonsRevealed.set(!buttonsRevealed.get());
                 }}
               >
-                <label
-                  halign={Gtk.Align.START}
-                  className="labelSmall"
-                  label={label}
-                />
+                <label halign={Gtk.Align.START} label={label} />
               </button>
               <revealer
                 revealChild={buttonsRevealed()}
@@ -308,7 +297,6 @@ function WifiScannedConnections() {
           return (
             <label
               halign={Gtk.Align.START}
-              className="labelLargeBold"
               css={`
                 margin-bottom: 4px;
               `}
@@ -360,7 +348,6 @@ function WifiScannedConnections() {
                     >
                       <label
                         halign={Gtk.Align.START}
-                        className="labelSmall"
                         label={`${getAccessPointIcon(accessPoint)}  ${accessPoint.ssid}`}
                       />
                     </button>
@@ -381,11 +368,7 @@ function WifiScannedConnections() {
 
           return (
             <box vertical={true}>
-              <label
-                halign={Gtk.Align.START}
-                className="labelLargeBold"
-                label="Available networks"
-              />
+              <label halign={Gtk.Align.START} label="Available networks" />
               {accessPointsUi}
             </box>
           );
@@ -404,11 +387,7 @@ function VpnActiveConnections() {
         }
         return (
           <box vertical={true}>
-            <label
-              halign={Gtk.Align.START}
-              className="labelLargeBold"
-              label="Active VPN"
-            />
+            <label halign={Gtk.Align.START} label="Active VPN" />
             {connections.map((connection) => {
               const buttonsRevealed = Variable(false);
 
@@ -434,7 +413,6 @@ function VpnActiveConnections() {
                   >
                     <label
                       halign={Gtk.Align.START}
-                      className="labelSmall"
                       label={`󰯄  ${connection}`}
                     />
                   </button>
@@ -499,11 +477,7 @@ function VpnConnections() {
 
         return (
           <box vertical={true}>
-            <label
-              halign={Gtk.Align.START}
-              className="labelLargeBold"
-              label="VPN Connections"
-            />
+            <label halign={Gtk.Align.START} label="VPN Connections" />
             {connectionsValue.map((connection) => {
               const buttonsRevealed = Variable(false);
               const isConnecting = Variable(false);
@@ -530,7 +504,6 @@ function VpnConnections() {
                   >
                     <label
                       halign={Gtk.Align.START}
-                      className="labelSmall"
                       label={`󰯄  ${connection}`}
                     />
                   </button>
@@ -613,16 +586,13 @@ export default function () {
 
   return (
     <box vertical={true}>
-      <box vertical={false} className="row">
+      <box vertical={false} className="controls network">
+        <label className="icon" label={getNetworkIconBinding()} />
         <label
-          className="systemMenuIconButton"
-          label={getNetworkIconBinding()}
-        />
-        <label
-          className="labelMediumBold"
           halign={Gtk.Align.START}
           hexpand={true}
           truncate={true}
+          className="name"
           label={networkName().as((value) => {
             const networkNameValue = value[0];
             const activeVpnConnectionsValue = value[1];
@@ -633,16 +603,9 @@ export default function () {
             }
           })}
         />
-        <button
-          className="panelButton"
-          label={networkChooserRevealed((revealed): string => {
-            if (revealed) {
-              return "";
-            } else {
-              return "";
-            }
-          })}
-          onClicked={() => {
+
+        <DropDownArrowButton
+          onClick={() => {
             networkChooserRevealed.set(!networkChooserRevealed.get());
             if (networkChooserRevealed.get()) {
               network.wifi?.scan();
@@ -651,7 +614,7 @@ export default function () {
         />
       </box>
       <revealer
-        className="rowRevealer"
+        className="networks"
         revealChild={networkChooserRevealed()}
         transitionDuration={200}
         transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
@@ -661,7 +624,7 @@ export default function () {
             bind(network.wifi, "activeAccessPoint").as((activeAccessPoint) => {
               return (
                 <button
-                  className="primaryButton"
+                  className=""
                   css={`
                     margin-bottom: 12px;
                   `}

@@ -2,7 +2,8 @@ import GObject from "gi://GObject";
 import Hyprland from "gi://AstalHyprland";
 import { App, Astal, astalify, ConstructProps, Gtk, Gdk } from "astal/gtk3";
 import { bind, GLib, Variable } from "astal";
-import { CalendarWindowName } from "constants";
+import { OverviewWindowName } from "constants";
+import NotificationHistory from "core/systemMenu/NotificationHistory";
 
 class CalendarWidget extends astalify(Gtk.Calendar) {
   static {
@@ -24,7 +25,7 @@ export default function (anchor: Astal.WindowAnchor) {
 
   return (
     <window
-      name={CalendarWindowName}
+      name={OverviewWindowName}
       application={App}
       anchor={anchor}
       layer={Astal.Layer.TOP}
@@ -42,28 +43,28 @@ export default function (anchor: Astal.WindowAnchor) {
         });
       }}
     >
-      <box css="padding: 20px;" vertical={true}>
-        <label
-          label={time().as((t) => {
-            return t.format("%A")!;
-          })}
-        />
-        <label
-          label={time().as((t) => {
-            return t.format("%B %-d, %Y")!;
-          })}
-        />
-        <box
-          css={`
-            margin-top: 12px;
-          `}
-        />
-        <CalendarWidget
-          className="calendar"
-          css={`
-            background-color: transparent;
-          `}
-        />
+      <box vertical={false} className="overview">
+        <box vertical={true} className="left">
+          {/* <NotificationHistory /> */}
+        </box>
+        <box vertical={true} className="right">
+          <label
+            label={time().as((t) => {
+              return t.format("%A")!;
+            })}
+          />
+          <label
+            label={time().as((t) => {
+              return t.format("%B %-d, %Y")!;
+            })}
+          />
+          <CalendarWidget
+            className="calendar"
+            css={`
+              background-color: transparent;
+            `}
+          />
+        </box>
       </box>
     </window>
   );

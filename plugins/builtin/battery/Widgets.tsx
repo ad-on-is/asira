@@ -9,7 +9,7 @@ import Battery from "gi://AstalBattery";
 export function ScreenRecordingButton() {
   return (
     <button
-      className="warningIconButton"
+      className="screenrecording"
       label=""
       // visible={isRecording()}
       visible={false}
@@ -44,7 +44,7 @@ export function BatteryButton() {
             batteryWarningInterval.destroy();
             batteryWarningInterval = null;
           }
-          return "panelButton";
+          return "icon";
         } else {
           if (batteryWarningInterval === null && battery.isBattery) {
             batteryWarningInterval = setInterval(() => {

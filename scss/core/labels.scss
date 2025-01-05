@@ -1,0 +1,28 @@
+@use "../variables" as vars;
+
+label {
+  &.icon {
+    margin: 0 0.7rem;
+  }
+  &.large {
+    font-size: 1.2rem;
+  }
+  &.xlarge {
+    font-size: 1.6rem;
+  }
+  &.small {
+    font-size: 0.8rem;
+  }
+  &.xsmall {
+    font-size: 0.6rem;
+  }
+}
+
+button box {
+  label.icon:first-child {
+    margin-left: 0;
+  }
+  label.icon:last-child {
+    margin-right: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import OSD from "core/OSD/OSD";
+import OSD from "core/OSD";
 import Brightness from "./brightness";
 import { getBrightnessIcon } from "./brightness";
 

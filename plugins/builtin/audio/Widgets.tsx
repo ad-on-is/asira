@@ -23,11 +23,9 @@ function AudioButton(
   return (
     <button className={`panelButton audio ${label}`}>
       <box>
-        {" "}
         <label className="icon" label={listener(() => getVolumeIcon(device))} />
         {showDescription ? (
           <box>
-            <label label=" " />
             <label
               className="description"
               label={listener(() => truncateDescription(device.description))}
@@ -36,10 +34,9 @@ function AudioButton(
         ) : (
           <></>
         )}
-        <label label=" " />
         <label
           className="volume"
-          label={listener(() => `${Math.round(device.volume * 100)}%`)}
+          label={listener(() => ` ${Math.round(device.volume * 100)}%`)}
         />
       </box>
     </button>

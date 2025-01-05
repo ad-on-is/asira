@@ -1,0 +1,24 @@
+@use "../variables" as vars;
+
+.window {
+  background-color: vars.$bg;
+  border-radius: vars.$borderRadius;
+  border-color: vars.$borderColor;
+  border-width: vars.$borderWidth;
+  border-style: solid;
+  font-size: vars.$baseFontSize;
+  font-family: vars.$fontFamily;
+  font-weight: vars.$fontWeight;
+}
+
+.calendar {
+  border-color: transparent;
+}
+
+.popupWindow {
+  // background-color: vars.$bg;
+  // border-radius: 8px;
+  // border-color: vars.$fg;
+  // border-width: 1px;
+  // border-style: solid;
+}

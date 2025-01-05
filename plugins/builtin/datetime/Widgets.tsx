@@ -1,39 +1,35 @@
 import { bind, GLib, Variable } from "astal";
 
 import Hyprland from "gi://AstalHyprland";
-import { App } from "astal/gtk3";
-import { CalendarWindowName } from "constants";
+import { App, Gdk } from "astal/gtk3";
+import { OverviewWindowName } from "constants";
 import { MiniWeather } from "../weather/Widgets";
-
-export default function DateTime({
-  showWeather = true,
-}: {
-  showWeather?: boolean;
-}) {
+import options from "options";
+export default function DateTime({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   const time = Variable<string>("").poll(
     1000,
-    () => GLib.DateTime.new_now_local().format("%H:%M:%S")!,
+    () => GLib.DateTime.new_now_local().format(options.dateTime.timeFormat)!,
   );
 
   const date = Variable<string>("").poll(
     1000,
-    () => GLib.DateTime.new_now_local().format("%a, %d.%b %Y")!,
+    () => GLib.DateTime.new_now_local().format(options.dateTime.dateFormat)!,
   );
 
   return (
     <button
       className="panelButton dateTime"
       onClicked={() => {
-        App.toggle_window(CalendarWindowName);
+        App.toggle_window(OverviewWindowName);
       }}
     >
       <box>
-        <label label="󰸗 " className="date icon" />
+        <label label="󰸗" className="date icon" />
         <label className="date" label={date()} />
-        <label label="  " className="time icon" />
+        <label label="" className="time icon" />
         <label className="time" label={time()} />
 
-        {showWeather ? <MiniWeather /> : <></>}
+        {options.dateTime.showWeather ? <MiniWeather /> : <></>}
       </box>
     </button>
   );

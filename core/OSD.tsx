@@ -1,5 +1,6 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import { Binding, GLib } from "astal";
+import options from "options";
 
 export default function OSD({
   gdkmonitor,
@@ -10,7 +11,7 @@ export default function OSD({
 }: {
   gdkmonitor?: Gdk.Monitor;
   iconLabel: Binding<string>;
-  label: string;
+  label: Binding<string>;
   sliderValue: Binding<number>;
   windowName: string;
 }) {
@@ -21,11 +22,14 @@ export default function OSD({
       name={`${windowName}OSD`}
       application={App}
       gdkmonitor={gdkmonitor}
-      anchor={Astal.WindowAnchor.BOTTOM}
+      anchor={options.osd.position}
       exclusivity={Astal.Exclusivity.NORMAL}
       layer={Astal.Layer.OVERLAY}
-      className="window"
-      margin_bottom={100}
+      className="window osd"
+      margin_top={options.osd.margin[0]}
+      margin_right={options.osd.margin[1]}
+      margin_bottom={options.osd.margin[2]}
+      margin_left={options.osd.margin[3]}
       visible={false}
       setup={(self) => {
         let canShow = false;
@@ -48,32 +52,11 @@ export default function OSD({
         });
       }}
     >
-      <box
-        vertical={false}
-        halign={Gtk.Align.CENTER}
-        css={"padding: 18px 5px;"}
-      >
-        <label
-          css={"margin-right: 15px;"}
-          className="alertIcon"
-          label={iconLabel}
-        />
-        <box
-          vertical={true}
-          css={"margin-left: 10px;"}
-          valign={Gtk.Align.CENTER}
-        >
-          <label
-            className="labelSmall"
-            label={label}
-            halign={Gtk.Align.START}
-          />
-          <slider
-            css="padding-top: 2px;"
-            className="alertProgress"
-            hexpand={true}
-            value={sliderValue}
-          />
+      <box vertical={false} halign={Gtk.Align.CENTER} className="inner">
+        <label className="icon" label={iconLabel} />
+        <box vertical={true} valign={Gtk.Align.CENTER}>
+          <label className="title" label={label} halign={Gtk.Align.START} />
+          <slider className="slider" hexpand={true} value={sliderValue} />
         </box>
       </box>
     </window>

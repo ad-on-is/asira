@@ -1,6 +1,7 @@
 import Weather from "./weather";
-import { bind, GLib, Variable } from "astal";
-export function MiniWeather() {
+import { bind } from "astal";
+import { Gdk } from "astal/gtk3";
+export function MiniWeather({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   const weather = Weather.get_default();
   return (
     <box className="weather">
