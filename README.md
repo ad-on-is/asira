@@ -27,6 +27,15 @@
 # clone this repo
 git clone https://github.com/ad-on-is/asira
 cd asira
+
+# to get openweather working
+# get an API-key on openweathermap.org and edit openweather.sh
+cp openweather.sh ~/.local/scripts/wm/
+
+# download the icons form here
+# https://github.com/rodrigokamada/openweathermap/tree/master/src/images
+# and save them to ~/.local/share/ow-icons
+
 ags -d $(pwd) run
 ```
 
