@@ -1,10 +1,12 @@
 import Hyprland from "gi://AstalHyprland";
 import { bind, GLib, Variable } from "astal";
+import { Gdk } from "astal/gtk3";
+const selected = Variable([""]);
 
 export default function HyprlandWorkspaces({
-  vertical = false,
+  gdkmonitor,
 }: {
-  vertical?: boolean;
+  gdkmonitor?: Gdk.Monitor;
 }) {
   const hypr = Hyprland.get_default();
 
@@ -23,13 +25,17 @@ export default function HyprlandWorkspaces({
     12: "",
   };
 
-  const monitor = hypr.get_focused_monitor();
-
   return (
-    <box vertical={vertical} className="workspaces">
+    <box vertical={false} className="workspaces">
       {bind(hypr, "workspaces").as((workspaces) => {
+        const monitor = hypr
+          .get_monitors()
+          .find(
+            (m) =>
+              m.model === gdkmonitor!.model && !selected.get().includes(m.name),
+          );
         const monitorWorkspaces = workspaces
-          .filter((w) => w.monitor.id === monitor.id)
+          .filter((w) => w.monitor.id === monitor!.id)
           .sort((a, b) => a.id - b.id);
 
         return monitorWorkspaces.map((workspace) => (

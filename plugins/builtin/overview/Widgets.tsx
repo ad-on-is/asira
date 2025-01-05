@@ -20,80 +20,63 @@ class CalendarWidget extends astalify(Gtk.Calendar) {
   }
 }
 
-export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export default function () {
   const time = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
     1000,
     () => GLib.DateTime.new_now_local(),
   );
 
   return (
-    <window
-      name={OverviewWindowName}
-      application={App}
-      anchor={options.overview.position}
-      layer={Astal.Layer.TOP}
-      margin={5}
-      className="window"
-      gdkmonitor={gdkmonitor}
-      visible={false}
-      keymode={Astal.Keymode.ON_DEMAND}
-      onKeyPressEvent={function (self, event: Gdk.Event) {
-        if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-          self.hide();
-        }
-      }}
-    >
-      <box vertical={false} className="overview">
-        <box
-          vertical={true}
-          className="left"
-          css={`
-            min-width: 400px;
-            padding: 1rem;
-          `}
-        >
-          <NotificationHistory />
-        </box>
-        <box
-          vertical={true}
-          className="right"
-          css={`
-            min-width: 300px;
-            padding: 0.5rem;
-          `}
-        >
-          <BigWeather />
-          <box
-            css={`
-              min-height: 3rem;
-            `}
-          ></box>
-          <label
-            className="xxxlarge"
-            label={time().as((t) => {
-              return t.format("%H:%M")!;
-            })}
-          />
-          <label
-            className="large"
-            label={time().as((t) => {
-              return t.format("%B %-d, %Y")!;
-            })}
-          />
-
-          <box
-            css={`
-              min-height: 3rem;
-            `}
-          ></box>
-          <CalendarWidget className="calendar" />
-          <box
-            css={`
-              min-height: 3rem;
-            `}
-          ></box>
-        </box>
+    <box vertical={false} className="overview">
+      <box
+        vertical={true}
+        className="left"
+        css={`
+          min-width: 400px;
+          padding: 1rem;
+        `}
+      >
+        <NotificationHistory />
       </box>
-    </window>
+      <box
+        vertical={true}
+        className="right"
+        css={`
+          min-width: 300px;
+          padding: 0.5rem;
+        `}
+      >
+        <BigWeather />
+        <box
+          css={`
+            min-height: 3rem;
+          `}
+        ></box>
+        <label
+          className="xxxlarge"
+          label={time().as((t) => {
+            return t.format("%H:%M")!;
+          })}
+        />
+        <label
+          className="large"
+          label={time().as((t) => {
+            return t.format("%B %-d, %Y")!;
+          })}
+        />
+
+        <box
+          css={`
+            min-height: 3rem;
+          `}
+        ></box>
+        <CalendarWidget className="calendar" />
+        <box
+          css={`
+            min-height: 3rem;
+          `}
+        ></box>
+      </box>
+    </box>
   );
 }

@@ -24,11 +24,13 @@
     padding: 0 3px;
     min-width: 25px;
     &.active {
-      color: #cba6f7;
+      label {
+        color: #cba6f7;
+      }
       background-color: rgba(203, 166, 247, 0.1);
     }
-    &.empty:not(.active) {
-      opacity: 0.2;
+    &.empty:not(.active) label {
+      color: transparentize(vars.$fg, 0.7);
     }
   }
 }

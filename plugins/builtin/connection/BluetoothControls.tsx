@@ -1,6 +1,5 @@
 import { bind, Variable } from "astal";
 import { Gtk, App } from "astal/gtk3";
-import { SystemMenuWindowName } from "constants";
 import { getBluetoothIcon, getBluetoothName } from "./bluetooth";
 import Bluetooth from "gi://AstalBluetooth";
 import { DropDownArrowButton } from "core/Button";
@@ -26,7 +25,7 @@ function BluetoothDevices() {
             ]);
 
             setTimeout(() => {
-              bind(App.get_window(SystemMenuWindowName)!, "visible").subscribe(
+              bind(App.get_window("systemInfo")!, "visible").subscribe(
                 (visible) => {
                   if (!visible) {
                     buttonsRevealed.set(false);
@@ -135,13 +134,11 @@ export default function () {
   const bluetoothChooserRevealed = Variable(false);
 
   setTimeout(() => {
-    bind(App.get_window(SystemMenuWindowName)!, "visible").subscribe(
-      (visible) => {
-        if (!visible) {
-          bluetoothChooserRevealed.set(false);
-        }
-      },
-    );
+    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
+      if (!visible) {
+        bluetoothChooserRevealed.set(false);
+      }
+    });
   }, 1_000);
 
   return (

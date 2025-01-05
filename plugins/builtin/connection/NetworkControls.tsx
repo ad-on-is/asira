@@ -7,7 +7,6 @@ import {
 import { bind, Variable } from "astal";
 import { Gtk, App } from "astal/gtk3";
 import { execAsync } from "astal/process";
-import { SystemMenuWindowName } from "constants";
 import { DropDownArrowButton } from "core/Button";
 
 const wifiConnections = Variable<string[]>([]);
@@ -208,7 +207,7 @@ function WifiConnections() {
           const buttonsRevealed = Variable(false);
 
           setTimeout(() => {
-            bind(App.get_window(SystemMenuWindowName)!, "visible").subscribe(
+            bind(App.get_window("systemInfo")!, "visible").subscribe(
               (visible) => {
                 if (!visible) {
                   buttonsRevealed.set(false);
@@ -326,14 +325,13 @@ function WifiScannedConnections() {
               const passwordEntryRevealed = Variable(false);
 
               setTimeout(() => {
-                bind(
-                  App.get_window(SystemMenuWindowName)!,
-                  "visible",
-                ).subscribe((visible) => {
-                  if (!visible) {
-                    passwordEntryRevealed.set(false);
-                  }
-                });
+                bind(App.get_window("systemInfo")!, "visible").subscribe(
+                  (visible) => {
+                    if (!visible) {
+                      passwordEntryRevealed.set(false);
+                    }
+                  },
+                );
               }, 1_000);
 
               return (
@@ -392,14 +390,13 @@ function VpnActiveConnections() {
               const buttonsRevealed = Variable(false);
 
               setTimeout(() => {
-                bind(
-                  App.get_window(SystemMenuWindowName)!,
-                  "visible",
-                ).subscribe((visible) => {
-                  if (!visible) {
-                    buttonsRevealed.set(false);
-                  }
-                });
+                bind(App.get_window("systemInfo")!, "visible").subscribe(
+                  (visible) => {
+                    if (!visible) {
+                      buttonsRevealed.set(false);
+                    }
+                  },
+                );
               }, 1_000);
 
               return (
@@ -483,14 +480,13 @@ function VpnConnections() {
               const isConnecting = Variable(false);
 
               setTimeout(() => {
-                bind(
-                  App.get_window(SystemMenuWindowName)!,
-                  "visible",
-                ).subscribe((visible) => {
-                  if (!visible) {
-                    buttonsRevealed.set(false);
-                  }
-                });
+                bind(App.get_window("systemInfo")!, "visible").subscribe(
+                  (visible) => {
+                    if (!visible) {
+                      buttonsRevealed.set(false);
+                    }
+                  },
+                );
               }, 1_000);
 
               return (
@@ -568,15 +564,13 @@ export default function () {
   updateConnections();
 
   setTimeout(() => {
-    bind(App.get_window(SystemMenuWindowName)!, "visible").subscribe(
-      (visible) => {
-        if (!visible) {
-          networkChooserRevealed.set(false);
-        } else {
-          updateConnections();
-        }
-      },
-    );
+    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
+      if (!visible) {
+        networkChooserRevealed.set(false);
+      } else {
+        updateConnections();
+      }
+    });
   }, 1_000);
 
   const networkName = Variable.derive([

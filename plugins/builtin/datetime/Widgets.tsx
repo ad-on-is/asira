@@ -5,6 +5,8 @@ import { App, Gdk } from "astal/gtk3";
 import { OverviewWindowName } from "constants";
 import { MiniWeather } from "../weather/Widgets";
 import options from "options";
+import { togglePopup } from "core/Popup";
+import OverView from "../overview/Widgets";
 export default function DateTime({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   const time = Variable<string>("").poll(
     1000,
@@ -20,7 +22,8 @@ export default function DateTime({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
     <button
       className="panelButton dateTime"
       onClicked={() => {
-        App.toggle_window(OverviewWindowName);
+        togglePopup("dateTime", options.overview.position, <OverView />);
+        // App.toggle_window(OverviewWindowName);
       }}
     >
       <box>

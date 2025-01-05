@@ -1,10 +1,12 @@
 import { bind } from "astal";
-import { Gdk } from "astal/gtk3";
+import { Gdk, Astal } from "astal/gtk3";
 
 import { getNetworkIconBinding } from "./network";
 
-import { activeVpnConnections } from "./NetworkControls";
+import NetworkControls, { activeVpnConnections } from "./NetworkControls";
 import Bluetooth from "gi://AstalBluetooth";
+import { togglePopup } from "core/Popup";
+import BluetoothControls from "./BluetoothControls";
 
 export function VpnButton() {
   return (
@@ -37,7 +39,23 @@ export function NetworkButton() {
 
 export function ConnectionButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   return (
-    <button className="panelButton connection">
+    <button
+      className="panelButton connection"
+      onClicked={() => {
+        togglePopup(
+          "custom",
+          Astal.WindowAnchor.TOP |
+            Astal.WindowAnchor.RIGHT |
+            Astal.WindowAnchor.BOTTOM,
+
+          <box vertical={true}>
+            <label className="large" label="Network & Bluetooth" />
+            <NetworkControls />
+            <BluetoothControls />
+          </box>,
+        );
+      }}
+    >
       <box>
         <BluetoothButton />
         <NetworkButton />

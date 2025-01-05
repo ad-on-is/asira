@@ -9,10 +9,9 @@
 import { App, Astal } from "astal/gtk3";
 import style from "./scss/main.scss";
 import Overview from "plugins/builtin/overview/Widgets";
-import SystemMenuWindow from "core/systemMenu/SystemMenuWindow";
+import SystemMenuWindow from "plugins/builtin/systemInfo/Widgets";
 
 import { exec } from "astal/process";
-import NotificationPopups from "core/notification/NotificationPopups";
 import AppLauncher, {
   AppLauncherWindowName,
 } from "plugins/appLauncher/AppLauncher";
@@ -29,12 +28,6 @@ import { init } from "options";
 App.start({
   css: style,
   main(...args: Array<string>) {
-    Overview(Astal.WindowAnchor.TOP);
-    SystemMenuWindow();
-    // ChargingAlertSound();
-    //
-    Screenshot();
-    Screenshare();
     init();
   },
   requestHandler(request: string, res: (response: any) => void) {

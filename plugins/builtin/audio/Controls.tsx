@@ -1,7 +1,6 @@
 import Wp from "gi://AstalWp";
 import { bind, Binding, Variable } from "astal";
 import { App, Gtk } from "astal/gtk3";
-import { SystemMenuWindowName } from "constants";
 import { getMicrophoneIcon, getVolumeIcon, toggleMuteEndpoint } from "./audio";
 import { DropDownArrowButton } from "core/Button";
 
@@ -52,13 +51,11 @@ function EndpointControls({
   ]);
 
   setTimeout(() => {
-    bind(App.get_window(SystemMenuWindowName)!, "visible").subscribe(
-      (visible) => {
-        if (!visible) {
-          endpointChooserRevealed.set(false);
-        }
-      },
-    );
+    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
+      if (!visible) {
+        endpointChooserRevealed.set(false);
+      }
+    });
   }, 1_000);
 
   return (

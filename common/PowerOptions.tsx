@@ -1,5 +1,4 @@
 import { App, Gtk } from "astal/gtk3";
-import { SystemMenuWindowName } from "constants";
 import { execAsync } from "astal/process";
 
 export default function () {
@@ -9,7 +8,7 @@ export default function () {
         className="logout icon"
         label="󰍃"
         onClicked={() => {
-          App.toggle_window(SystemMenuWindowName);
+          App.toggle_window("systemInfo");
           execAsync("uwsm stop");
         }}
       />
@@ -17,7 +16,7 @@ export default function () {
         className="lock icon"
         label=""
         onClicked={() => {
-          App.toggle_window(SystemMenuWindowName);
+          App.toggle_window("systemInfo");
           execAsync("uwsm app -- hyprlock");
         }}
       />
@@ -25,7 +24,7 @@ export default function () {
         className="restart icon"
         label=""
         onClicked={() => {
-          App.toggle_window(SystemMenuWindowName);
+          App.toggle_window("systemInfo");
           execAsync("systemctl reboot");
         }}
       />
@@ -33,7 +32,7 @@ export default function () {
         className="shutdown icon"
         label="⏻"
         onClicked={() => {
-          App.toggle_window(SystemMenuWindowName);
+          App.toggle_window("systemInfo");
           execAsync("systemctl poweroff");
         }}
       />

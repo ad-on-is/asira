@@ -6,6 +6,7 @@ import options from "options";
 
 function AudioButton(
   device: Wp.Endpoint,
+  getIcon: Function,
   gdkmonitor?: Gdk.Monitor,
   label?: string,
 ) {
@@ -23,7 +24,7 @@ function AudioButton(
   return (
     <button className={`panelButton audio ${label}`}>
       <box>
-        <label className="icon" label={listener(() => getVolumeIcon(device))} />
+        <label className="icon" label={listener(() => getIcon(device))} />
         {showDescription ? (
           <box>
             <label
@@ -46,6 +47,7 @@ function AudioButton(
 export function VolumeButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   return AudioButton(
     Wp.get_default()!.audio.default_speaker,
+    getVolumeIcon,
     gdkmonitor,
     "speaker",
   );
@@ -53,6 +55,7 @@ export function VolumeButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
 export function MicrophoneButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   return AudioButton(
     Wp.get_default()!.audio.default_microphone,
+    getMicrophoneIcon,
     gdkmonitor,
     "microphone",
   );

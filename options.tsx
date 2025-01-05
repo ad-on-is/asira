@@ -1,6 +1,6 @@
 import DateTime from "plugins/builtin/datetime/Widgets";
 
-import OsButton from "core/systemMenu/OsButton";
+import OsButton from "common/OsButton";
 import { App, Astal } from "astal/gtk3";
 import { TopBar, BottomBar, SideBarLeft, SideBarRight } from "core/Bar";
 
@@ -25,6 +25,12 @@ const options = {
     showWeather: true,
     timeFormat: "%H:%M:%S",
     dateFormat: "%a, %d.%b %Y",
+  },
+  systemInfo: {
+    position:
+      Astal.WindowAnchor.TOP |
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.BOTTOM,
   },
   overview: {
     position: Astal.WindowAnchor.TOP,
@@ -75,6 +81,7 @@ export function init() {
 
   // Use TopBar|BottomBar|SieBarLeft|SideBarRight
   App.get_monitors().map(TopBar);
+  App.get_monitors().map(BottomBar);
   // TopBar(mainMonitor);
   App.get_monitors().map(DisplayNotifications);
   // DisplayNotifications(mainMonitor)
