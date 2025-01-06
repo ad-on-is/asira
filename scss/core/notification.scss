@@ -1,25 +1,17 @@
 @use "../variables" as vars;
 
-eventbox.notification {
-  &:last-child > box {
-    margin-bottom: 1px;
-  }
-
+.notification {
   // eventboxes can not take margins so we style its inner box instead
-  > box {
-    min-width: 300px;
-    border-radius: vars.$borderRadius;
-    background-color: vars.$bg;
-    margin: 0.3rem;
-    .image {
-      border-radius: 0.5rem;
-      min-width: 5rem;
-      min-height: 5rem;
-      margin-right: 1rem;
-    }
+  min-width: 300px;
+  margin: 0.3rem;
+  .image {
+    border-radius: 0.5rem;
+    min-width: 5rem;
+    min-height: 5rem;
+    margin-right: 1rem;
   }
 
-  &.critical > box {
+  &.critical {
     border: 2px solid vars.$warning;
 
     .header {
@@ -35,7 +27,7 @@ eventbox.notification {
 }
 
 .notificationHistory {
-  .notification > box {
+  .notification {
     border: 1px solid transparentize(vars.$fg, 0.9);
   }
 }

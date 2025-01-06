@@ -1,6 +1,5 @@
 import { GLib, Variable, bind } from "astal";
 import { Astal, Gtk, Gdk } from "astal/gtk3";
-import { type EventBox } from "astal/gtk3/widget";
 import Notifd from "gi://AstalNotifd";
 import { insertNewlines } from "core/utils/strings";
 import options from "options";
@@ -154,13 +153,13 @@ export function Notification(props: Props) {
 
   return (
     <eventbox
-      className={`notification ${urgency(n)}`}
+      // className={`notification window  ${urgency(n)}`}
       setup={setup}
       onHoverLost={onHoverLost}
       onHover={onHover}
       onClick={() => n.dismiss()}
     >
-      <box vertical={true}>
+      <box vertical={true} className={`notification window  ${urgency(n)}`}>
         <box vertical={false} className="header">
           <label className="icon" label="" />
           <label
@@ -234,8 +233,10 @@ export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
 
   return (
     <window
-      // className="window"
       gdkmonitor={gdkmonitor}
+      css={`
+        background-color: transparent;
+      `}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       margin_top={options.notification.margin[0]}
       margin_right={options.notification.margin[1]}
@@ -246,13 +247,11 @@ export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
       <box vertical={true}>
         {bind(notifs).as((list) =>
           list.map((n) => (
-            <box className="window">
-              <Notification
-                notification={n}
-                autoDismiss={true}
-                onAutoDismiss={() => notifs.delete(n.id)}
-              />
-            </box>
+            <Notification
+              notification={n}
+              autoDismiss={true}
+              onAutoDismiss={() => notifs.delete(n.id)}
+            />
           )),
         )}
       </box>
