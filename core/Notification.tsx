@@ -209,14 +209,17 @@ export function Notification(props: Props) {
           </box>
         </box>
         {n.get_actions().length > 0 && (
-          <box vertical={true}>
+          <box>
             {n.get_actions().map(({ label, id }) => (
               <button
-                hexpand={true}
+                // hexpand={true}
                 css={`
                   margin: 4px 8px 8px 8px;
                 `}
-                onClicked={() => n.invoke(id)}
+                onClicked={() => {
+                  console.log(id);
+                  n.invoke(id);
+                }}
                 label={label}
               />
             ))}
