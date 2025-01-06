@@ -83,8 +83,8 @@ export function init() {
   App.get_monitors().map(TopBar);
   App.get_monitors().map(BottomBar);
   // TopBar(mainMonitor);
-  App.get_monitors().map(DisplayNotifications);
-  // DisplayNotifications(mainMonitor)
+  // App.get_monitors().map(DisplayNotifications);
+  DisplayNotifications(mainMonitor);
   App.get_monitors().map(VolumeOSD);
   // VolumeOSD(mainMonitor)
   App.get_monitors().map(MicrophoneOSD);

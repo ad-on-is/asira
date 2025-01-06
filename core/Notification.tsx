@@ -11,15 +11,15 @@ const TIMEOUT_DELAY = 7_000;
 
 class NotifiationMap implements Subscribable {
   // the underlying map to keep track of id widget pairs
-  private map: Map<number, Gtk.Widget> = new Map();
+  private map: Map<number, Notifd.Notification> = new Map();
 
   // it makes sense to use a Variable under the hood and use its
   // reactivity implementation instead of keeping track of subscribers ourselves
-  private var: Variable<Array<Gtk.Widget>> = Variable([]);
+  private var: Variable<Array<Notifd.Notification>> = Variable([]);
 
   // notify subscribers to rerender when state changes
   private notifiy() {
-    this.var.set([...this.map.values()].reverse());
+    this.var.set([...this.map.values()]);
   }
 
   constructor() {
@@ -31,7 +31,7 @@ class NotifiationMap implements Subscribable {
      * note that if the notification has any actions
      * they might not work, since the sender already treats them as resolved
      */
-    // notifd.ignoreTimeout = true
+    // notifd.ignoreTimeout = true;
 
     notifd.connect("notified", (_, id) => {
       let hideTimeout: GLib.Source | null = null;
@@ -40,40 +40,7 @@ class NotifiationMap implements Subscribable {
         return;
       }
 
-      this.set(
-        id,
-        Notification({
-          notification: notifd.get_notification(id)!,
-
-          // once hovering over the notification is done
-          // destroy the widget without calling notification.dismiss()
-          // so that it acts as a "popup" and we can still display it
-          // in a notification center like widget
-          // but clicking on the close button will close it
-          onHoverLost: () => {
-            hideTimeout = setTimeout(() => {
-              this.delete(id);
-              hideTimeout?.destroy();
-              hideTimeout = null;
-            }, TIMEOUT_DELAY);
-          },
-          onHover() {
-            hideTimeout?.destroy();
-            hideTimeout = null;
-          },
-
-          // notifd by default does not close notifications
-          // until user input or the timeout specified by sender
-          // which we set to ignore above
-          setup: () => {
-            hideTimeout = setTimeout(() => {
-              this.delete(id);
-              hideTimeout?.destroy();
-              hideTimeout = null;
-            }, TIMEOUT_DELAY);
-          },
-        }),
-      );
+      this.set(id, notifd.get_notification(id)!);
     });
 
     // notifications can be closed by the outside before
@@ -83,15 +50,12 @@ class NotifiationMap implements Subscribable {
     });
   }
 
-  private set(key: number, value: Gtk.Widget) {
-    // in case of replacecment destroy previous widget
-    this.map.get(key)?.destroy();
+  private set(key: number, value: Notifd.Notification) {
     this.map.set(key, value);
     this.notifiy();
   }
 
-  private delete(key: number) {
-    this.map.get(key)?.destroy();
+  delete(key: number) {
     this.map.delete(key);
     this.notifiy();
   }
@@ -102,7 +66,7 @@ class NotifiationMap implements Subscribable {
   }
 
   // needed by the Subscribable interface
-  subscribe(callback: (list: Array<Gtk.Widget>) => void) {
+  subscribe(callback: (list: Array<Notifd.Notification>) => void) {
     return this.var.subscribe(callback);
   }
 }
@@ -125,9 +89,8 @@ const urgency = (n: Notifd.Notification) => {
 };
 
 type Props = {
-  setup(self: EventBox): void;
-  onHoverLost(self: EventBox): void;
-  onHover(self: EventBox): void;
+  autoDismiss: boolean;
+  onAutoDismiss?: Function;
   notification: Notifd.Notification;
 };
 
@@ -156,8 +119,38 @@ function NotificationIcon({
 }
 
 export function Notification(props: Props) {
-  const { notification: n, onHoverLost, onHover, setup } = props;
+  let { notification: n, autoDismiss, onAutoDismiss } = props;
   const { START, END } = Gtk.Align;
+
+  let setup,
+    onHover,
+    onHoverLost = () => {};
+
+  if (autoDismiss) {
+    let hideTimeout: GLib.Source | null = null;
+    setup = () => {
+      hideTimeout = setTimeout(() => {
+        if (onAutoDismiss !== null) {
+          onAutoDismiss!();
+        }
+        hideTimeout?.destroy();
+        hideTimeout = null;
+      }, TIMEOUT_DELAY);
+    };
+    onHover = () => {
+      hideTimeout = null;
+    };
+    onHoverLost = () => {
+      hideTimeout = setTimeout(() => {
+        if (onAutoDismiss !== null) {
+          onAutoDismiss!();
+        }
+
+        hideTimeout?.destroy();
+        hideTimeout = null;
+      }, TIMEOUT_DELAY);
+    };
+  }
 
   return (
     <eventbox
@@ -237,10 +230,11 @@ export function Notification(props: Props) {
 
 export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
   const notifs = new NotifiationMap();
+  const notifications = Notifd.get_default();
 
   return (
     <window
-      className="window"
+      // className="window"
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       margin_top={options.notification.margin[0]}
@@ -249,7 +243,19 @@ export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
       margin_left={options.notification.margin[3]}
       anchor={options.notification.position}
     >
-      <box vertical={true}>{bind(notifs)}</box>
+      <box vertical={true}>
+        {bind(notifs).as((list) =>
+          list.map((n) => (
+            <box className="window">
+              <Notification
+                notification={n}
+                autoDismiss={true}
+                onAutoDismiss={() => notifs.delete(n.id)}
+              />
+            </box>
+          )),
+        )}
+      </box>
     </window>
   );
 }
@@ -311,9 +317,7 @@ export function NotificationHistory() {
               return notificationsList.map((notification) => {
                 return (
                   <Notification
-                    setup={() => {}}
-                    onHoverLost={() => {}}
-                    onHover={() => {}}
+                    autoDismiss={false}
                     notification={notification}
                   />
                 );
