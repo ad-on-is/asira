@@ -11,7 +11,7 @@ export function SpeakerControls() {
     defaultEndpoint: audio.default_speaker,
     endpointsBinding: bind(audio, "speakers"),
     getIcon: getVolumeIcon,
-    label: "speakers",
+    label: "speaker",
   });
 }
 export function MicrophoneControls() {
@@ -20,7 +20,7 @@ export function MicrophoneControls() {
     defaultEndpoint: audio.default_microphone,
     endpointsBinding: bind(audio, "microphones"),
     getIcon: getMicrophoneIcon,
-    label: "microphones",
+    label: "microphone",
   });
 }
 
@@ -42,21 +42,11 @@ function EndpointControls({
   endpointsBinding: Binding<Wp.Endpoint[]>;
   label: string;
 }) {
-  const endpointChooserRevealed = Variable(false);
-
   const endpointLabelVar = Variable.derive([
     bind(defaultEndpoint, "description"),
     bind(defaultEndpoint, "volume"),
     bind(defaultEndpoint, "mute"),
   ]);
-
-  setTimeout(() => {
-    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
-      if (!visible) {
-        endpointChooserRevealed.set(false);
-      }
-    });
-  }, 1_000);
 
   return (
     <box vertical={true}>
@@ -74,45 +64,33 @@ function EndpointControls({
           onDragged={({ value }) => (defaultEndpoint.volume = value)}
           value={bind(defaultEndpoint, "volume")}
         />
-        <DropDownArrowButton
-          onClick={() => {
-            endpointChooserRevealed.set(!endpointChooserRevealed.get());
-          }}
-        />
       </box>
-      <revealer
-        className="rowRevealer"
-        revealChild={endpointChooserRevealed()}
-        transitionDuration={200}
-        transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-      >
-        <box vertical={true}>
-          {endpointsBinding.as((endpoints) => {
-            return endpoints.map((endpoint) => {
-              return (
-                <button
-                  hexpand={true}
-                  onClicked={() => {
-                    endpoint.set_is_default(true);
-                  }}
-                >
-                  <label
-                    halign={Gtk.Align.START}
-                    truncate={true}
-                    label={bind(endpoint, "isDefault").as((isDefault) => {
-                      if (isDefault) {
-                        return `  ${endpoint.description}`;
-                      } else {
-                        return `   ${endpoint.description}`;
-                      }
-                    })}
-                  />
-                </button>
-              );
-            });
-          })}
-        </box>
-      </revealer>
+      <box vertical={true}>
+        {endpointsBinding.as((endpoints) => {
+          return endpoints.map((endpoint) => {
+            return (
+              <button
+                hexpand={true}
+                onClicked={() => {
+                  endpoint.set_is_default(true);
+                }}
+              >
+                <label
+                  halign={Gtk.Align.START}
+                  truncate={true}
+                  label={bind(endpoint, "isDefault").as((isDefault) => {
+                    if (isDefault) {
+                      return `  ${endpoint.description}`;
+                    } else {
+                      return `   ${endpoint.description}`;
+                    }
+                  })}
+                />
+              </button>
+            );
+          });
+        })}
+      </box>
     </box>
   );
 }

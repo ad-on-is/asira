@@ -1,7 +1,15 @@
 import Hyprland from "gi://AstalHyprland";
 import { bind, GLib, Variable } from "astal";
 import { Gdk } from "astal/gtk3";
-const selected = Variable([""]);
+
+function getMonitorName(gdkmonitor: Gdk.Monitor) {
+  const display = Gdk.Display.get_default();
+  const screen = display!.get_default_screen();
+  for (let i = 0; i < display!.get_n_monitors(); ++i) {
+    if (gdkmonitor === display!.get_monitor(i))
+      return screen.get_monitor_plug_name(i);
+  }
+}
 
 export default function HyprlandWorkspaces({
   gdkmonitor,
@@ -30,10 +38,7 @@ export default function HyprlandWorkspaces({
       {bind(hypr, "workspaces").as((workspaces) => {
         const monitor = hypr
           .get_monitors()
-          .find(
-            (m) =>
-              m.model === gdkmonitor!.model && !selected.get().includes(m.name),
-          );
+          .find((m) => m.name === getMonitorName(gdkmonitor!));
         const monitorWorkspaces = workspaces
           .filter((w) => w.monitor.id === monitor!.id)
           .sort((a, b) => a.id - b.id);

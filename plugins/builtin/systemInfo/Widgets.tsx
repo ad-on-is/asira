@@ -34,21 +34,10 @@ export default function () {
         >
           <box css={"margin-top: 20px;"} />
           <PowerOptions />
-          {/* <Divider css={"margin: 0 60px 0 60px;"} /> */}
-          <NetworkControls />
-          <BluetoothControls />
-          <SpeakerControls />
-          <MicrophoneControls />
           {/*Disabling Media players while this bug persists https://github.com/Aylur/astal/issues/226*/}
           {/* <MediaPlayers /> */}
-          {/* <box css={"margin-top: 20px;"} /> */}
-          {/* <box css={"margin-top: 20px;"} /> */}
-          {/* <Divider css={"margin: 0 60px 0 60px;"} /> */}
-          {/* <box css={"margin-top: 20px;"} /> */}
-          {/* <box css={"margin-top: 20px;"} /> */}
         </box>
       </box>
-      <box vexpand={true} />
     </box>
   );
 }

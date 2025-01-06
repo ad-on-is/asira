@@ -12,10 +12,18 @@ function toggle(name: string) {
 }
 
 export function togglePopup(
-  name: string,
+  identifier: string,
   anchor: Astal.WindowAnchor,
   child: Gtk.Widget,
 ) {
+  const name = identifier;
+  //TODO: handle close of other or similar popups
+  //
+  // let [name, category] = identifier.split(":");
+  // if (typeof category === "undefined") {
+  //   category = "empty";
+  // }
+  // console.log(name, category);
   if (!openWindows.get().includes(name)) {
     PopupWindow(name, anchor, child);
     const ow = openWindows.get();

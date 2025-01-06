@@ -1,5 +1,11 @@
 import AstalNetwork from "gi://AstalNetwork";
 import {
+  wifiConnections,
+  activeVpnConnections,
+  deleteConnection,
+  connectVpn,
+  updateConnections,
+  vpnConnections,
   getAccessPointIcon,
   getNetworkIconBinding,
   getNetworkNameBinding,
@@ -7,145 +13,12 @@ import {
 import { bind, Variable } from "astal";
 import { Gtk, App } from "astal/gtk3";
 import { execAsync } from "astal/process";
-import { DropDownArrowButton } from "core/Button";
-
-const wifiConnections = Variable<string[]>([]);
-const activeWifiConnections = Variable<string[]>([]);
-const vpnConnections = Variable<string[]>([]);
-export const activeVpnConnections = Variable<string[]>([]);
-
-function ssidInRange(ssid: string) {
-  const network = AstalNetwork.get_default();
-
-  return (
-    network.wifi.accessPoints.find((accessPoint) => {
-      return accessPoint.ssid === ssid;
-    }) != null
-  );
-}
-
-function updateConnections() {
-  // update active connections
-  execAsync(["bash", "-c", `nmcli -t -f NAME,TYPE connection show --active`])
-    .catch((error) => {
-      print(error);
-    })
-    .then((value) => {
-      if (typeof value !== "string") {
-        return;
-      }
-
-      const wifiNames = value
-        .split("\n")
-        .filter((line) => line.includes("802-11-wireless"))
-        .map((line) => line.split(":")[0].trim())
-        .sort((a, b) => {
-          const aInRange = ssidInRange(a);
-          const bInRange = ssidInRange(b);
-          if (aInRange && bInRange) {
-            return 0;
-          } else if (aInRange) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-
-      activeWifiConnections.set(wifiNames);
-
-      const vpnNames = value
-        .split("\n")
-        .filter((line) => line.includes("vpn"))
-        .map((line) => line.split(":")[0].trim())
-        .sort((a, b) => {
-          if (a > b) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
-
-      activeVpnConnections.set(vpnNames);
-    })
-    .finally(() => {
-      // update inactive connections
-      execAsync(["bash", "-c", `nmcli -t -f NAME,TYPE connection show`])
-        .catch((error) => {
-          print(error);
-        })
-        .then((value) => {
-          if (typeof value !== "string") {
-            return;
-          }
-
-          const wifiNames = value
-            .split("\n")
-            .filter((line) => line.includes("802-11-wireless"))
-            .map((line) => line.split(":")[0].trim())
-            .filter((line) => !activeWifiConnections.get().includes(line))
-            .sort((a, b) => {
-              const aInRange = ssidInRange(a);
-              const bInRange = ssidInRange(b);
-              if (aInRange && bInRange) {
-                return 0;
-              } else if (aInRange) {
-                return -1;
-              } else {
-                return 1;
-              }
-            });
-
-          wifiConnections.set(wifiNames);
-
-          const vpnNames = value
-            .split("\n")
-            .filter((line) => line.includes("vpn"))
-            .map((line) => line.split(":")[0].trim())
-            .filter((line) => !activeVpnConnections.get().includes(line))
-            .sort((a, b) => {
-              if (a > b) {
-                return 1;
-              } else {
-                return -1;
-              }
-            });
-
-          vpnConnections.set(vpnNames);
-        });
-    });
-}
-
-function deleteConnection(ssid: string) {
-  execAsync(["bash", "-c", `nmcli connection delete "${ssid}"`]).finally(() => {
-    updateConnections();
-  });
-}
-
-function connectVpn(name: string) {
-  // first disconnect any existing vpn connections
-  activeVpnConnections.get().forEach((vpnName) => {
-    execAsync(["bash", "-c", `nmcli connection down "${vpnName}"`]).finally(
-      () => {
-        updateConnections();
-      },
-    );
-  });
-
-  execAsync(["bash", "-c", `nmcli connection up "${name}"`])
-    .catch((error) => {
-      print(error);
-    })
-    .finally(() => {
-      updateConnections();
-    });
-}
+import { ArrowDropdown, ButtonDropdown } from "core/DropDown";
 
 function PasswordEntry({
   accessPoint,
-  passwordEntryRevealed,
 }: {
   accessPoint: AstalNetwork.AccessPoint;
-  passwordEntryRevealed: Variable<boolean>;
 }) {
   const text = Variable("");
 
@@ -162,19 +35,12 @@ function PasswordEntry({
         print(value);
       })
       .finally(() => {
-        passwordEntryRevealed.set(false);
         updateConnections();
       });
   };
 
   return (
-    <box
-      css={`
-        margin-top: 4px;
-      `}
-      vertical={true}
-      spacing={4}
-    >
+    <box vertical={true} spacing={4}>
       {accessPoint.flags !== 0 && (
         <box vertical={true}>
           <label halign={Gtk.Align.START} label="Password" />
@@ -204,54 +70,28 @@ function WifiConnections() {
       <label halign={Gtk.Align.START} label="Saved networks" />
       {wifiConnections((connectionsValue) => {
         return connectionsValue.map((connection) => {
-          const buttonsRevealed = Variable(false);
-
-          setTimeout(() => {
-            bind(App.get_window("systemInfo")!, "visible").subscribe(
-              (visible) => {
-                if (!visible) {
-                  buttonsRevealed.set(false);
-                }
-              },
-            );
-          }, 1_000);
-
           let label: string;
+          let icon: string;
           let canConnect: boolean;
           const accessPoint = network.wifi.accessPoints.find((accessPoint) => {
             return accessPoint.ssid === connection;
           });
           if (accessPoint != null) {
-            label = `${getAccessPointIcon(accessPoint)}  ${connection}`;
+            icon = getAccessPointIcon(accessPoint);
+            label = `${connection}`;
             canConnect = network.wifi.activeAccessPoint.ssid !== connection;
           } else {
-            label = `󰤮  ${connection}`;
+            icon = "󰤮 ";
+            label = `${connection}`;
             canConnect = false;
           }
 
           return (
-            <box vertical={true}>
-              <button
-                hexpand={true}
-                className="panelButton"
-                onClicked={() => {
-                  buttonsRevealed.set(!buttonsRevealed.get());
-                }}
-              >
-                <label halign={Gtk.Align.START} label={label} />
-              </button>
-              <revealer
-                revealChild={buttonsRevealed()}
-                transitionDuration={200}
-                transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-              >
-                <box
-                  css={`
-                    margin-top: 4px;
-                  `}
-                  vertical={true}
-                  spacing={4}
-                >
+            <ButtonDropdown
+              icon={icon}
+              label={label}
+              content={
+                <box vertical={false} spacing={4} className="connections wifi">
                   {canConnect && (
                     <button
                       hexpand={true}
@@ -277,8 +117,8 @@ function WifiConnections() {
                     }}
                   />
                 </box>
-              </revealer>
-            </box>
+              }
+            />
           );
         });
       })}
@@ -295,10 +135,8 @@ function WifiScannedConnections() {
         if (scanning) {
           return (
             <label
+              className="wifi scanning"
               halign={Gtk.Align.START}
-              css={`
-                margin-bottom: 4px;
-              `}
               label="Scanning…"
             />
           );
@@ -322,45 +160,12 @@ function WifiScannedConnections() {
               }
             })
             .map((accessPoint) => {
-              const passwordEntryRevealed = Variable(false);
-
-              setTimeout(() => {
-                bind(App.get_window("systemInfo")!, "visible").subscribe(
-                  (visible) => {
-                    if (!visible) {
-                      passwordEntryRevealed.set(false);
-                    }
-                  },
-                );
-              }, 1_000);
-
               return (
-                <box vertical={true}>
-                  <box vertical={false}>
-                    <button
-                      hexpand={true}
-                      className="panelButton"
-                      onClicked={() => {
-                        passwordEntryRevealed.set(!passwordEntryRevealed.get());
-                      }}
-                    >
-                      <label
-                        halign={Gtk.Align.START}
-                        label={`${getAccessPointIcon(accessPoint)}  ${accessPoint.ssid}`}
-                      />
-                    </button>
-                  </box>
-                  <revealer
-                    revealChild={passwordEntryRevealed()}
-                    transitionDuration={200}
-                    transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-                  >
-                    <PasswordEntry
-                      accessPoint={accessPoint}
-                      passwordEntryRevealed={passwordEntryRevealed}
-                    />
-                  </revealer>
-                </box>
+                <ButtonDropdown
+                  icon={getAccessPointIcon(accessPoint)}
+                  label={`${accessPoint.ssid}`}
+                  content={<PasswordEntry accessPoint={accessPoint} />}
+                />
               );
             });
 
@@ -387,37 +192,11 @@ function VpnActiveConnections() {
           <box vertical={true}>
             <label halign={Gtk.Align.START} label="Active VPN" />
             {connections.map((connection) => {
-              const buttonsRevealed = Variable(false);
-
-              setTimeout(() => {
-                bind(App.get_window("systemInfo")!, "visible").subscribe(
-                  (visible) => {
-                    if (!visible) {
-                      buttonsRevealed.set(false);
-                    }
-                  },
-                );
-              }, 1_000);
-
               return (
-                <box vertical={true}>
-                  <button
-                    hexpand={true}
-                    className="panelButton"
-                    onClicked={() => {
-                      buttonsRevealed.set(!buttonsRevealed.get());
-                    }}
-                  >
-                    <label
-                      halign={Gtk.Align.START}
-                      label={`󰯄  ${connection}`}
-                    />
-                  </button>
-                  <revealer
-                    revealChild={buttonsRevealed()}
-                    transitionDuration={200}
-                    transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-                  >
+                <ButtonDropdown
+                  icon="󰯄"
+                  label={`${connection}`}
+                  content={
                     <box
                       css={`
                         margin-top: 4px;
@@ -448,15 +227,10 @@ function VpnActiveConnections() {
                         }}
                       />
                     </box>
-                  </revealer>
-                </box>
+                  }
+                />
               );
             })}
-            <box
-              css={`
-                margin-top: 12px;
-              `}
-            />
           </box>
         );
       })}
@@ -476,38 +250,13 @@ function VpnConnections() {
           <box vertical={true}>
             <label halign={Gtk.Align.START} label="VPN Connections" />
             {connectionsValue.map((connection) => {
-              const buttonsRevealed = Variable(false);
               const isConnecting = Variable(false);
 
-              setTimeout(() => {
-                bind(App.get_window("systemInfo")!, "visible").subscribe(
-                  (visible) => {
-                    if (!visible) {
-                      buttonsRevealed.set(false);
-                    }
-                  },
-                );
-              }, 1_000);
-
               return (
-                <box vertical={true}>
-                  <button
-                    hexpand={true}
-                    className="panelButton"
-                    onClicked={() => {
-                      buttonsRevealed.set(!buttonsRevealed.get());
-                    }}
-                  >
-                    <label
-                      halign={Gtk.Align.START}
-                      label={`󰯄  ${connection}`}
-                    />
-                  </button>
-                  <revealer
-                    revealChild={buttonsRevealed()}
-                    transitionDuration={200}
-                    transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-                  >
+                <ButtonDropdown
+                  icon="󰯄"
+                  label={`${connection}`}
+                  content={
                     <box
                       css={`
                         margin-top: 4px;
@@ -541,15 +290,10 @@ function VpnConnections() {
                         }}
                       />
                     </box>
-                  </revealer>
-                </box>
+                  }
+                />
               );
             })}
-            <box
-              css={`
-                margin-top: 12px;
-              `}
-            />
           </box>
         );
       })}
@@ -559,19 +303,8 @@ function VpnConnections() {
 
 export default function () {
   const network = AstalNetwork.get_default();
-  const networkChooserRevealed = Variable(false);
 
   updateConnections();
-
-  setTimeout(() => {
-    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
-      if (!visible) {
-        networkChooserRevealed.set(false);
-      } else {
-        updateConnections();
-      }
-    });
-  }, 1_000);
 
   const networkName = Variable.derive([
     getNetworkNameBinding(),
@@ -579,41 +312,19 @@ export default function () {
   ]);
 
   return (
-    <box vertical={true}>
-      <box vertical={false} className="controls network">
-        <label className="icon" label={getNetworkIconBinding()} />
-        <label
-          halign={Gtk.Align.START}
-          hexpand={true}
-          truncate={true}
-          className="name"
-          label={networkName().as((value) => {
-            const networkNameValue = value[0];
-            const activeVpnConnectionsValue = value[1];
-            if (activeVpnConnectionsValue.length === 0) {
-              return networkNameValue;
-            } else {
-              return `${networkNameValue} (+VPN)`;
-            }
-          })}
-        />
-
-        <DropDownArrowButton
-          onClick={() => {
-            networkChooserRevealed.set(!networkChooserRevealed.get());
-            if (networkChooserRevealed.get()) {
-              network.wifi?.scan();
-            }
-          }}
-        />
-      </box>
-      <revealer
-        className="networks"
-        revealChild={networkChooserRevealed()}
-        transitionDuration={200}
-        transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-      >
-        <box vertical={true}>
+    <ArrowDropdown
+      label={networkName().as((value) => {
+        const networkNameValue = value[0];
+        const activeVpnConnectionsValue = value[1];
+        if (activeVpnConnectionsValue.length === 0) {
+          return networkNameValue;
+        } else {
+          return `${networkNameValue} (+VPN)`;
+        }
+      })}
+      icon={getNetworkIconBinding()}
+      content={
+        <box vertical={true} className="controls network">
           {network.wifi &&
             bind(network.wifi, "activeAccessPoint").as((activeAccessPoint) => {
               return (
@@ -632,14 +343,12 @@ export default function () {
           <VpnActiveConnections />
           <VpnConnections />
           {network.wifi && <WifiConnections connections={wifiConnections} />}
-          <box
-            css={`
-              margin-top: 12px;
-            `}
-          />
           {network.wifi && <WifiScannedConnections />}
         </box>
-      </revealer>
-    </box>
+      }
+      onClicked={() => {
+        network.wifi?.scan();
+      }}
+    />
   );
 }

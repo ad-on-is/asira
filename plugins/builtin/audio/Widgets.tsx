@@ -1,15 +1,17 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
-import { Gdk } from "astal/gtk3";
+import { Astal, Gdk } from "astal/gtk3";
 import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
 import options from "options";
+import { togglePopup } from "core/Popup";
+import { MicrophoneControls, SpeakerControls } from "./Controls";
 
-function AudioButton(
-  device: Wp.Endpoint,
-  getIcon: Function,
-  gdkmonitor?: Gdk.Monitor,
-  label?: string,
-) {
+function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
+  const device =
+    label === "speaker"
+      ? Wp.get_default()!.audio.default_speaker
+      : Wp.get_default()!.audio.default_microphone;
+
   const listener = Variable.derive([
     bind(device, "description"),
     bind(device, "volume"),
@@ -22,9 +24,27 @@ function AudioButton(
     ) || options.audio.showDescriptionOnMonitors.includes("*");
 
   return (
-    <button className={`panelButton audio ${label}`}>
+    <button
+      className={`${label}`}
+      onClicked={() => {
+        togglePopup(
+          `${label}:audio`,
+          Astal.WindowAnchor.TOP |
+            Astal.WindowAnchor.RIGHT |
+            Astal.WindowAnchor.BOTTOM,
+          label === "speaker" ? <SpeakerControls /> : <MicrophoneControls />,
+        );
+      }}
+    >
       <box>
-        <label className="icon" label={listener(() => getIcon(device))} />
+        <label
+          className="icon"
+          label={listener(() =>
+            label === "speaker"
+              ? getVolumeIcon(device)
+              : getMicrophoneIcon(device),
+          )}
+        />
         {showDescription ? (
           <box>
             <label
@@ -45,18 +65,8 @@ function AudioButton(
 }
 
 export function VolumeButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
-  return AudioButton(
-    Wp.get_default()!.audio.default_speaker,
-    getVolumeIcon,
-    gdkmonitor,
-    "speaker",
-  );
+  return AudioButton("speaker", gdkmonitor);
 }
 export function MicrophoneButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
-  return AudioButton(
-    Wp.get_default()!.audio.default_microphone,
-    getMicrophoneIcon,
-    gdkmonitor,
-    "microphone",
-  );
+  return AudioButton("microphone", gdkmonitor);
 }

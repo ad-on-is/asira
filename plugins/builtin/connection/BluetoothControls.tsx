@@ -1,14 +1,14 @@
 import { bind, Variable } from "astal";
-import { Gtk, App } from "astal/gtk3";
+import { Gtk } from "astal/gtk3";
 import { getBluetoothIcon, getBluetoothName } from "./bluetooth";
 import Bluetooth from "gi://AstalBluetooth";
-import { DropDownArrowButton } from "core/Button";
+import { ArrowDropdown, ButtonDropdown } from "core/DropDown";
 
 function BluetoothDevices() {
   const bluetooth = Bluetooth.get_default();
 
   return (
-    <box vertical={true}>
+    <box vertical={true} className="bluetooth controls">
       {bind(bluetooth, "devices").as((devices) => {
         if (devices.length === 0) {
           return <label label="No devices" />;
@@ -18,45 +18,19 @@ function BluetoothDevices() {
             return device.name != null;
           })
           .map((device) => {
-            const buttonsRevealed = Variable(false);
             const connectionState = Variable.derive([
               bind(device, "connected"),
               bind(device, "connecting"),
             ]);
 
-            setTimeout(() => {
-              bind(App.get_window("systemInfo")!, "visible").subscribe(
-                (visible) => {
-                  if (!visible) {
-                    buttonsRevealed.set(false);
-                  }
-                },
-              );
-            }, 1_000);
-
             return (
-              <box vertical={true}>
-                <button
-                  hexpand={true}
-                  className="transparentButton"
-                  onClicked={() => {
-                    buttonsRevealed.set(!buttonsRevealed.get());
-                  }}
-                >
-                  <label halign={Gtk.Align.START} label={`  ${device.name}`} />
-                </button>
-                <revealer
-                  revealChild={buttonsRevealed()}
-                  transitionDuration={200}
-                  transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-                >
+              <ButtonDropdown
+                icon=""
+                label={`${device.name}`}
+                content={
                   <box vertical={true}>
                     <button
                       hexpand={true}
-                      className="primaryButton"
-                      css={`
-                        margin-top: 4px;
-                      `}
                       visible={bind(device, "paired")}
                       label={connectionState((value) => {
                         const connected = value[0];
@@ -120,8 +94,8 @@ function BluetoothDevices() {
                       }}
                     />
                   </box>
-                </revealer>
-              </box>
+                }
+              />
             );
           });
       })}
@@ -131,41 +105,18 @@ function BluetoothDevices() {
 
 export default function () {
   const bluetooth = Bluetooth.get_default();
-  const bluetoothChooserRevealed = Variable(false);
-
-  setTimeout(() => {
-    bind(App.get_window("systemInfo")!, "visible").subscribe((visible) => {
-      if (!visible) {
-        bluetoothChooserRevealed.set(false);
-      }
-    });
-  }, 1_000);
 
   return (
     <box>
       {bind(bluetooth, "isPowered").as((isPowered) => {
         if (!isPowered) return <box />;
-        return (
-          <box vertical={true}>
-            <box vertical={false} className="controls bluetooth">
-              <label className="icon" label={getBluetoothIcon()} />
-              <label
-                halign={Gtk.Align.START}
-                hexpand={true}
-                label={getBluetoothName()}
-              />
 
-              <DropDownArrowButton
-                onClick={() => {
-                  bluetoothChooserRevealed.set(!bluetoothChooserRevealed.get());
-                }}
-              />
-            </box>
-            <revealer
-              revealChild={bluetoothChooserRevealed()}
-              transitionDuration={200}
-              transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-            >
+        return (
+          <ArrowDropdown
+            icon={getBluetoothIcon()}
+            label={getBluetoothName()}
+            onClicked={() => {}}
+            content={
               <box vertical={true}>
                 <box vertical={false}>
                   <label
@@ -194,8 +145,8 @@ export default function () {
                 </box>
                 <BluetoothDevices />
               </box>
-            </revealer>
-          </box>
+            }
+          />
         );
       })}
     </box>
