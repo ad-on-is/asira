@@ -41,7 +41,7 @@ export function NetworkButton() {
 export function ConnectionButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   return (
     <button
-      className="panelButton connection"
+      className={`panelButton connection`}
       onClicked={() => {
         togglePopup(
           "connection",

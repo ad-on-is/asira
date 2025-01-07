@@ -1,4 +1,4 @@
-@use "../variables" as vars;
+@use "variables"as vars;
 
 .notification {
   // eventboxes can not take margins so we style its inner box instead
@@ -23,11 +23,5 @@
         color: vars.$warning;
       }
     }
-  }
-}
-
-.notificationHistory {
-  .notification {
-    border: 1px solid transparentize(vars.$fg, 0.9);
   }
 }

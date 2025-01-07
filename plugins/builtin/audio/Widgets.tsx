@@ -25,7 +25,7 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
 
   return (
     <button
-      className={`${label}`}
+      className={`panelButton audio ${label}`}
       onClicked={() => {
         togglePopup(
           `${label}:audio`,

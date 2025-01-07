@@ -1,9 +1,14 @@
+@use "sass:color";
 @use "variables" as vars;
-
 .panelButton {
   &.dateTime {
     .icon {
       color: #fab387;
+    }
+  }
+  &.connection {
+    .icon {
+      color: #cba6f7;
     }
   }
   &.audio {
@@ -30,7 +35,7 @@
       background-color: rgba(203, 166, 247, 0.1);
     }
     &.empty:not(.active) label {
-      color: transparentize(vars.$fg, 0.7);
+      color: color.scale(vars.$fg, $alpha: 70%);
     }
   }
 }
@@ -57,9 +62,15 @@
   }
   .appname,
   .time {
-    color: transparentize(vars.$fg, 0.5);
+    color: color.scale(vars.$fg, $alpha: 50%);
   }
   .message {
-    color: transparentize(vars.$fg, 0.5);
+    color: color.scale(vars.$fg, $alpha: 50%);
+  }
+}
+
+.notificationHistory {
+  .notification {
+    border: 1px solid color.scale(vars.$fg, $alpha: 90%);
   }
 }

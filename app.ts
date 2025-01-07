@@ -32,7 +32,7 @@ App.start({
   },
   requestHandler(request: string, res: (response: any) => void) {
     if (request === "theme") {
-      exec("sass ./scss/main.scss ./style.css");
+      exec("sass --silent ./scss/main.scss ./style.css");
       App.apply_css("./style.css");
       res("ags theme applied");
     } else if (request === "appLauncher") {

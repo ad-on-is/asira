@@ -3330,6 +3330,7 @@ declare module 'gi://GLib?version=2.0' {
          * string giving the generic name of the desktop entry.
          */
         const KEY_FILE_DESKTOP_KEY_GENERIC_NAME: string;
+        const KEY_FILE_DESKTOP_KEY_GETTEXT_DOMAIN: string;
         /**
          * A key under %G_KEY_FILE_DESKTOP_GROUP, whose value is a boolean
          * stating whether the desktop entry has been deleted by the user.
@@ -4616,11 +4617,6 @@ declare module 'gi://GLib?version=2.0' {
          * If the reference was the last one, it will call `clear_func`
          * to clear the contents of `mem_block,` and then will free the
          * resources allocated for `mem_block`.
-         *
-         * Note that implementing weak references via `clear_func` is not thread-safe:
-         * clearing a pointer to the memory from the callback can race with another
-         * thread trying to access it as `mem_block` already has a reference count of 0
-         * when the callback is called and will be freed.
          * @param mem_block a pointer to reference counted data
          */
         function atomic_rc_box_release_full(mem_block: any): void;

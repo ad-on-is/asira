@@ -15,6 +15,7 @@ import { DisplayNotifications } from "core/Notification";
 
 import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
 import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
+import SysTray from "core/SysTray";
 
 const options = {
   notification: {
@@ -70,6 +71,7 @@ const options = {
         ScreenRecordingButton,
         ConnectionButton,
         BatteryButton,
+        SysTray,
       ],
     },
   },

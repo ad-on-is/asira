@@ -256,14 +256,6 @@ declare module 'gi://GtkLayerShell?version=0.1' {
          */
         function set_namespace(window: Gtk.Window, name_space: string): void;
         /**
-         * Commits a surface state if there's no pending commit scheduled by the GTK.
-         * You almost never need to call this; the only known case is when the surface is in a state
-         * where it does not receive frame callbacks and the regular deferred commit mechanism
-         * is unavailable.
-         * @param window A layer surface.
-         */
-        function try_force_commit(window: Gtk.Window): void;
-        /**
          * Name of the imported GIR library
          * `see` https://gitlab.gnome.org/GNOME/gjs/-/blob/master/gi/ns.cpp#L188
          */
