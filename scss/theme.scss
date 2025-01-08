@@ -18,6 +18,25 @@
       color: #f9e2af;
     }
   }
+  &.razer {
+    .icon,
+    .value {
+      color: #a6e3a1;
+    }
+    .low {
+      .icon,
+      .value {
+        color: #fab387;
+      }
+    }
+
+    .critical {
+      .icon,
+      .value {
+        color: #f38ba8;
+      }
+    }
+  }
   &.audio {
     .icon,
     .value {

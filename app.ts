@@ -1,5 +1,4 @@
 // TODO:
-// Razerbattery
 // Cpu usage/temp
 // RAM
 

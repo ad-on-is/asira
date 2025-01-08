@@ -17,6 +17,7 @@ import { DisplayNotifications } from "core/Notification";
 import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
 import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
 import SysTray from "core/SysTray";
+import Razer from "plugins/builtin/razer/Widgets";
 
 const options = {
   notification: {
@@ -69,7 +70,7 @@ const options = {
     widgets: {
       start: [],
       center: [],
-      end: [Storage],
+      end: [Razer, Storage],
     },
   },
   topBar: {
