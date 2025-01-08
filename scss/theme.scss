@@ -1,5 +1,6 @@
 @use "sass:color";
-@use "variables" as vars;
+@use "core/variables" as vars;
+
 .panelButton {
   &.dateTime {
     .icon {
@@ -11,9 +12,15 @@
       color: #cba6f7;
     }
   }
+  &.storage {
+    .icon,
+    .value {
+      color: #f9e2af;
+    }
+  }
   &.audio {
     .icon,
-    .volume {
+    .value {
       color: #74c7ec;
     }
     &.microphone {
@@ -71,6 +78,6 @@
 
 .notificationHistory {
   .notification {
-    border: 1px solid color.scale(vars.$fg, $alpha: 90%);
+    border: 1px solid color.scale($color: vars.$fg, $alpha: 10%);
   }
 }

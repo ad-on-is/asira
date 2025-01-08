@@ -48,7 +48,7 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
         {showDescription ? (
           <box>
             <label
-              className="description"
+              className="name"
               label={listener(() => truncateDescription(device.description))}
             />
           </box>
@@ -56,7 +56,7 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
           <></>
         )}
         <label
-          className="volume"
+          className="value"
           label={listener(() => ` ${Math.round(device.volume * 100)}%`)}
         />
       </box>

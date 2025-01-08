@@ -1,15 +1,8 @@
-@use "core/window";
-@use "core/scroll";
-@use "core/divider";
-@use "core/buttons";
-@use "core/labels";
-@use "core/slider";
-@use "core/osd";
-@use "core/bar";
-@use "core/notification";
+@use "core/core";
 @use "widgets/systemInfo";
 @use "widgets/calendar";
 @use "theme";
+
 // @use "widgets/appLauncher";
 // @use "widgets/mediaPlayer";
 .weather.mini .icon {

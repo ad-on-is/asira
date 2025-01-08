@@ -2,9 +2,6 @@
 // Razerbattery
 // Cpu usage/temp
 // RAM
-// Filesystem
-// wifi
-// systray
 
 import { App, Astal } from "astal/gtk3";
 import style from "./scss/main.scss";

@@ -10,6 +10,7 @@ import {
 } from "plugins/builtin/battery/Widgets";
 import { ConnectionButton } from "plugins/builtin/connection/Widgets";
 import HyprlandWorkspaces from "plugins/builtin/hyprland/Workspaces";
+import Storage from "plugins/builtin/storage/Widgets";
 import { MicrophoneButton, VolumeButton } from "plugins/builtin/audio/Widgets";
 import { DisplayNotifications } from "core/Notification";
 
@@ -21,6 +22,17 @@ const options = {
   notification: {
     position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
     margin: [0, 50, 50, 0],
+  },
+  storage: {
+    position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
+
+    show: [
+      { name: "/", label: "root" },
+      { name: "/home", label: "home" },
+      { name: "/run/media/adonis/Expansion", label: "Expansion" },
+      { name: "/run/media/adonis/Backups", label: "Backups" },
+      { name: "/run/media/adonis/NAS-Drive", label: "NAS", isNetwork: true },
+    ],
   },
   dateTime: {
     showWeather: true,
@@ -56,8 +68,8 @@ const options = {
     margin: [5, 10, 10, 10],
     widgets: {
       start: [],
-      center: [DateTime],
-      end: [],
+      center: [],
+      end: [Storage],
     },
   },
   topBar: {

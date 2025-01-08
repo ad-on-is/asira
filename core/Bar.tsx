@@ -33,17 +33,18 @@ function HorizontalBar(
           ${vertical ? "min-height: 20px" : "min-width: 40px"};
         `}
       >
-        <box halign={Gtk.Align.START} vertical={vertical}>
+        <box halign={Gtk.Align.START} vertical={vertical} className="col start">
           {opts.widgets.start.map((Component) => (
             <Component gdkmonitor={gdkmonitor} />
           ))}
         </box>
-        <box vertical={vertical}>
+        <box vertical={vertical} className="col center">
           {opts.widgets.center.map((Component) => (
             <Component gdkmonitor={gdkmonitor} />
           ))}
         </box>
         <box
+          className="col end"
           halign={Gtk.Align.END}
           vertical={vertical}
           valign={Gtk.Align.START}

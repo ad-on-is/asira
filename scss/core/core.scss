@@ -1,0 +1,192 @@
+@use "variables" as vars;
+
+button {
+  // all: unset;
+  background-color: vars.$buttonBg;
+  color: vars.$buttonFg;
+  padding: 0px 8px 0px 8px;
+  border: none;
+  border-radius: 4px;
+  // margin: 0;
+  label {
+    margin: 0;
+  }
+  box {
+    margin: 0;
+  }
+
+  &:hover {
+    background-color: vars.$buttonBgHover;
+    color: vars.$buttonFgHover;
+  }
+  &.icon {
+    border-radius: 100%;
+    min-width: 0.8rem;
+    min-height: 2rem;
+  }
+
+  &.primary {
+    background-color: vars.$buttonPrimaryBg;
+    color: vars.$buttonPrimaryFg;
+    &:hover {
+      color: vars.$buttonPrimaryFgHover;
+      background-color: vars.$buttonPrimaryBgHover;
+    }
+  }
+  &.accent {
+    background-color: vars.$buttonAccentBg;
+    color: vars.$buttonAccentFg;
+    &:hover {
+      color: vars.$buttonAccentFgHover;
+      background-color: vars.$buttonAccentBgHover;
+    }
+  }
+
+  &.panelButton {
+    &.storage {
+      .unit {
+        margin: 0 0.8rem;
+      }
+    }
+  }
+}
+
+.divider {
+  border: 1px solid vars.$bgHover;
+  margin: 1rem 0;
+}
+
+label {
+  color: vars.$fg;
+  &.icon {
+    margin: 0 0.7rem;
+  }
+  &.large {
+    font-size: 1.2rem;
+  }
+  &.xlarge {
+    font-size: 1.6rem;
+  }
+  &.xxlarge {
+    font-size: 2rem;
+  }
+
+  &.xxxlarge {
+    font-size: 3rem;
+  }
+  &.small {
+    font-size: 0.8rem;
+  }
+  &.xsmall {
+    font-size: 0.6rem;
+  }
+}
+
+button box {
+  label.icon:first-child {
+    margin-left: 0;
+  }
+  label.icon:last-child {
+    margin-right: 0;
+  }
+}
+
+scrollable {
+  .frame {
+    border-style: none;
+  }
+  .trough {
+    border-style: none;
+  }
+}
+
+.window {
+  background-color: vars.$bg;
+  border-radius: vars.$borderRadius;
+  border-color: vars.$borderColor;
+  border-width: vars.$borderWidth;
+  border-style: solid;
+  font-size: vars.$baseFontSize;
+  font-family: vars.$fontFamily;
+  font-weight: vars.$fontWeight;
+}
+
+.calendar {
+  border-color: transparent;
+}
+
+.slider {
+  all: unset;
+  trough {
+    all: unset;
+    background: vars.$sliderTrough;
+    min-height: 8px;
+    border-radius: 16px;
+    slider {
+      all: unset;
+    }
+    .slider highlight {
+      all: unset;
+      min-width: 8px;
+      border-radius: 16px;
+      background: vars.$fg;
+    }
+  }
+}
+
+.notification {
+  // eventboxes can not take margins so we style its inner box instead
+  min-width: 300px;
+  margin: 0.3rem;
+  .image {
+    border-radius: 0.5rem;
+    min-width: 5rem;
+    min-height: 5rem;
+    margin-right: 1rem;
+  }
+
+  &.critical {
+    border: 2px solid vars.$warning;
+
+    .header {
+      .app-name {
+        color: vars.$warning;
+      }
+
+      .app-icon {
+        color: vars.$warning;
+      }
+    }
+  }
+}
+
+.osd {
+  .inner {
+    min-width: 220px;
+    padding: 4px 28px;
+  }
+  .title {
+    margin-bottom: 4px;
+  }
+  .icon {
+    all: unset;
+    margin-right: 28px;
+    font-size: 48px;
+    // color: vars.$fg;
+  }
+}
+
+.overview {
+  .left {
+    margin: 1rem;
+  }
+}
+
+.storagePopup {
+  .unit {
+    margin-bottom: 1rem;
+    .description {
+      opacity: 0.3;
+    }
+  }
+}
