@@ -1,10 +1,11 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
-import { Astal, Gdk } from "astal/gtk3";
 import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
 import options from "options";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
+import { Astal } from "astal/gtk3";
+import { Gdk } from "astal/gtk3";
 
 function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
   const device =

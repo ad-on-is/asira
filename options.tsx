@@ -18,6 +18,7 @@ import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
 import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
 import SysTray from "core/SysTray";
 import Razer from "plugins/builtin/razer/Widgets";
+import { CPU } from "plugins/builtin/gtop/Widgets";
 
 const options = {
   notification: {
@@ -70,7 +71,7 @@ const options = {
     widgets: {
       start: [],
       center: [],
-      end: [Razer, Storage],
+      end: [CPU, Razer, Storage],
     },
   },
   topBar: {
@@ -79,12 +80,12 @@ const options = {
       start: [OsButton, HyprlandWorkspaces],
       center: [DateTime],
       end: [
+        SysTray,
         VolumeButton,
         MicrophoneButton,
         ScreenRecordingButton,
         ConnectionButton,
         BatteryButton,
-        SysTray,
       ],
     },
   },

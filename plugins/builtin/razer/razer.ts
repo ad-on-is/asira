@@ -1,8 +1,6 @@
 import GObject, { register, property } from "astal/gobject";
 import { interval } from "astal";
-import { App } from "astal/gtk3";
 import { execAsync, exec } from "astal/process";
-import { bytesToHumanReadable, Unit } from "core/utils/helpers";
 
 const get = () =>
   execAsync(`python3 ${exec("pwd")}/plugins/builtin/razer/razer.py`);

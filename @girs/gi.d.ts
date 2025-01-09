@@ -38,6 +38,7 @@ import './gdkpixdata-2.0.d.ts';
 import './gdkpixbuf-2.0.d.ts';
 import './gdk-4.0.d.ts';
 import './gdk-3.0.d.ts';
+import './gtop-2.0.d.ts';
 import './gmodule-2.0.d.ts';
 import './glibunix-2.0.d.ts';
 import './gl-1.0.d.ts';

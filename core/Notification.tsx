@@ -210,19 +210,22 @@ export function Notification(props: Props) {
         </box>
         {n.get_actions().length > 0 && (
           <box>
-            {n.get_actions().map(({ label, id }) => (
-              <button
-                // hexpand={true}
-                css={`
-                  margin: 4px 8px 8px 8px;
-                `}
-                onClicked={() => {
-                  console.log(id);
-                  n.invoke(id);
-                }}
-                label={label}
-              />
-            ))}
+            {n
+              .get_actions()
+              .filter((a) => a.label !== "")
+              .map(({ label, id }) => (
+                <button
+                  // hexpand={true}
+                  css={`
+                    margin: 4px 8px 8px 8px;
+                  `}
+                  onClicked={() => {
+                    console.log(id);
+                    n.invoke(id);
+                  }}
+                  label={label}
+                />
+              ))}
           </box>
         )}
       </box>

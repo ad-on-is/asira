@@ -1,0 +1,6 @@
+{
+  "name": "Asira",
+  "dependencies": {
+    "astal": "/usr/share/astal/gjs"
+  }
+}

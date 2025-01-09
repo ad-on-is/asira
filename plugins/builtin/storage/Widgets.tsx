@@ -29,7 +29,7 @@ export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
               const isNetwork = s.isNetwork || false;
               const icon = isNetwork ? "󰒍" : "";
               return (
-                <box className={`unit ${isNetwork ? "network" : ""}`}>
+                <box className={`section ${isNetwork ? "network" : ""} `}>
                   <label className="icon" label={icon} />
                   <label className="name" label={s.label} />
                   <label className="value" label={` ${i.freePercent}%`} />

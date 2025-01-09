@@ -6,7 +6,7 @@ export function bytesToHumanReadable(bytes: number): Unit {
     size /= 1024;
     i++;
   }
-  return { size: Math.round(size), unit: units[i] };
+  return { size: Math.round(size * 100) / 100, unit: units[i] };
 }
 
 export type Unit = {

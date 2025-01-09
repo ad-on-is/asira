@@ -1,51 +1,61 @@
 @use "sass:color";
 @use "core/variables" as vars;
 
+.window {
+  background-color: color.adjust(vars.$crust, $alpha: -0.1);
+}
+
 .panelButton {
   &.dateTime {
     .icon {
-      color: #fab387;
+      color: vars.$peach;
     }
   }
   &.connection {
     .icon {
-      color: #cba6f7;
+      color: vars.$mauve;
     }
   }
   &.storage {
     .icon,
     .value {
-      color: #f9e2af;
+      color: vars.$yellow;
     }
   }
+  &.gtop {
+    .icon {
+      color: vars.$blue;
+    }
+  }
+
   &.razer {
     .icon,
     .value {
-      color: #a6e3a1;
+      color: vars.$green;
     }
     .low {
       .icon,
       .value {
-        color: #fab387;
+        color: vars.$peach;
       }
     }
 
     .critical {
       .icon,
       .value {
-        color: #f38ba8;
+        color: vars.$red;
       }
     }
   }
   &.audio {
     .icon,
     .value {
-      color: #74c7ec;
+      color: vars.$sapphire;
     }
     &.microphone {
       .icon,
       .volume {
-        color: #89dceb;
+        color: vars.$sky;
       }
     }
   }
@@ -56,12 +66,12 @@
     min-width: 25px;
     &.active {
       label {
-        color: #cba6f7;
+        color: vars.$mauve;
       }
-      background-color: rgba(203, 166, 247, 0.1);
+      background-color: color.adjust(vars.$mauve, $alpha: -0.8);
     }
     &.empty:not(.active) label {
-      color: color.scale(vars.$fg, $alpha: 70%);
+      color: color.adjust(vars.$fg, $alpha: -0.3);
     }
   }
 }
@@ -88,15 +98,15 @@
   }
   .appname,
   .time {
-    color: color.scale(vars.$fg, $alpha: 50%);
+    color: color.adjust(vars.$fg, $alpha: -0.6);
   }
   .message {
-    color: color.scale(vars.$fg, $alpha: 50%);
+    color: color.adjust(vars.$fg, $alpha: -0.6);
   }
 }
 
 .notificationHistory {
   .notification {
-    border: 1px solid color.scale($color: vars.$fg, $alpha: 10%);
+    border: 1px solid color.adjust($color: vars.$fg, $alpha: -0.8);
   }
 }

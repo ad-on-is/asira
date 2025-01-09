@@ -41,14 +41,6 @@ button {
       background-color: vars.$buttonAccentBgHover;
     }
   }
-
-  &.panelButton {
-    &.storage {
-      .unit {
-        margin: 0 0.8rem;
-      }
-    }
-  }
 }
 
 .divider {
@@ -89,6 +81,15 @@ button box {
   label.icon:last-child {
     margin-right: 0;
   }
+  .section {
+    margin: 0 0.5rem;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
 
 scrollable {
@@ -119,17 +120,17 @@ scrollable {
   all: unset;
   trough {
     all: unset;
-    background: vars.$sliderTrough;
+    background: vars.$sliderBack;
     min-height: 8px;
     border-radius: 16px;
     slider {
       all: unset;
     }
-    .slider highlight {
+    highlight {
       all: unset;
       min-width: 8px;
       border-radius: 16px;
-      background: vars.$fg;
+      background: vars.$sliderFront;
     }
   }
 }
