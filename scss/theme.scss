@@ -7,8 +7,9 @@
 }
 
 .panelButton {
+  transition: background-color 0.3s ease-out;
   &.focused {
-    background-color: color.adjust(vars.$fg, $alpha: -0.9);
+    background-color: color.adjust(vars.$primary, $alpha: -0.8);
   }
   &.pinned .icon {
     color: vars.$red;
@@ -87,8 +88,14 @@
       background-color: color.adjust(vars.$mauve, $alpha: -0.8);
     }
     &.empty:not(.active) label {
-      color: color.adjust(vars.$fg, $alpha: -0.3);
+      color: color.adjust(vars.$fg, $alpha: -0.8);
     }
+  }
+}
+
+.bar {
+  .panelButton:not(:hover) {
+    background-color: transparent;
   }
 }
 
@@ -123,6 +130,7 @@
 
 .notificationHistory {
   .notification {
-    border: 1px solid color.adjust($color: vars.$fg, $alpha: -0.8);
+    border-color: transparent;
+    background-color: color.adjust(vars.$bg, $alpha: -0.5);
   }
 }

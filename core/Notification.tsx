@@ -270,6 +270,36 @@ export function NotificationHistory() {
 
   return (
     <box vertical={true} className="notificationHistory">
+      <scrollable vexpand={true} hscroll={Gtk.PolicyType.NEVER}>
+        <box vertical={true} className="list">
+          {bind(notifications, "notifications").as((notificationsList) => {
+            if (notificationsList.length === 0) {
+              return (
+                <box
+                  vertical={true}
+                  css={`
+                    margin-top: 5rem;
+                  `}
+                >
+                  <label className="icon xxxlarge" label="󱇦" />
+                  <label className="xlarge" label="All caught up" />
+                  <label label="No new notifications" />
+                </box>
+              );
+            } else {
+              return notificationsList.map((notification) => {
+                return (
+                  <Notification
+                    autoDismiss={false}
+                    notification={notification}
+                  />
+                );
+              });
+            }
+          })}
+        </box>
+      </scrollable>
+
       <box vertical={false}>
         <button
           onClicked={() => {
@@ -301,36 +331,6 @@ export function NotificationHistory() {
           </box>
         </button>
       </box>
-
-      <scrollable vexpand={true} hscroll={Gtk.PolicyType.NEVER}>
-        <box vertical={true} className="list">
-          {bind(notifications, "notifications").as((notificationsList) => {
-            if (notificationsList.length === 0) {
-              return (
-                <box
-                  vertical={true}
-                  css={`
-                    margin-top: 5rem;
-                  `}
-                >
-                  <label className="icon xxxlarge" label="󱇦" />
-                  <label className="xlarge" label="All caught up" />
-                  <label label="No new notifications" />
-                </box>
-              );
-            } else {
-              return notificationsList.map((notification) => {
-                return (
-                  <Notification
-                    autoDismiss={false}
-                    notification={notification}
-                  />
-                );
-              });
-            }
-          })}
-        </box>
-      </scrollable>
     </box>
   );
 }

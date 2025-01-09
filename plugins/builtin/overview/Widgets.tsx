@@ -33,7 +33,6 @@ export default function () {
         className="left"
         css={`
           min-width: 400px;
-          padding: 1rem;
         `}
       >
         <NotificationHistory />

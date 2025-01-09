@@ -43,7 +43,7 @@ export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
                     return (
                       <button
                         className={`panelButton app ${c.floating && !c.pinned ? "floating" : ""} ${c.pinned ? "pinned" : ""} ${c.focused ? "focused" : ""} ${c.workspace.id < 0 ? "minimized" : ""}`}
-                        onClicked={() => {
+                        onClicked={(self) => {
                           if (c.workspace.id > 0) {
                             hypr.dispatch(
                               "focuswindow",

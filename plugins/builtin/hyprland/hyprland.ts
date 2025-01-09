@@ -26,7 +26,8 @@ export class HyprTaskbar extends GObject.Object {
   }
 
   #clients: MyClient[] = [];
-  #apps: Apps.Application[] = [];
+  apps: Apps.Application[] = [];
+  cache: { [className: string]: string } = {};
 
   @property()
   get clients() {
@@ -34,13 +35,21 @@ export class HyprTaskbar extends GObject.Object {
   }
 
   iconName(title: string, className: string) {
-    const app = this.#apps.find(
+    if (this.cache[className]) {
+      return this.cache[className];
+    }
+    const app = this.apps.find(
       (a) =>
         a.name.toLowerCase().includes(title.toLowerCase()) ||
         a.name.toLowerCase().includes(className.toLowerCase()),
     );
 
-    return app?.iconName || "missing-symbolic";
+    if (app) {
+      this.cache[className] = app.iconName;
+      return app.iconName;
+    }
+
+    return "missing-symbolic";
   }
 
   setInactive() {
@@ -71,7 +80,7 @@ export class HyprTaskbar extends GObject.Object {
       this.#clients.push(mc);
     });
 
-    this.#apps = apps.list;
+    this.apps = apps.list;
 
     this.filterAndNotify();
 
