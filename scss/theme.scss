@@ -3,9 +3,25 @@
 
 .window {
   background-color: color.adjust(vars.$crust, $alpha: -0.1);
+  border: 1px solid color.adjust(vars.$fg, $alpha: -0.8);
 }
 
 .panelButton {
+  &.focused {
+    background-color: color.adjust(vars.$fg, $alpha: -0.9);
+  }
+  &.pinned .icon {
+    color: vars.$red;
+  }
+  &.pinned,
+  &.floating {
+    label.icon {
+      opacity: 0.3;
+    }
+  }
+  &.minimized {
+    opacity: 0.5;
+  }
   &.dateTime {
     .icon {
       color: vars.$peach;

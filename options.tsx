@@ -19,6 +19,7 @@ import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
 import SysTray from "core/SysTray";
 import Razer from "plugins/builtin/razer/Widgets";
 import { CPU } from "plugins/builtin/gtop/Widgets";
+import TaskBar from "plugins/builtin/hyprland/TaskBar";
 
 const options = {
   notification: {
@@ -47,6 +48,27 @@ const options = {
       Astal.WindowAnchor.LEFT |
       Astal.WindowAnchor.BOTTOM,
   },
+  hyprland: {
+    taskbar: {
+      minimizedWorkspace: "minimized",
+    },
+    workspaces: {
+      icons: {
+        1: "󰈸",
+        2: "󱋊",
+        3: " ",
+        4: "󰈸",
+        5: "󱋊",
+        6: "",
+        7: "󰈸",
+        8: "󱋊",
+        9: "",
+        10: "󰈸",
+        11: "󱋊",
+        12: "",
+      },
+    },
+  },
   overview: {
     position: Astal.WindowAnchor.TOP,
   },
@@ -69,7 +91,7 @@ const options = {
   bottomBar: {
     margin: [5, 10, 10, 10],
     widgets: {
-      start: [],
+      start: [TaskBar],
       center: [],
       end: [CPU, Razer, Storage],
     },
