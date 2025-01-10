@@ -198,3 +198,15 @@ scrollable {
     }
   }
 }
+
+.mediaPlayer {
+  .seekContainer {
+    label,
+    slider {
+      margin: 0 1rem;
+    }
+  }
+  .slider {
+    min-width: 10rem;
+  }
+}

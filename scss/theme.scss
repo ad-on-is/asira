@@ -94,7 +94,7 @@
 }
 
 .bar {
-  .panelButton:not(:hover) {
+  .panelButton:not(:hover):not(.focused) {
     background-color: transparent;
   }
 }
@@ -132,5 +132,32 @@
   .notification {
     border-color: transparent;
     background-color: color.adjust(vars.$bg, $alpha: -0.5);
+  }
+}
+
+.mediaPlayerPopup {
+  .info {
+    margin-bottom: 0.8rem;
+    .album {
+      color: color.adjust(vars.$fg, $alpha: -0.6);
+    }
+  }
+  .cover {
+    margin-right: 0.8rem;
+    border-radius: 0.5rem;
+    min-width: 5rem;
+    min-height: 5rem;
+  }
+
+  .seek {
+    .slider {
+      margin: 0 0.8rem;
+    }
+  }
+
+  .controls {
+    button:not(:hover) {
+      background-color: transparent;
+    }
   }
 }

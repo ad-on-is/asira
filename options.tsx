@@ -20,6 +20,7 @@ import SysTray from "core/SysTray";
 import Razer from "plugins/builtin/razer/Widgets";
 import { CPU } from "plugins/builtin/gtop/Widgets";
 import TaskBar from "plugins/builtin/hyprland/TaskBar";
+import MediaPlayer from "plugins/builtin/mediaplayer/Widgets";
 
 const options = {
   notification: {
@@ -92,7 +93,7 @@ const options = {
     margin: [5, 10, 10, 10],
     widgets: {
       start: [TaskBar],
-      center: [],
+      center: [MediaPlayer],
       end: [CPU, Razer, Storage],
     },
   },

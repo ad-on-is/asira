@@ -67,7 +67,7 @@ function PopupWindow(
       }}
     >
       <box vertical={true}>
-        <box vertical={true} className="window">
+        <box vertical={true} className="window popUp">
           <box
             css={`
               margin: 10px 10px 10px 10px;

@@ -1,6 +1,8 @@
 import { Gtk } from "astal/gtk3";
 import Mpris from "gi://AstalMpris";
 import { bind, Variable } from "astal";
+import { togglePopup } from "core/Popup";
+import { Astal } from "astal/gtk3";
 
 function lengthStr(length: number) {
   const min = Math.floor(length / 60);
@@ -9,12 +11,53 @@ function lengthStr(length: number) {
   return `${min}:${sec0}${sec}`;
 }
 
+export function MediaPlayerWidget({ player }: { player: Mpris.Player }) {
+  const title = bind(player, "title").as((t) => t || "Unknown Track");
+
+  const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
+  const cover = bind(player, "artUrl").as((a) => a || "Unknown CoverArt");
+  const remainingPositon = Variable(player.length - player.position);
+  bind(player, "position").subscribe((position) => {
+    if (player.playbackStatus === Mpris.PlaybackStatus.PLAYING) {
+      remainingPositon.set(player.length - position);
+    }
+  });
+
+  return (
+    <box className="mediaPlayer">
+      <box
+        className="icon"
+        css={`
+          background-image: url("${cover.get()}");
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          border-radius: 0.5rem;
+          min-width: 1rem;
+          min-height: 1rem;
+          margin-top: 0.3rem;
+          margin-bottom: 0.3rem;
+        `}
+      />
+      <label className="title" truncate={true} label={title} />
+      <label label=" - " />
+      <label className="artist" truncate={true} label={artist} />
+      <label
+        className="position"
+        label={remainingPositon().as((rp) => ` (${lengthStr(rp)})`)}
+      />
+    </box>
+  );
+}
+
 function MediaPlayer({ player }: { player: Mpris.Player }) {
   const { START, END, CENTER } = Gtk.Align;
 
   const title = bind(player, "title").as((t) => t || "Unknown Track");
 
   const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
+  const cover = bind(player, "artUrl").as((a) => a || "Unknown CoverArt");
+  const album = bind(player, "album").as((a) => a || "Unknown Album");
 
   // player.position will keep changing even when the player is paused.  This is a workaround
   const realPosition = Variable(player.position);
@@ -29,17 +72,48 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
   );
 
   return (
-    <box className="mediaPlayer" vertical={true}>
-      <label truncate={true} halign={CENTER} label={title} />
-      <label truncate={true} halign={CENTER} label={artist} />
-      <box className="seekContainer" vertical={false}>
+    <box className="mediaPlayerPopup" vertical={true}>
+      <box className="info">
+        <box
+          className="cover"
+          css={`
+            background-image: url("${cover.get()}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+          `}
+        />
+
+        <box vertical={true}>
+          <label
+            truncate={true}
+            className="large title"
+            halign={START}
+            label={title}
+          />
+          <label
+            truncate={true}
+            halign={START}
+            label={artist}
+            className="artist"
+          />
+          <label
+            truncate={true}
+            halign={START}
+            label={album}
+            className="album"
+          />
+        </box>
+      </box>
+
+      <box className="seek" vertical={false}>
         <label
           halign={START}
           visible={bind(player, "length").as((l) => l > 0)}
           label={realPosition().as(lengthStr)}
         />
         <slider
-          className="seek"
+          className="slider"
           hexpand={true}
           visible={bind(player, "length").as((l) => l > 0)}
           onDragged={({ value }) => {
@@ -58,7 +132,7 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
           )}
         />
       </box>
-      <box halign={CENTER}>
+      <box halign={CENTER} className="controls">
         <button
           className="controlButton"
           onClicked={() => {
@@ -129,11 +203,23 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
 export default function () {
   const mpris = Mpris.get_default();
   return (
-    <box className="mediaPlayersContainer" vertical={true}>
+    <box>
       {bind(mpris, "players").as((players) => {
-        return players.map((player) => <MediaPlayer player={player} />);
+        return players.map((player) => (
+          <button
+            className="panelButton mediaPlayer"
+            onClicked={() => {
+              togglePopup(
+                "mediaPlayer",
+                Astal.WindowAnchor.BOTTOM,
+                <MediaPlayer player={player} />,
+              );
+            }}
+          >
+            <MediaPlayerWidget player={player} />
+          </button>
+        ));
       })}
     </box>
   );
 }
-
