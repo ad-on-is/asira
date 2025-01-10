@@ -1,9 +1,9 @@
 import { Gdk, Gtk } from "astal/gtk3";
 import Storage, { UnitInfo } from "./storage";
-import options from "init";
 import { togglePopup } from "core/Popup";
+import { Astal } from "astal/gtk3";
 
-export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const storage = Storage.get_default();
   return (
     <button
@@ -11,16 +11,16 @@ export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
       onClicked={() => {
         togglePopup(
           "dateTime",
-          options.storage.position,
+          opts.position || Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
           <PopUp info={storage.info} />,
         );
       }}
     >
       <box
         setup={(self) => {
-          const itemsToShow = options.storage.show;
+          const itemsToShow = opts.paths || [];
           self.hook(storage, "notify::info", () => {
-            self.children = itemsToShow.map((s) => {
+            self.children = itemsToShow.map((s: { name: string, label: string, isNetwork: boolean }) => {
               let i = storage.info.find((i) => i.name == s.name);
 
               if (!i) {
@@ -53,7 +53,7 @@ function PopUp({ info }: { info: UnitInfo[] }) {
         ) : (
           <box vertical={true} className="unit">
             <label label={i.name} halign={Gtk.Align.START} />
-            <slider className="slider" value={val} onDragged={() => {}} />
+            <slider className="slider" value={val} onDragged={() => { }} />
             <box>
               <label
                 className="description"

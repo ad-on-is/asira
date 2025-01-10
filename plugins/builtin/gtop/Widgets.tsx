@@ -1,7 +1,7 @@
 import { Gdk } from "astal/gtk3";
 import Top from "./gtop";
 
-export function CPU({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const top = Top.get_default();
   return (
     <button className="panelButton gtop">

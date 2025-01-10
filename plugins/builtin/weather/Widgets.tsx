@@ -1,7 +1,7 @@
 import Weather from "./weather";
 import { bind } from "astal";
 import { Gdk } from "astal/gtk3";
-export function MiniWeather({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export function MiniWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const weather = Weather.get_default();
   return (
     <box className="weather mini">
@@ -21,7 +21,7 @@ export function MiniWeather({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
   );
 }
 
-export function BigWeather({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export function BigWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const weather = Weather.get_default();
   return (
     <box className="weather big" vertical={true}>

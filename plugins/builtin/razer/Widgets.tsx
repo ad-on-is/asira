@@ -3,7 +3,7 @@ import options from "init";
 import Razer from "./razer";
 import { togglePopup } from "core/Popup";
 
-export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const razer = Razer.get_default();
   return (
     <button

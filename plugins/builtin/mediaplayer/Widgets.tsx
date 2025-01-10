@@ -3,6 +3,7 @@ import Mpris from "gi://AstalMpris";
 import { bind, Variable } from "astal";
 import { togglePopup } from "core/Popup";
 import { Astal } from "astal/gtk3";
+import { Gdk } from "astal/gtk3";
 
 function lengthStr(length: number) {
   const min = Math.floor(length / 60);
@@ -200,7 +201,7 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
   );
 }
 
-export default function () {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const mpris = Mpris.get_default();
   return (
     <box>

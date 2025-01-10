@@ -20,7 +20,7 @@ class CalendarWidget extends astalify(Gtk.Calendar) {
   }
 }
 
-export default function () {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const time = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
     1000,
     () => GLib.DateTime.new_now_local(),

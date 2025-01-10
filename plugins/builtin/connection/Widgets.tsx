@@ -38,7 +38,7 @@ export function NetworkButton() {
   return <label className="icon network" label={getNetworkIconBinding()} />;
 }
 
-export function ConnectionButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+export function ConnectionButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   return (
     <button
       className={`panelButton connection`}
@@ -46,8 +46,8 @@ export function ConnectionButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
         togglePopup(
           "connection",
           Astal.WindowAnchor.TOP |
-            Astal.WindowAnchor.RIGHT |
-            Astal.WindowAnchor.BOTTOM,
+          Astal.WindowAnchor.RIGHT |
+          Astal.WindowAnchor.BOTTOM,
 
           <box vertical={true}>
             <NetworkControls />

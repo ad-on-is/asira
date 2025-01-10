@@ -1,17 +1,18 @@
 import Hyprland from "gi://AstalHyprland";
 import { bind, GLib, Variable } from "astal";
 import { Gdk } from "astal/gtk3";
-import options from "init";
 import { getMonitorName } from "./hyprland";
 
 export default function HyprlandWorkspaces({
   gdkmonitor,
+  opts
 }: {
   gdkmonitor?: Gdk.Monitor;
+  opts?: any
 }) {
   const hypr = Hyprland.get_default();
 
-  const icons: { [id: number]: string } = options.hyprland.workspaces.icons;
+  const icons: { [id: number]: string } = opts?.icons || {};
 
   return (
     <box vertical={false} className="workspaces">

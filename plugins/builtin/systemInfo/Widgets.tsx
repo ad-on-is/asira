@@ -1,17 +1,7 @@
-import { App, Astal } from "astal/gtk3";
-import {
-  MicrophoneControls,
-  SpeakerControls,
-} from "plugins/builtin/audio/Controls";
 import { bind } from "astal";
 import { Gtk, Gdk } from "astal/gtk3";
 import PowerOptions from "../../../common/PowerOptions";
-import NetworkControls from "plugins/builtin/connection/NetworkControls";
-import BluetoothControls from "plugins/builtin/connection/BluetoothControls";
-import Divider from "common/Divider";
-import MediaPlayers from "core/MediaPlayers";
-
-export default function () {
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   let window: Gtk.Window;
 
   return (

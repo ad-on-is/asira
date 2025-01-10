@@ -3,14 +3,18 @@ import Hyprland from "gi://AstalHyprland";
 
 import { bind, GLib, Variable, derive } from "astal";
 import { Gdk } from "astal/gtk3";
-import options from "init";
-import { truncateDescription } from "../audio/audio";
 import { truncateString } from "core/utils/strings";
 
-export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
+/**@param: {{textOnlyOn: []}} opts */
+
+export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
   const taskbar = HyprTaskbar.get_default();
   const hypr = Hyprland.get_default();
-  const minimizedWs = options.hyprland.taskbar.minimizedWorkspace;
+  const minimizedWs = opts?.minimizedWorkspace || "minimized";
+  const showTitle = opts?.textOnlyOn === undefined ||
+    (opts?.textOnlyOn || []).includes(
+      gdkmonitor?.model || "*",
+    );
   return (
     <box vertical={false} className="taskbar">
       {bind(hypr, "workspaces").as((workspaces) => {
@@ -66,7 +70,7 @@ export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
                               c.initialClass,
                             )}
                           />
-                          <label
+                          <label visible={showTitle}
                             label={truncateString(c.title.split(" — ")[0], 16)}
                           />
                           <label

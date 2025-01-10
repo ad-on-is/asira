@@ -1,6 +1,6 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 
-import options from "init";
+import options from "core/init";
 
 function HorizontalBar(
   gdkmonitor: Gdk.Monitor,
@@ -34,13 +34,14 @@ function HorizontalBar(
         `}
       >
         <box halign={Gtk.Align.START} vertical={vertical} className="col start">
-          {opts.widgets.start.map((Component) => (
-            <Component gdkmonitor={gdkmonitor} />
+
+          {opts.widgets.start.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor?.model)).map(({ Component, o, m }: { Component: Gtk.Widget, o: any, m: string[] }) => (
+            <Component gdkmonitor={gdkmonitor} opts={o} />
           ))}
         </box>
         <box vertical={vertical} className="col center">
-          {opts.widgets.center.map((Component) => (
-            <Component gdkmonitor={gdkmonitor} />
+          {opts.widgets.center.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor.model)).map(({ Component, o, m }) => (
+            <Component gdkmonitor={gdkmonitor} opts={o} />
           ))}
         </box>
         <box
@@ -49,8 +50,9 @@ function HorizontalBar(
           vertical={vertical}
           valign={Gtk.Align.START}
         >
-          {opts.widgets.end.map((Component) => (
-            <Component gdkmonitor={gdkmonitor} />
+
+          {opts.widgets.end.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor.model)).map(({ Component, o, m }) => (
+            <Component gdkmonitor={gdkmonitor} opts={o} />
           ))}
         </box>
       </centerbox>
@@ -72,8 +74,8 @@ export function BottomBar(gdkmonitor: Gdk.Monitor) {
     gdkmonitor,
     "bottomBar",
     Astal.WindowAnchor.BOTTOM |
-      Astal.WindowAnchor.LEFT |
-      Astal.WindowAnchor.RIGHT,
+    Astal.WindowAnchor.LEFT |
+    Astal.WindowAnchor.RIGHT,
     false,
   );
 }
@@ -83,8 +85,8 @@ export function SideBarLeft(gdkmonitor: Gdk.Monitor) {
     gdkmonitor,
     "leftBar",
     Astal.WindowAnchor.TOP |
-      Astal.WindowAnchor.LEFT |
-      Astal.WindowAnchor.BOTTOM,
+    Astal.WindowAnchor.LEFT |
+    Astal.WindowAnchor.BOTTOM,
     true,
   );
 }
@@ -94,20 +96,9 @@ export function SideBarRight(gdkmonitor: Gdk.Monitor) {
     gdkmonitor,
     "rightBar",
     Astal.WindowAnchor.TOP |
-      Astal.WindowAnchor.RIGHT |
-      Astal.WindowAnchor.BOTTOM,
+    Astal.WindowAnchor.RIGHT |
+    Astal.WindowAnchor.BOTTOM,
     true,
   );
 }
 
-export function BarWidget({
-  gdkmonitor,
-  Component,
-  opts,
-}: {
-  gdkmonitor: Gdk.Monitor;
-  Component: Gtk.Widget;
-  opts: any;
-}) {
-  return <Component {...opts} />;
-}

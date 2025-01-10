@@ -123,7 +123,7 @@ export function Notification(props: Props) {
 
   let setup,
     onHover,
-    onHoverLost = () => {};
+    onHoverLost = () => { };
 
   if (autoDismiss) {
     let hideTimeout: GLib.Source | null = null;

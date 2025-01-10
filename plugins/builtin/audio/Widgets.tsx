@@ -1,13 +1,12 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
 import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
-import options from "init";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";
 import { Gdk } from "astal/gtk3";
 
-function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
+function AudioButton(label: string, gdkmonitor?: Gdk.Monitor, opts?: any) {
   const device =
     label === "speaker"
       ? Wp.get_default()!.audio.default_speaker
@@ -19,10 +18,10 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
     bind(device, "mute"),
   ]);
 
-  const showDescription =
-    options.audio.showDescriptionOnMonitors.includes(
+  const showDescription = opts?.textOnlyOn === undefined ||
+    (opts?.textOnlyOn || []).includes(
       gdkmonitor?.model || "*",
-    ) || options.audio.showDescriptionOnMonitors.includes("*");
+    );
 
   return (
     <button
@@ -31,8 +30,8 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
         togglePopup(
           `${label}:audio`,
           Astal.WindowAnchor.TOP |
-            Astal.WindowAnchor.RIGHT |
-            Astal.WindowAnchor.BOTTOM,
+          Astal.WindowAnchor.RIGHT |
+          Astal.WindowAnchor.BOTTOM,
           label === "speaker" ? <SpeakerControls /> : <MicrophoneControls />,
         );
       }}
@@ -46,28 +45,24 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor) {
               : getMicrophoneIcon(device),
           )}
         />
-        {showDescription ? (
-          <box>
-            <label
-              className="name"
-              label={listener(() => truncateDescription(device.description))}
-            />
-          </box>
-        ) : (
-          <></>
-        )}
+
+        <label visible={showDescription}
+          className="name"
+          label={listener(() => `${truncateDescription(device.description)} `)}
+        />
+
         <label
           className="value"
-          label={listener(() => ` ${Math.round(device.volume * 100)}%`)}
+          label={listener(() => `${Math.round(device.volume * 100)}%`)}
         />
       </box>
     </button>
   );
 }
 
-export function VolumeButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
-  return AudioButton("speaker", gdkmonitor);
+export function VolumeButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+  return AudioButton("speaker", gdkmonitor, opts);
 }
-export function MicrophoneButton({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {
-  return AudioButton("microphone", gdkmonitor);
+export function MicrophoneButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+  return AudioButton("microphone", gdkmonitor, opts);
 }
