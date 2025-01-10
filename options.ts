@@ -22,11 +22,10 @@ import { CPU } from "plugins/builtin/gtop/Widgets";
 import TaskBar from "plugins/builtin/hyprland/TaskBar";
 import MediaPlayer from "plugins/builtin/mediaplayer/Widgets";
 
-const options = {
-  notification: {
-    position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
-    margin: [0, 50, 50, 0],
-  },
+import _ from "lodash";
+import coreOptions from "core/options";
+
+export default _.merge(coreOptions, {
   storage: {
     position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
 
@@ -37,17 +36,6 @@ const options = {
       { name: "/run/media/adonis/Backups", label: "Backups" },
       { name: "/run/media/adonis/NAS-Drive", label: "NAS", isNetwork: true },
     ],
-  },
-  dateTime: {
-    showWeather: true,
-    timeFormat: "%H:%M:%S",
-    dateFormat: "%a, %d.%b %Y",
-  },
-  systemInfo: {
-    position:
-      Astal.WindowAnchor.TOP |
-      Astal.WindowAnchor.LEFT |
-      Astal.WindowAnchor.BOTTOM,
   },
   hyprland: {
     taskbar: {
@@ -70,27 +58,17 @@ const options = {
       },
     },
   },
-  overview: {
-    position: Astal.WindowAnchor.TOP,
-  },
-  osd: {
-    position: Astal.WindowAnchor.BOTTOM,
-    margin: [0, 0, 100, 0],
-  },
   audio: {
     // use "*" for all monitors
     showDescriptionOnMonitors: ["34GP950G", "LG ULTRAWIDE"],
   },
   leftBar: {
-    margin: [5, 10, 10, 10],
     widgets: { start: [DateTime], center: [], end: [] },
   },
   rightBar: {
-    margin: [5, 10, 10, 10],
     widgets: { start: [], center: [], end: [] },
   },
   bottomBar: {
-    margin: [5, 10, 10, 10],
     widgets: {
       start: [TaskBar],
       center: [MediaPlayer],
@@ -98,7 +76,6 @@ const options = {
     },
   },
   topBar: {
-    margin: [5, 10, 0, 10],
     widgets: {
       start: [OsButton, HyprlandWorkspaces],
       center: [DateTime],
@@ -112,24 +89,4 @@ const options = {
       ],
     },
   },
-};
-
-export function init() {
-  const mainMonitor =
-    App.get_monitors().find((m) => m.is_primary()) || App.get_monitors()[0];
-
-  // Use TopBar|BottomBar|SieBarLeft|SideBarRight
-  App.get_monitors().map(TopBar);
-  App.get_monitors().map(BottomBar);
-  // TopBar(mainMonitor);
-  // App.get_monitors().map(DisplayNotifications);
-  DisplayNotifications(mainMonitor);
-  App.get_monitors().map(VolumeOSD);
-  // VolumeOSD(mainMonitor)
-  App.get_monitors().map(MicrophoneOSD);
-  // MicrophoneOSD(mainMonitor);
-  App.get_monitors().map(BrightnessOSD);
-  // BrightnessOSD(mainMonitor)
-}
-
-export default options;
+});

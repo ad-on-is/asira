@@ -4,7 +4,7 @@ import Hyprland from "gi://AstalHyprland";
 import { App, Gdk } from "astal/gtk3";
 import { OverviewWindowName } from "constants";
 import { MiniWeather } from "../weather/Widgets";
-import options from "options";
+import options from "init";
 import { togglePopup } from "core/Popup";
 import OverView from "../overview/Widgets";
 export default function DateTime({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {

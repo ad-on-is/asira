@@ -1,6 +1,6 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 
-import options from "options";
+import options from "init";
 
 function HorizontalBar(
   gdkmonitor: Gdk.Monitor,
@@ -98,4 +98,16 @@ export function SideBarRight(gdkmonitor: Gdk.Monitor) {
       Astal.WindowAnchor.BOTTOM,
     true,
   );
+}
+
+export function BarWidget({
+  gdkmonitor,
+  Component,
+  opts,
+}: {
+  gdkmonitor: Gdk.Monitor;
+  Component: Gtk.Widget;
+  opts: any;
+}) {
+  return <Component {...opts} />;
 }

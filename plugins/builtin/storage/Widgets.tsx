@@ -1,6 +1,6 @@
 import { Gdk, Gtk } from "astal/gtk3";
 import Storage, { UnitInfo } from "./storage";
-import options from "options";
+import options from "init";
 import { togglePopup } from "core/Popup";
 
 export default function ({ gdkmonitor }: { gdkmonitor?: Gdk.Monitor }) {

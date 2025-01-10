@@ -3,7 +3,7 @@ import Hyprland from "gi://AstalHyprland";
 
 import { bind, GLib, Variable, derive } from "astal";
 import { Gdk } from "astal/gtk3";
-import options from "options";
+import options from "init";
 import { truncateDescription } from "../audio/audio";
 import { truncateString } from "core/utils/strings";
 

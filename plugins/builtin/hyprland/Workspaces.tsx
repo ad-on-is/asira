@@ -1,7 +1,7 @@
 import Hyprland from "gi://AstalHyprland";
 import { bind, GLib, Variable } from "astal";
 import { Gdk } from "astal/gtk3";
-import options from "options";
+import options from "init";
 import { getMonitorName } from "./hyprland";
 
 export default function HyprlandWorkspaces({

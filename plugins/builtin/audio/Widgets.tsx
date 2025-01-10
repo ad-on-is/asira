@@ -1,7 +1,7 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
 import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
-import options from "options";
+import options from "init";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";

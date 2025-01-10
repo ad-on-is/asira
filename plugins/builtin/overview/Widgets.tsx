@@ -4,7 +4,7 @@ import { App, Astal, astalify, ConstructProps, Gtk, Gdk } from "astal/gtk3";
 import { bind, GLib, Variable } from "astal";
 import { OverviewWindowName } from "constants";
 import { NotificationHistory } from "core/Notification";
-import options from "options";
+import options from "init";
 import { BigWeather } from "../weather/Widgets";
 import Divider from "common/Divider";
 

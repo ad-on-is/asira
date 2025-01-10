@@ -1,6 +1,6 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import { Binding, GLib } from "astal";
-import options from "options";
+import options from "init";
 
 export default function OSD({
   gdkmonitor,

@@ -1,21 +1,8 @@
-import { App, Astal } from "astal/gtk3";
+import { App } from "astal/gtk3";
 import style from "./scss/main.scss";
-import Overview from "plugins/builtin/overview/Widgets";
-import SystemMenuWindow from "plugins/builtin/systemInfo/Widgets";
 
 import { exec } from "astal/process";
-import AppLauncher, {
-  AppLauncherWindowName,
-} from "plugins/appLauncher/AppLauncher";
-import Screenshot, {
-  ScreenshotWindowName,
-} from "plugins/screenshot/Screenshot";
-import Screenshare, {
-  ScreenshareWindowName,
-  updateResponse,
-  updateWindows,
-} from "plugins/screenshare/Screenshare";
-import { init } from "options";
+import { init } from "init";
 try {
   exec("sass ./scss/main.scss ./style.css");
 } catch (e) {
@@ -23,8 +10,7 @@ try {
 }
 
 App.start({
-  // css: style,
-  css: "./style.css",
+  css: style,
   main(...args: Array<string>) {
     init();
   },

@@ -2,7 +2,7 @@ import { GLib, Variable, bind } from "astal";
 import { Astal, Gtk, Gdk } from "astal/gtk3";
 import Notifd from "gi://AstalNotifd";
 import { insertNewlines } from "core/utils/strings";
-import options from "options";
+import options from "init";
 
 import { type Subscribable } from "astal/binding";
 

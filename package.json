@@ -1,6 +1,10 @@
 {
   "name": "Asira",
   "dependencies": {
-    "astal": "/usr/share/astal/gjs"
+    "astal": "/usr/share/astal/gjs",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.14"
   }
 }

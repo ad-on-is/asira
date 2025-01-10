@@ -1,5 +1,5 @@
 import { Gdk, Gtk } from "astal/gtk3";
-import options from "options";
+import options from "init";
 import Razer from "./razer";
 import { togglePopup } from "core/Popup";
 
