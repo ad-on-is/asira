@@ -42,7 +42,7 @@ export default _.merge(coreOptions,
   // see core/init for reference
   //
   {
-    openweatherApiKey: "",
+    openweatherApiKey: "02a93a93f5a23b3dc88da0cdd3663308",
     topBar: {
       widgets: {
         start: [{ Component: OsButton }, {

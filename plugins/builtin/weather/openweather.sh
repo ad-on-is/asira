@@ -5,7 +5,7 @@ if [ -n "$location" ]; then
   lat=$(echo $location | jq '.latitude')
   city=$(echo $location | jq '.city')
   lon=$(echo $loc | jq '.longitude')
-  weather=$(curl -sf "https://api.openweathermap.org/data/2.5/weather?appid=${OPENWEATHERMAP_KEY}&lat=$lat&lon=$lon&units=metric")
+  weather=$(curl -sf "https://api.openweathermap.org/data/2.5/weather?appid=${1}&lat=$lat&lon=$lon&units=metric")
   res=$(echo $weather | sed 's/.$//')
   res="$res,\"city\":$city}"
   echo $res

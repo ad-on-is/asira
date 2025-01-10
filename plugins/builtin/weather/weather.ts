@@ -1,8 +1,9 @@
 import GObject, { register, property } from "astal/gobject";
 import { interval } from "astal";
-import { execAsync } from "astal/process";
+import { execAsync, exec } from "astal/process";
+import options from "init"
 
-const get = () => execAsync(`bash -c "$HOME/.local/scripts/wm/openweather.sh"`);
+const get = () => execAsync(`bash -c "${exec("pwd")}/plugins/builtin/weather/openweather.sh ${options.openweatherApiKey}"`);
 
 @register({ GTypeName: "Weather" })
 export default class Weather extends GObject.Object {

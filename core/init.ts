@@ -25,6 +25,7 @@ export function init() {
 }
 
 export default {
+  openweatherApiKey: "",
   notification: {
     position: Astal.WindowAnchor.BOTTOM | Astal.WindowAnchor.RIGHT,
     margin: [0, 50, 50, 0],
