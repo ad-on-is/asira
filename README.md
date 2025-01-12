@@ -22,6 +22,7 @@
   - Notifd
   - WirePlumber
 - Install [AGS2](https://aylur.github.io/ags/guide/install.html)
+- Install [Bun](https://bun.sh/)
 
 ```bash
 # clone this repo
@@ -30,6 +31,9 @@ cd asira
 
 # copy init file
 cp init.example.tsx init.tsx
+
+# install dependencies
+bun i
 
 # download the icons form here
 # https://github.com/rodrigokamada/openweathermap/tree/master/src/images
