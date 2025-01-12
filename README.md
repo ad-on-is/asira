@@ -29,7 +29,7 @@ git clone https://github.com/ad-on-is/asira
 cd asira
 
 # copy init file
-cp init.example.ts init.ts
+cp init.example.tsx init.tsx
 
 # download the icons form here
 # https://github.com/rodrigokamada/openweathermap/tree/master/src/images

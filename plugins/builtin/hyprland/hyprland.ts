@@ -1,5 +1,5 @@
 import Hyprland from "gi://AstalHyprland";
-import GObject, { register, property } from "astal/gobject";
+import GObject, { property, register } from "astal/gobject";
 import { Gdk } from "astal/gtk3";
 import Apps from "gi://AstalApps";
 
@@ -11,8 +11,9 @@ export function getMonitorName(gdkmonitor: Gdk.Monitor) {
   const display = Gdk.Display.get_default();
   const screen = display!.get_default_screen();
   for (let i = 0; i < display!.get_n_monitors(); ++i) {
-    if (gdkmonitor === display!.get_monitor(i))
+    if (gdkmonitor === display!.get_monitor(i)) {
       return screen.get_monitor_plug_name(i);
+    }
   }
 }
 
@@ -61,9 +62,12 @@ export class HyprTaskbar extends GObject.Object {
 
   filterAndNotify() {
     const swallowed = this.#clients
-      .filter((c) => c.swallowing !== "0x0")
+      .filter((c) => c.swallowing !== null && c.swallowing !== "0x0")
       .map((c) => c.swallowing.replaceAll("0x", ""));
-    this.#clients = this.#clients.filter((c) => !swallowed.includes(c.address));
+    const notSwallowed = this.#clients.filter((c) =>
+      !swallowed.includes(c.address)
+    );
+    this.#clients = notSwallowed;
     this.notify("clients");
   }
 
@@ -116,13 +120,14 @@ export class HyprTaskbar extends GObject.Object {
         "activewindowv2",
         "changefloatingmode",
         "pin",
+        "moveoutofgroup",
       ];
       if (!events.includes(event)) {
         return;
       }
 
       const address = details.split(",")[0];
-      const old = this.#clients.find((c) => c.address === address);
+      const old = this.#clients.find((c) => (c?.address || "") === address);
       if (old) {
         const idx = this.#clients.indexOf(old);
         const cl = hypr.get_client(old.address);

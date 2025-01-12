@@ -1,13 +1,7 @@
 import { App } from "astal/gtk3";
 import style from "./scss/main.scss";
 
-import { exec } from "astal/process";
-import { init } from "init";
-try {
-  exec("sass ./scss/main.scss ./style.css");
-} catch (e) {
-  console.error(e);
-}
+import { handler, init } from "init";
 
 App.start({
   css: style,
@@ -15,6 +9,7 @@ App.start({
     init();
   },
   requestHandler(request: string, res: (response: any) => void) {
+    handler(request, res);
     // if (request === "theme") {
     //   exec("sass --silent ./scss/main.scss ./style.css");
     //   App.apply_css("./style.css");

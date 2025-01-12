@@ -1,13 +1,23 @@
 import { bind, GLib, Variable } from "astal";
 
 import Hyprland from "gi://AstalHyprland";
-import { App, Gdk } from "astal/gtk3";
+import { App, Gdk, Gtk } from "astal/gtk3";
 import { OverviewWindowName } from "constants";
 import { MiniWeather } from "../weather/Widgets";
 import { togglePopup } from "core/Popup";
 import OverView from "../overview/Widgets";
 import { Astal } from "astal/gtk3";
-export default function DateTime({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export default function DateTime(
+  { gdkmonitor, opts }: {
+    gdkmonitor?: Gdk.Monitor;
+    opts?: {
+      dateFormat: string;
+      timeFormat: string;
+      showWeather: boolean;
+      overview: { position: Astal.WindowAnchor };
+    };
+  },
+): Gtk.Widget {
   const time = Variable<string>("").poll(
     1000,
     () => GLib.DateTime.new_now_local().format(opts?.timeFormat || "%H-%M:%S")!,
@@ -15,14 +25,19 @@ export default function DateTime({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monito
 
   const date = Variable<string>("").poll(
     1000,
-    () => GLib.DateTime.new_now_local().format(opts.dateFormat || "%a, %d.%b %Y")!,
+    () =>
+      GLib.DateTime.new_now_local().format(opts?.dateFormat || "%a, %d.%b %Y")!,
   );
 
   return (
     <button
       className="panelButton dateTime"
       onClicked={() => {
-        togglePopup("dateTime", opts?.overview.position || Astal.WindowAnchor.TOP, <OverView />);
+        togglePopup(
+          "dateTime",
+          opts?.overview.position || Astal.WindowAnchor.TOP,
+          <OverView />,
+        );
         // App.toggle_window(OverviewWindowName);
       }}
     >
@@ -32,7 +47,7 @@ export default function DateTime({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monito
         <label label="" className="time icon" />
         <label className="time" label={time()} />
 
-        {opts?.showWeather || true ? <MiniWeather /> : <></>}
+        {opts?.showWeather || true ? <MiniWeather /> : <box />}
       </box>
     </button>
   );

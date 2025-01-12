@@ -1,27 +1,25 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
-import { getVolumeIcon, truncateDescription, getMicrophoneIcon } from "./audio";
+import { getMicrophoneIcon, getVolumeIcon, truncateDescription } from "./audio";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";
 import { Gdk } from "astal/gtk3";
 
-function AudioButton(label: string, gdkmonitor?: Gdk.Monitor, opts?: any) {
-  const device =
-    label === "speaker"
-      ? Wp.get_default()!.audio.default_speaker
-      : Wp.get_default()!.audio.default_microphone;
+function AudioButton(
+  label: string,
+  gdkmonitor?: Gdk.Monitor,
+  opts?: { showDescription: boolean },
+) {
+  const device = label === "speaker"
+    ? Wp.get_default()!.audio.default_speaker
+    : Wp.get_default()!.audio.default_microphone;
 
   const listener = Variable.derive([
     bind(device, "description"),
     bind(device, "volume"),
     bind(device, "mute"),
   ]);
-
-  const showDescription = opts?.textOnlyOn === undefined ||
-    (opts?.textOnlyOn || []).includes(
-      gdkmonitor?.model || "*",
-    );
 
   return (
     <button
@@ -42,11 +40,12 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor, opts?: any) {
           label={listener(() =>
             label === "speaker"
               ? getVolumeIcon(device)
-              : getMicrophoneIcon(device),
+              : getMicrophoneIcon(device)
           )}
         />
 
-        <label visible={showDescription}
+        <label
+          visible={opts?.showDescription || false}
           className="name"
           label={listener(() => `${truncateDescription(device.description)} `)}
         />
@@ -60,9 +59,19 @@ function AudioButton(label: string, gdkmonitor?: Gdk.Monitor, opts?: any) {
   );
 }
 
-export function VolumeButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export function VolumeButton(
+  { gdkmonitor, opts }: {
+    gdkmonitor?: Gdk.Monitor;
+    opts?: { showDescription: boolean };
+  },
+) {
   return AudioButton("speaker", gdkmonitor, opts);
 }
-export function MicrophoneButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export function MicrophoneButton(
+  { gdkmonitor, opts }: {
+    gdkmonitor?: Gdk.Monitor;
+    opts?: { showDescription: boolean };
+  },
+) {
   return AudioButton("microphone", gdkmonitor, opts);
 }

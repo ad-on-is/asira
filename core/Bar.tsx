@@ -1,15 +1,16 @@
-import { App, Astal, Gtk, Gdk } from "astal/gtk3";
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 
 import options from "core/init";
 
-function HorizontalBar(
+function Bar(
   gdkmonitor: Gdk.Monitor,
-  key: "topBar" | "bottomBar" | "leftBar" | "rightBar",
+  key: "top" | "bottom" | "left" | "right",
   anchor: Astal.WindowAnchor,
   vertical: boolean,
 ) {
-  const opts = options[key];
-
+  const opts = options.bar[key];
+  const widgets: { start: Function[]; center: Function[]; end: Function[] } =
+    opts.widgets;
   return (
     <window
       css={`
@@ -34,71 +35,70 @@ function HorizontalBar(
         `}
       >
         <box halign={Gtk.Align.START} vertical={vertical} className="col start">
-
-          {opts.widgets.start.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor?.model)).map(({ Component, o, m }: { Component: Gtk.Widget, o: any, m: string[] }) => (
-            <Component gdkmonitor={gdkmonitor} opts={o} />
-          ))}
+          {(widgets.start || []).map((w) => w(gdkmonitor))}
         </box>
         <box vertical={vertical} className="col center">
-          {opts.widgets.center.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor.model)).map(({ Component, o, m }) => (
-            <Component gdkmonitor={gdkmonitor} opts={o} />
-          ))}
+          {(widgets.center || []).map((w) => w(gdkmonitor))}
         </box>
-        <box
+        <centerbox
           className="col end"
           halign={Gtk.Align.END}
           vertical={vertical}
           valign={Gtk.Align.START}
         >
-
-          {opts.widgets.end.filter(({ m }: { m: [] }) => typeof m === "undefined" || m.includes(gdkmonitor.model)).map(({ Component, o, m }) => (
-            <Component gdkmonitor={gdkmonitor} opts={o} />
-          ))}
-        </box>
+          {(widgets.end || []).map((w) => w(gdkmonitor))}
+        </centerbox>
       </centerbox>
     </window>
   );
 }
 
-export function TopBar(gdkmonitor: Gdk.Monitor) {
-  return HorizontalBar(
+export function TopBar(
+  gdkmonitor: Gdk.Monitor,
+) {
+  return Bar(
     gdkmonitor,
-    "topBar",
+    "top",
     Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT | Astal.WindowAnchor.RIGHT,
     false,
   );
 }
 
-export function BottomBar(gdkmonitor: Gdk.Monitor) {
-  return HorizontalBar(
+export function BottomBar(
+  gdkmonitor: Gdk.Monitor,
+) {
+  return Bar(
     gdkmonitor,
-    "bottomBar",
+    "bottom",
     Astal.WindowAnchor.BOTTOM |
-    Astal.WindowAnchor.LEFT |
-    Astal.WindowAnchor.RIGHT,
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.RIGHT,
     false,
   );
 }
 
-export function SideBarLeft(gdkmonitor: Gdk.Monitor) {
-  return HorizontalBar(
+export function SideBarLeft(
+  gdkmonitor: Gdk.Monitor,
+) {
+  return Bar(
     gdkmonitor,
-    "leftBar",
+    "left",
     Astal.WindowAnchor.TOP |
-    Astal.WindowAnchor.LEFT |
-    Astal.WindowAnchor.BOTTOM,
+      Astal.WindowAnchor.LEFT |
+      Astal.WindowAnchor.BOTTOM,
     true,
   );
 }
 
-export function SideBarRight(gdkmonitor: Gdk.Monitor) {
-  return HorizontalBar(
+export function SideBarRight(
+  gdkmonitor: Gdk.Monitor,
+) {
+  return Bar(
     gdkmonitor,
-    "rightBar",
+    "right",
     Astal.WindowAnchor.TOP |
-    Astal.WindowAnchor.RIGHT |
-    Astal.WindowAnchor.BOTTOM,
+      Astal.WindowAnchor.RIGHT |
+      Astal.WindowAnchor.BOTTOM,
     true,
   );
 }
-
