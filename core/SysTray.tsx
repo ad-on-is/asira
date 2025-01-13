@@ -9,6 +9,7 @@ export default function () {
         items.map((item) => (
           <menubutton
             tooltipMarkup={bind(item, "title")}
+            className="panelButton"
             usePopover={false}
             actionGroup={bind(item, "action-group").as((ag) => [
               "dbusmenu",

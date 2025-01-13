@@ -1,8 +1,6 @@
 import { bind, GLib, Variable } from "astal";
 
-import Hyprland from "gi://AstalHyprland";
 import { App, Gdk, Gtk } from "astal/gtk3";
-import { OverviewWindowName } from "constants";
 import { MiniWeather } from "../weather/Widgets";
 import { togglePopup } from "core/Popup";
 import OverView from "../overview/Widgets";

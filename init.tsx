@@ -97,16 +97,17 @@ export default _.merge(
           end: [
             (m: Gdk.Monitor) => <SysTray />,
             (m: Gdk.Monitor) => (
-              <VolumeButton
-                gdkmonitor={m}
-                opts={{ showDescription: wideScreens.includes(m.model) }}
-              />
-            ),
-            (m: Gdk.Monitor) => (
-              <MicrophoneButton
-                gdkmonitor={m}
-                opts={{ showDescription: wideScreens.includes(m.model) }}
-              />
+              <box>
+
+                <VolumeButton
+                  gdkmonitor={m}
+                  opts={{ showDescription: wideScreens.includes(m.model) }}
+                />
+                <MicrophoneButton
+                  gdkmonitor={m}
+                  opts={{ showDescription: wideScreens.includes(m.model) }}
+                />
+              </box>
             ),
             (m: Gdk.Monitor) => <ConnectionButton />,
           ],

@@ -4,39 +4,38 @@ import options from "init";
 
 export default function OSD({
   gdkmonitor,
-  iconLabel,
-  label,
-  sliderValue,
-  windowName,
+  trigger,
+  name,
+  widget,
 }: {
   gdkmonitor?: Gdk.Monitor;
-  iconLabel: Binding<string>;
-  label: Binding<string>;
-  sliderValue: Binding<number>;
-  windowName: string;
+  trigger: Binding<any>;
+  name: string;
+  widget?: Gtk.Widget
 }) {
   let windowVisibilityTimeout: GLib.Source | null = null;
 
   return (
     <window
-      name={`${windowName}OSD`}
+      name={`${name}OSD`}
       application={App}
       gdkmonitor={gdkmonitor}
       anchor={options.osd.position}
       exclusivity={Astal.Exclusivity.NORMAL}
       layer={Astal.Layer.OVERLAY}
-      className="window osd"
+      className={`window osd ${name}`}
       margin_top={options.osd.margin[0]}
       margin_right={options.osd.margin[1]}
       margin_bottom={options.osd.margin[2]}
       margin_left={options.osd.margin[3]}
       visible={false}
       setup={(self) => {
+        // prevent trigger on init
         let canShow = false;
         setTimeout(() => {
           canShow = true;
-        }, 3_000);
-        sliderValue.subscribe(() => {
+        }, 1_000);
+        trigger.subscribe(() => {
           if (!canShow) {
             return;
           }
@@ -52,13 +51,18 @@ export default function OSD({
         });
       }}
     >
-      <box vertical={false} halign={Gtk.Align.CENTER} className="inner">
-        <label className="icon" label={iconLabel} />
-        <box vertical={true} valign={Gtk.Align.CENTER}>
-          <label className="title" label={label} halign={Gtk.Align.START} />
-          <slider className="slider" hexpand={true} value={sliderValue} />
-        </box>
-      </box>
+      {widget || <box><label label="!!!! - Missing Widget - !!!!" css={`padding: 2rem;`} /></box>}
     </window>
   );
+}
+
+export function IconWithTextAndSlider({ icon, title, value }: { icon: Binding<string>, title: Binding<string>, value: Binding<number> }) {
+  return (<box vertical={false} halign={Gtk.Align.CENTER} className="inner">
+    <label className="icon" label={icon} />
+    <box vertical={true} valign={Gtk.Align.CENTER}>
+      <label className="title" label={title} halign={Gtk.Align.START} />
+      <slider className="slider" hexpand={true} value={value} sensitive={false} />
+    </box>
+  </box>
+  )
 }

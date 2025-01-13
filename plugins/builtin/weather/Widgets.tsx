@@ -1,7 +1,9 @@
 import Weather from "./weather";
 import { bind } from "astal";
 import { Gdk } from "astal/gtk3";
-export function MiniWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export function MiniWeather(
+  { gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor; opts?: any },
+) {
   const weather = Weather.get_default();
   return (
     <box className="weather mini">
@@ -9,7 +11,8 @@ export function MiniWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, op
         className="icon"
         icon={bind(weather, "info").as(
           (info) =>
-            `/home/adonis/.local/share/ow-icons/images/${info.weather[0].icon}_t.png`,
+            `/home/adonis/.local/share/ow-icons/images/${info.weather[0].icon
+            }_t.png`,
         )}
       />
       <label
@@ -21,7 +24,9 @@ export function MiniWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, op
   );
 }
 
-export function BigWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export function BigWeather(
+  { gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor; opts?: any },
+) {
   const weather = Weather.get_default();
   return (
     <box className="weather big" vertical={true}>
@@ -29,7 +34,8 @@ export function BigWeather({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opt
         className="icon"
         icon={bind(weather, "info").as(
           (info) =>
-            `/home/adonis/.local/share/ow-icons/images/${info.weather[0].icon}_t.png`,
+            `/home/adonis/.local/share/ow-icons/images/${info.weather[0].icon
+            }_t.png`,
         )}
       />
       <label

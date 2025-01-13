@@ -1,8 +1,8 @@
 import Wp from "gi://AstalWp";
 import { bind, Variable } from "astal";
 import { getMicrophoneIcon, getVolumeIcon } from "./audio";
-import OSD from "core/OSD";
-import { Gdk } from "astal/gtk3";
+import OSD, { IconWithTextAndSlider } from "core/OSD";
+import { Gdk, Gtk } from "astal/gtk3";
 
 function AudioOSD(
   device: Wp.Endpoint,
@@ -17,13 +17,14 @@ function AudioOSD(
 
   return (
     <OSD
-      iconLabel={listener(() => iconFunc(device))}
-      label={bind(device, "volume").as(
-        (vol) => `Volume ${Math.round(vol * 100)}%`,
-      )}
       gdkmonitor={gdkmonitor}
-      sliderValue={bind(device, "volume")}
-      windowName="volume"
+      trigger={bind(device, "volume")}
+      name="volume"
+      widget={<IconWithTextAndSlider icon={listener(() => iconFunc(device))} title={
+        bind(device, "volume").as(
+          (vol) => `Volume ${Math.round(vol * 100)}%`,
+        )
+      } value={bind(device, "volume")} />}
     />
   );
 }

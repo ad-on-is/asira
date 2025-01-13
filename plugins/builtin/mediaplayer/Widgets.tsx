@@ -16,7 +16,19 @@ export function MediaPlayerWidget({ player }: { player: Mpris.Player }) {
   const title = bind(player, "title").as((t) => t || "Unknown Track");
 
   const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
-  const cover = bind(player, "artUrl").as((a) => a || "Unknown CoverArt");
+  const coverCss = bind(player, "coverArt").as((a) =>
+    `
+          background-image: url("${a}");
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          border-radius: 0.2rem;
+          min-width: 1rem;
+          min-height: 1rem;
+          margin-top: 0.3rem;
+          margin-bottom: 0.3rem;
+        ` || ""
+  );
   const remainingPositon = Variable(player.length - player.position);
   bind(player, "position").subscribe((position) => {
     if (player.playbackStatus === Mpris.PlaybackStatus.PLAYING) {
@@ -28,17 +40,7 @@ export function MediaPlayerWidget({ player }: { player: Mpris.Player }) {
     <box className="mediaPlayer">
       <box
         className="icon"
-        css={`
-          background-image: url("${cover.get()}");
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center;
-          border-radius: 0.5rem;
-          min-width: 1rem;
-          min-height: 1rem;
-          margin-top: 0.3rem;
-          margin-bottom: 0.3rem;
-        `}
+        css={coverCss}
       />
       <label className="title" truncate={true} label={title} />
       <label label=" - " />
@@ -57,7 +59,14 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
   const title = bind(player, "title").as((t) => t || "Unknown Track");
 
   const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
-  const cover = bind(player, "artUrl").as((a) => a || "Unknown CoverArt");
+  const coverCss = bind(player, "coverArt").as((a) =>
+    `
+            background-image: url("${a}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+          ` || ""
+  );
   const album = bind(player, "album").as((a) => a || "Unknown Album");
 
   // player.position will keep changing even when the player is paused.  This is a workaround
@@ -69,7 +78,7 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
   });
 
   const playIcon = bind(player, "playbackStatus").as((s) =>
-    s === Mpris.PlaybackStatus.PLAYING ? "" : "",
+    s === Mpris.PlaybackStatus.PLAYING ? "" : ""
   );
 
   return (
@@ -77,12 +86,7 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
       <box className="info">
         <box
           className="cover"
-          css={`
-            background-image: url("${cover.get()}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-          `}
+          css={coverCss}
         />
 
         <box vertical={true}>
@@ -129,7 +133,7 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
           halign={END}
           visible={bind(player, "length").as((l) => l > 0)}
           label={bind(player, "length").as((l) =>
-            l > 0 ? lengthStr(l) : "0:00",
+            l > 0 ? lengthStr(l) : "0:00"
           )}
         />
       </box>
@@ -201,7 +205,9 @@ function MediaPlayer({ player }: { player: Mpris.Player }) {
   );
 }
 
-export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export default function (
+  { gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor; opts?: any },
+) {
   const mpris = Mpris.get_default();
   return (
     <box>

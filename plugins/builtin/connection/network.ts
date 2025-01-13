@@ -201,15 +201,7 @@ export function getNetworkIconBinding() {
 
 export function getNetworkIcon(network: AstalNetwork.Network) {
   const { connectivity, wifi, wired } = network;
-
   // Handle wired connection
-  if (wired !== null) {
-    if (wired.internet === AstalNetwork.Internet.CONNECTED) {
-      return "󰈀";
-    } else {
-      return "󰈀"; // You could add more logic here for wired states if needed
-    }
-  }
 
   // Handle Wi-Fi connection
   if (wifi !== null) {
@@ -257,6 +249,15 @@ export function getNetworkIcon(network: AstalNetwork.Network) {
 
     // Fallback if none of the conditions are met
     return "󰤯";
+  } else {
+
+    if (wired !== null) {
+      if (wired.internet === AstalNetwork.Internet.CONNECTED) {
+        return "󰈀";
+      } else {
+        return "󰈀"; // You could add more logic here for wired states if needed
+      }
+    }
   }
 
   // Default or unknown status

@@ -35,19 +35,19 @@ function Bar(
         `}
       >
         <box halign={Gtk.Align.START} vertical={vertical} className="col start">
-          {(widgets.start || []).map((w) => w(gdkmonitor))}
+          {(widgets.start || []).map((w) => <box className="barItem" vertical={vertical}>{w(gdkmonitor)}</box>)}
         </box>
         <box vertical={vertical} className="col center">
-          {(widgets.center || []).map((w) => w(gdkmonitor))}
+          {(widgets.center || []).map((w) => <box className="barItem" vertical={vertical}>{w(gdkmonitor)}</box>)}
         </box>
-        <centerbox
+        <box
           className="col end"
           halign={Gtk.Align.END}
           vertical={vertical}
           valign={Gtk.Align.START}
         >
-          {(widgets.end || []).map((w) => w(gdkmonitor))}
-        </centerbox>
+          {(widgets.end || []).map((w) => <box className="barItem" vertical={vertical}>{w(gdkmonitor)}</box>)}
+        </box>
       </centerbox>
     </window>
   );
@@ -71,8 +71,8 @@ export function BottomBar(
     gdkmonitor,
     "bottom",
     Astal.WindowAnchor.BOTTOM |
-      Astal.WindowAnchor.LEFT |
-      Astal.WindowAnchor.RIGHT,
+    Astal.WindowAnchor.LEFT |
+    Astal.WindowAnchor.RIGHT,
     false,
   );
 }
@@ -84,8 +84,8 @@ export function SideBarLeft(
     gdkmonitor,
     "left",
     Astal.WindowAnchor.TOP |
-      Astal.WindowAnchor.LEFT |
-      Astal.WindowAnchor.BOTTOM,
+    Astal.WindowAnchor.LEFT |
+    Astal.WindowAnchor.BOTTOM,
     true,
   );
 }
@@ -97,8 +97,8 @@ export function SideBarRight(
     gdkmonitor,
     "right",
     Astal.WindowAnchor.TOP |
-      Astal.WindowAnchor.RIGHT |
-      Astal.WindowAnchor.BOTTOM,
+    Astal.WindowAnchor.RIGHT |
+    Astal.WindowAnchor.BOTTOM,
     true,
   );
 }

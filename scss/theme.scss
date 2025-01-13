@@ -1,44 +1,66 @@
 @use "sass:color";
 @use "core/variables" as vars;
 
+
 .window {
   background-color: color.adjust(vars.$crust, $alpha: -0.1);
   border: 1px solid color.adjust(vars.$fg, $alpha: -0.8);
 }
 
+.barItem {
+  margin: 0 vars.$spacing;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
 .panelButton {
   transition: background-color 0.3s ease-out;
+
   &.focused {
     background-color: color.adjust(vars.$primary, $alpha: -0.8);
   }
+
   &.pinned .icon {
     color: vars.$red;
   }
+
   &.pinned,
   &.floating {
     label.icon {
       opacity: 0.3;
     }
   }
+
   &.minimized {
     opacity: 0.5;
   }
+
   &.dateTime {
     .icon {
       color: vars.$peach;
     }
   }
+
   &.connection {
     .icon {
       color: vars.$mauve;
     }
   }
+
   &.storage {
+
     .icon,
     .value {
       color: vars.$yellow;
     }
   }
+
   &.gtop {
     .icon {
       color: vars.$blue;
@@ -46,11 +68,14 @@
   }
 
   &.razer {
+
     .icon,
     .value {
       color: vars.$green;
     }
+
     .low {
+
       .icon,
       .value {
         color: vars.$peach;
@@ -58,18 +83,23 @@
     }
 
     .critical {
+
       .icon,
       .value {
         color: vars.$red;
       }
     }
   }
+
   &.audio {
+
     .icon,
     .value {
       color: vars.$sapphire;
     }
+
     &.microphone {
+
       .icon,
       .volume {
         color: vars.$sky;
@@ -81,12 +111,15 @@
     font-size: 1.2rem;
     padding: 0 3px;
     min-width: 25px;
+
     &.active {
       label {
         color: vars.$mauve;
       }
+
       background-color: color.adjust(vars.$mauve, $alpha: -0.8);
     }
+
     &.empty:not(.active) label {
       color: color.adjust(vars.$fg, $alpha: -0.8);
     }
@@ -107,9 +140,11 @@
   .highlight {
     color: vars.$accent;
   }
+
   .indeterminate {
     color: vars.$fg;
   }
+
   .header {
     color: vars.$fg;
   }
@@ -119,10 +154,12 @@
   .icon {
     color: vars.$primary;
   }
+
   .appname,
   .time {
     color: color.adjust(vars.$fg, $alpha: -0.6);
   }
+
   .message {
     color: color.adjust(vars.$fg, $alpha: -0.6);
   }
@@ -138,10 +175,12 @@
 .mediaPlayerPopup {
   .info {
     margin-bottom: 0.8rem;
+
     .album {
       color: color.adjust(vars.$fg, $alpha: -0.6);
     }
   }
+
   .cover {
     margin-right: 0.8rem;
     border-radius: 0.5rem;

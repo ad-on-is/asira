@@ -1,7 +1,7 @@
 import { bind } from "astal";
 import { Gdk, Astal } from "astal/gtk3";
 
-import { getNetworkIconBinding } from "./network";
+import { getNetworkIconBinding, getNetworkNameBinding } from "./network";
 
 import NetworkControls from "./NetworkControls";
 import { activeVpnConnections } from "./network";
@@ -35,7 +35,13 @@ export function BluetoothButton() {
 }
 
 export function NetworkButton() {
-  return <label className="icon network" label={getNetworkIconBinding()} />;
+  return (
+    <box>
+      <label className="icon network" label={getNetworkIconBinding()} />
+      <label className="name" label={getNetworkNameBinding()} />
+    </box>
+  )
+
 }
 
 export function ConnectionButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
@@ -57,9 +63,9 @@ export function ConnectionButton({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monito
       }}
     >
       <box>
-        <BluetoothButton />
         <NetworkButton />
         <VpnButton />
+        <BluetoothButton />
       </box>
     </button>
   );

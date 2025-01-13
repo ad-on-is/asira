@@ -53,7 +53,7 @@ function PopUp({ info }: { info: UnitInfo[] }) {
         ) : (
           <box vertical={true} className="unit">
             <label label={i.name} halign={Gtk.Align.START} />
-            <slider className="slider" value={val} onDragged={() => { }} />
+            <slider className="slider" value={val} sensitive={false} />
             <box>
               <label
                 className="description"
