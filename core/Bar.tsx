@@ -44,7 +44,6 @@ function Bar(
           className="col end"
           halign={Gtk.Align.END}
           vertical={vertical}
-          valign={Gtk.Align.START}
         >
           {(widgets.end || []).map((w) => <box className="barItem" vertical={vertical}>{w(gdkmonitor)}</box>)}
         </box>

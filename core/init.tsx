@@ -44,6 +44,7 @@ export default {
   },
   osd: {
     position: Astal.WindowAnchor.BOTTOM,
+    stayOpenMs: 2000,
     margin: [0, 0, 100, 0],
   },
   bar: {

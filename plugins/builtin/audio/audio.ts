@@ -20,13 +20,13 @@ export function getVolumeIcon(speaker?: Wp.Endpoint) {
     }
   } else {
     if (volume === 0 || muted) {
-      return "󰝟";
+      return "";
     } else if (volume < 0.33) {
       return "";
-    } else if (volume < 0.66) {
+    } else if (volume < 0.76) {
       return "";
     } else {
-      return "󰕾";
+      return "";
     }
   }
 }

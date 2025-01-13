@@ -47,18 +47,18 @@ export default function OSD({
             self.visible = false;
             windowVisibilityTimeout?.destroy();
             windowVisibilityTimeout = null;
-          }, 1_000);
+          }, options.osd.stayOpenMs);
         });
       }}
     >
-      {widget || <box><label label="!!!! - Missing Widget - !!!!" css={`padding: 2rem;`} /></box>}
+      {<box className="inner" hexpand={true}>{widget || <label label="!!!! - Missing Widget - !!!!" />}</box>}
     </window>
   );
 }
 
 export function IconWithTextAndSlider({ icon, title, value }: { icon: Binding<string>, title: Binding<string>, value: Binding<number> }) {
-  return (<box vertical={false} halign={Gtk.Align.CENTER} className="inner">
-    <label className="icon" label={icon} />
+  return (<box vertical={false} className="osdIconWithTextAndSlider">
+    <label className="icon" label={icon} halign={Gtk.Align.START} />
     <box vertical={true} valign={Gtk.Align.CENTER}>
       <label className="title" label={title} halign={Gtk.Align.START} />
       <slider className="slider" hexpand={true} value={value} sensitive={false} />

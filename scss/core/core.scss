@@ -1,5 +1,19 @@
 @use "variables" as vars;
 
+* {
+  // all: unset;
+}
+
+
+menu {
+  background-color: vars.$bg;
+  color: vars.$primary;
+
+  * {
+    color: vars.$fg;
+  }
+}
+
 button,
 menubutton {
   // all: unset;
@@ -197,19 +211,23 @@ scrollable {
 
 .osd {
   .inner {
-    min-width: 220px;
-    padding: 4px 28px;
+    padding: vars.$osdPadding;
+    min-width: vars.$osdWidth;
   }
+}
+
+.osdIconWithTextAndSlider {
 
   .title {
-    margin-bottom: 4px;
+    margin-bottom: 0.5rem;
   }
 
   .icon {
     all: unset;
     margin-right: 28px;
-    font-size: 48px;
-    // color: vars.$fg;
+    font-size: 3rem;
+    min-width: 3rem;
+    color: vars.$fg;
   }
 }
 

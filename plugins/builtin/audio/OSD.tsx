@@ -15,10 +15,11 @@ function AudioOSD(
     bind(device, "mute"),
   ]);
 
+
   return (
     <OSD
       gdkmonitor={gdkmonitor}
-      trigger={bind(device, "volume")}
+      trigger={listener()}
       name="volume"
       widget={<IconWithTextAndSlider icon={listener(() => iconFunc(device))} title={
         bind(device, "volume").as(
