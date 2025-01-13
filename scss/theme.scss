@@ -7,6 +7,32 @@
   border: 1px solid color.adjust(vars.$fg, $alpha: -0.8);
 }
 
+.calendar {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+
+.systemInfo {
+  .powerOptions {
+    button {
+      min-width: 3rem;
+      min-height: 4rem;
+      font-size: 2rem;
+      margin: 0 8px;
+    }
+  }
+}
+
+.weather.mini .icon {
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+}
+
+.weather.big .icon {
+  font-size: 4rem;
+}
+
 .barItem {
   margin: 0 vars.$spacing;
 

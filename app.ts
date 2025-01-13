@@ -1,5 +1,5 @@
 import { App } from "astal/gtk3";
-import style from "./scss/main.scss";
+import style from "./scss/core/main.scss";
 
 import { handler, init } from "init";
 

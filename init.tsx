@@ -4,10 +4,6 @@ import OsButton from "common/OsButton";
 import { App, Astal } from "astal/gtk3";
 import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
-import {
-  BatteryButton,
-  ScreenRecordingButton,
-} from "plugins/builtin/battery/Widgets";
 import { ConnectionButton } from "plugins/builtin/connection/Widgets";
 import HyprlandWorkspaces from "plugins/builtin/hyprland/Workspaces";
 import Storage from "plugins/builtin/storage/Widgets";
@@ -23,7 +19,6 @@ import _ from "lodash";
 import coreOptions from "core/init";
 import { handler as coreHandler, init as coreInit } from "core/init";
 import { Gdk } from "astal/gtk3";
-import { getMonitorName } from "plugins/builtin/hyprland/hyprland";
 
 const wideScreens = ["34GP950G", "LG ULTRAWIDE"];
 

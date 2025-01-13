@@ -1,6 +1,7 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
-import { Binding, GLib } from "astal";
+import { Binding, GLib, Variable } from "astal";
 import options from "init";
+const triggers = Variable
 
 export default function OSD({
   gdkmonitor,
@@ -14,6 +15,7 @@ export default function OSD({
   widget?: Gtk.Widget
 }) {
   let windowVisibilityTimeout: GLib.Source | null = null;
+
 
   return (
     <window
