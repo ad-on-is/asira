@@ -39,7 +39,14 @@ bun i
 # https://github.com/rodrigokamada/openweathermap/tree/master/src/images
 # and save them to ~/.local/share/ow-icons
 
+# to run the shell
 ags -d $(pwd) run
+
+# to run the launcher
+ags -d $(pwd) run
+
+# to toggle the launcher (Use this as your keyboard shortcut)
+astal -i asira-launcher "show"
 ```
 
 ```
