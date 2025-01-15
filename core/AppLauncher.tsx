@@ -15,22 +15,10 @@ class FlowBox extends astalify(Gtk.FlowBox) {
   }
 }
 
-class ScrolledWindow extends astalify(Gtk.ScrolledWindow) {
-  static {
-    GObject.registerClass(this);
-  }
 
-  constructor(
-    props: ConstructProps<ScrolledWindow, Gtk.ScrolledWindow.ConstructorProps, {}>,
-  ) {
-    super(props as any);
-  }
-}
-
-export const AppLauncherWindowName = "appLauncher";
 
 function hide() {
-  App.get_window(AppLauncherWindowName)!.hide();
+  App.get_window("launcher")!.hide();
 }
 
 function launchApp(app: Apps.Application) {
