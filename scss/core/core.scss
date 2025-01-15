@@ -1,8 +1,5 @@
 @use "variables" as vars;
 
-* {
-  // all: unset;
-}
 
 
 menu {
@@ -39,8 +36,9 @@ menubutton {
 
   &.icon {
     border-radius: 100%;
-    min-width: 0.8rem;
-    min-height: 2rem;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+    padding: 0;
   }
 
   &.primary {
@@ -69,27 +67,47 @@ menubutton {
   margin: 1rem 0;
 }
 
-box .icon {
+box>.icon {
   margin: 0 0.7rem;
 
-  &:first-child {
-    margin-left: 0;
+}
 
-    +.icon {
+button>box {
+
+
+  &>.icon {
+
+    &:first-child:not(:last-child) {
       margin-left: 0;
+    }
+
+    &:last-child:not(:first-child) {
+      margin-right: 0;
     }
   }
 
-  &:last-child:not(:first-child) {
-    margin-right: 0;
+  &>box>.icon {
+    margin: 0 0.7rem;
   }
+
+
+
 }
 
-label {
+
+
+
+label,
+entry {
+  all: unset;
   color: vars.$fg;
 
   &.icon {
     margin: 0 0.7rem;
+  }
+
+  &.medium {
+    font-size: 1rem;
   }
 
   &.large {
@@ -115,6 +133,10 @@ label {
   &.xsmall {
     font-size: 0.6rem;
   }
+}
+
+entry {
+  padding: 1rem;
 }
 
 button box {
@@ -178,14 +200,22 @@ scrollable {
   }
 }
 
-.horizontalSlider {
-  background-color: #ff00ff;
-}
 
 .notification {
   // eventboxes can not take margins so we style its inner box instead
   min-width: 300px;
-  margin: 0.3rem;
+  margin: 0.3rem 0;
+
+  .header {
+    margin: 0.4rem 0;
+
+    button {
+      background-color: transparent;
+
+    }
+
+
+  }
 
   .image {
     border-radius: 0.5rem;
@@ -198,11 +228,11 @@ scrollable {
     border: 2px solid vars.$warning;
 
     .header {
-      .app-name {
+      .appname {
         color: vars.$warning;
       }
 
-      .app-icon {
+      .appicon {
         color: vars.$warning;
       }
     }
@@ -218,16 +248,19 @@ scrollable {
 
 .osdIconWithTextAndSlider {
 
+
   .title {
     margin-bottom: 0.5rem;
   }
 
+  .iconWrapper {
+    min-width: 4rem;
+  }
+
   .icon {
-    all: unset;
-    margin-right: 28px;
-    font-size: 3rem;
-    min-width: 3rem;
     color: vars.$fg;
+    margin-right: 1.5rem;
+    font-size: 3rem;
   }
 }
 
@@ -235,6 +268,13 @@ scrollable {
   .left {
     // margin: 1rem;
   }
+}
+
+.popUp .inner {
+  margin: 1rem;
+  min-width: vars.$popupWidth;
+
+
 }
 
 .storagePopup {

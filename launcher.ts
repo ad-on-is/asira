@@ -1,14 +1,14 @@
 import { App } from "astal/gtk3";
 import style from "./scss/core/main.scss";
 
-import { handler, init } from "init";
+import { handler, initLauncher } from "init";
 
 
 App.start({
   css: style,
-  instanceName: "asira-shell",
+  instanceName: "asira-launcher",
   main(...args: Array<string>) {
-    init();
+    initLauncher();
   },
   requestHandler(request: string, res: (response: any) => void) {
     handler(request, res);
@@ -17,7 +17,8 @@ App.start({
     //   App.apply_css("./style.css");
     //   res("ags theme applied");
     // } else if (request === "appLauncher") {
-    //   App.toggle_window(AppLauncherWindowName);
+    App.toggle_window("launcher");
+    res("ok");
     //   res("app launcher toggled");
     // } else if (request === "screenshot") {
     //   App.toggle_window(ScreenshotWindowName);

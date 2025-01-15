@@ -59,8 +59,8 @@ export default function OSD({
 }
 
 export function IconWithTextAndSlider({ icon, title, value }: { icon: Binding<string>, title: Binding<string>, value: Binding<number> }) {
-  return (<box vertical={false} className="osdIconWithTextAndSlider">
-    <label className="icon" label={icon} halign={Gtk.Align.START} />
+  return (<box vertical={false} className={value.as((v) => `osdIconWithTextAndSlider s${Math.floor(Math.round(v * 100) / 10)}`)}>
+    <box className="iconWrapper" halign={Gtk.Align.START}><label className="icon" label={icon} halign={Gtk.Align.START} /></box>
     <box vertical={true} valign={Gtk.Align.CENTER}>
       <label className="title" label={title} halign={Gtk.Align.START} />
       <slider className="slider" hexpand={true} value={value} sensitive={false} />

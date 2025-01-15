@@ -6,7 +6,7 @@ import { bind, timeout } from "astal";
 const openWindows = Variable([""]);
 
 function toggle(name: string) {
-  timeout(50, () => {
+  timeout(10, () => {
     App.toggle_window(name);
   });
 }
@@ -16,14 +16,23 @@ export function togglePopup(
   anchor: Astal.WindowAnchor,
   child: Gtk.Widget,
 ) {
-  const name = identifier;
-  //TODO: handle close of other or similar popups
-  //
-  // let [name, category] = identifier.split(":");
-  // if (typeof category === "undefined") {
-  //   category = "empty";
-  // }
-  // console.log(name, category);
+  let [_, category] = identifier.split(":");
+  const name = identifier
+  if (typeof category === "undefined") {
+    category = "empty";
+  }
+  const catOpen = openWindows.get().find((o) => o.includes(category))
+  if (catOpen && catOpen !== identifier) {
+    try {
+      const o = App.get_window(catOpen);
+      o?.destroy();
+      const ow = openWindows.get().filter((o) => o !== catOpen);
+      openWindows.set(ow)
+
+    } catch (_) { }
+
+  }
+
   if (!openWindows.get().includes(name)) {
     PopupWindow(name, anchor, child);
     const ow = openWindows.get();
@@ -55,6 +64,7 @@ function PopupWindow(
       margin={5}
       keymode={Astal.Keymode.ON_DEMAND}
       visible={false}
+
       onKeyPressEvent={function (self, event: Gdk.Event) {
         if (event.get_keyval()[1] === Gdk.KEY_Escape) {
           const ow = openWindows.get().filter((o) => o !== name);
@@ -68,11 +78,7 @@ function PopupWindow(
     >
       <box vertical={true}>
         <box vertical={true} className="window popUp">
-          <box
-            css={`
-              margin: 10px 10px 10px 10px;
-              min-width: 300px;
-            `}
+          <box className="inner"
             vertical={true}
           >
             {child}

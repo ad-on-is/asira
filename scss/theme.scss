@@ -3,7 +3,6 @@
 
 
 .window {
-  background-color: color.adjust(vars.$crust, $alpha: -0.1);
   border: 1px solid color.adjust(vars.$fg, $alpha: -0.8);
 }
 
@@ -26,7 +25,6 @@
 
 .weather.mini .icon {
   font-size: 1.2rem;
-  margin-left: 0.5rem;
 }
 
 .weather.big .icon {
@@ -44,6 +42,9 @@
     margin-right: 0;
   }
 }
+
+
+
 
 .panelButton {
   transition: background-color 0.3s ease-out;
@@ -193,9 +194,17 @@
 
 .notificationHistory {
   .notification {
-    border-color: transparent;
-    background-color: color.adjust(vars.$bg, $alpha: -0.5);
+    border-color: color.adjust(vars.$fg, $alpha: -0.9);
+    // background-color: color.adjust(vars.$bg, $alpha: -0.5);
   }
+}
+
+.tag {
+  background-color: color.adjust(vars.$fg, $alpha: -0.8);
+  color: vars.$fg;
+  margin: 0.1rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0.3rem;
 }
 
 .mediaPlayerPopup {
@@ -223,6 +232,32 @@
   .controls {
     button:not(:hover) {
       background-color: transparent;
+    }
+  }
+}
+
+
+.launcher {
+
+  .searchField {
+    all: unset;
+    padding: 1rem 0.7rem;
+    border: none;
+    outline: none;
+  }
+
+  .entry {
+    .subtitle {
+      opacity: 0.3;
+    }
+  }
+
+  button {
+    background: transparent;
+
+    &.active,
+    &:hover {
+      background-color: color.adjust(vars.$fg, $alpha: -0.8);
     }
   }
 }

@@ -21,8 +21,10 @@ export function init() {
   // App.get_monitors().map(DisplayNotifications);
   DisplayNotifications(mainMonitor);
   App.get_monitors().map(VolumeOSD);
+  // VolumeOSD(); // to display on the currently focused monitor
   // VolumeOSD(mainMonitor)
   App.get_monitors().map(MicrophoneOSD);
+  // MicrophoneOSD(); // to display on the currently focused monitor
   // MicrophoneOSD(mainMonitor);
   App.get_monitors().map(BrightnessOSD);
   // BrightnessOSD(mainMonitor)

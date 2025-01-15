@@ -27,7 +27,6 @@ export class HyprTaskbar extends GObject.Object {
   }
 
   #clients: MyClient[] = [];
-  apps: Apps.Application[] = [];
   cache: { [className: string]: string } = {};
 
   @property()
@@ -39,7 +38,8 @@ export class HyprTaskbar extends GObject.Object {
     if (this.cache[className]) {
       return this.cache[className];
     }
-    const app = this.apps.find(
+    const apps = new Apps.Apps();
+    const app = apps.list.find(
       (a) =>
         a.name.toLowerCase().includes(title.toLowerCase()) ||
         a.name.toLowerCase().includes(className.toLowerCase()),
@@ -84,7 +84,6 @@ export class HyprTaskbar extends GObject.Object {
       this.#clients.push(mc);
     });
 
-    this.apps = apps.list;
 
     this.filterAndNotify();
 

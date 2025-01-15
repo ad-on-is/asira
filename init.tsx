@@ -19,8 +19,13 @@ import _ from "lodash";
 import coreOptions from "core/init";
 import { handler as coreHandler, init as coreInit } from "core/init";
 import { Gdk } from "astal/gtk3";
+import AppLauncher from "core/AppLauncher";
 
 const wideScreens = ["34GP950G", "LG ULTRAWIDE"];
+
+export function initLauncher() {
+  AppLauncher();
+}
 
 export function init() {
   coreInit();

@@ -9,6 +9,7 @@ export function bytesToHumanReadable(bytes: number): Unit {
   return { size: Math.round(size * 100) / 100, unit: units[i] };
 }
 
+
 export type Unit = {
   size: number;
   unit: string;

@@ -1,10 +1,13 @@
-import { GLib, Variable, bind } from "astal";
+import { GLib, Variable, bind, timeout } from "astal";
 import { Astal, Gtk, Gdk } from "astal/gtk3";
 import Notifd from "gi://AstalNotifd";
+import Mpris from "gi://AstalMpris";
+
 import { insertNewlines } from "core/utils/strings";
 import options from "init";
-
+import appIcons from "core/utils/appIcons"
 import { type Subscribable } from "astal/binding";
+import { execAsync, exec } from "astal";
 
 const TIMEOUT_DELAY = 7_000;
 
@@ -21,8 +24,11 @@ class NotifiationMap implements Subscribable {
     this.var.set([...this.map.values()]);
   }
 
+  private current: number = 0;
+
   constructor() {
     const notifd = Notifd.get_default();
+    const mpris = Mpris.get_default();
 
     /**
      * uncomment this if you want to
@@ -31,6 +37,26 @@ class NotifiationMap implements Subscribable {
      * they might not work, since the sender already treats them as resolved
      */
     // notifd.ignoreTimeout = true;
+
+
+    mpris.players.map((player) => {
+
+
+      const listener = Variable.derive([bind(player, "title"),
+      bind(player, "coverArt"),
+      bind(player, "artist"),
+      bind(player, "album"),
+      bind(player, "playback_status")
+      ])
+
+
+      listener.subscribe(async ([t, c, ar, al]) => {
+        timeout(300, async () => {
+          const id = await execAsync(`notify-send "${t}" "${ar}\n${al}" --icon "${c}" --app-name "${player.identity}" --print-id ${this.current !== 0 ? `--replace-id=${this.current}` : ""}`)
+          this.current = parseInt(id)
+        })
+      })
+    })
 
     notifd.connect("notified", (_, id) => {
       let hideTimeout: GLib.Source | null = null;
@@ -46,6 +72,9 @@ class NotifiationMap implements Subscribable {
     // any user input, which have to be handled too
     notifd.connect("resolved", (_, id) => {
       this.delete(id);
+      if (this.current === id) {
+        this.current = 0
+      }
     });
   }
 
@@ -151,6 +180,10 @@ export function Notification(props: Props) {
     };
   }
 
+  const appIcon = appIcons.get([n.appName])
+
+
+
   return (
     <eventbox
       // className={`notification window  ${urgency(n)}`}
@@ -161,11 +194,15 @@ export function Notification(props: Props) {
     >
       <box vertical={true} className={`notification window  ${urgency(n)}`}>
         <box vertical={false} className="header">
-          <label className="icon" label="" />
+
+          {appIcon === "" ? (<label className="icon appicon" label="" />
+          ) : (<icon
+            className="icon appicon"
+            icon={appIcon}
+          />
+          )}
+
           <label
-            css={`
-              margin-left: 8px;
-            `}
             className="small appname"
             halign={START}
             truncate
@@ -180,7 +217,7 @@ export function Notification(props: Props) {
             halign={END}
             label={time(n.time)}
           />
-          <button className="icon" onClicked={() => n.dismiss()} label="" />
+          <button className="icon close" onClicked={() => n.dismiss()} label="" />
         </box>
         <box
           vertical={true}
