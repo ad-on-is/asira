@@ -6,9 +6,9 @@ export function MiniWeather(
 ) {
   const weather = Weather.get_default();
   return (
-    <box className="weather mini">
+    <>
       <icon
-        className="icon"
+        className="icon weather mini"
         icon={bind(weather, "info").as(
           (info) =>
             `/home/adonis/.local/share/ow-icons/images/${info.weather[0].icon
@@ -16,11 +16,12 @@ export function MiniWeather(
         )}
       />
       <label
+        className="value weather mini"
         label={bind(weather, "info").as(
           (info) => `${Math.round(info.main.temp)}°C`,
         )}
       />
-    </box>
+    </>
   );
 }
 

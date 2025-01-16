@@ -75,7 +75,8 @@ box>.icon {
 button>box {
 
 
-  &>.icon {
+  &>.icon,
+  & box>.icon {
 
     &:first-child:not(:last-child) {
       margin-left: 0;
@@ -86,9 +87,6 @@ button>box {
     }
   }
 
-  &>box>.icon {
-    margin: 0 0.7rem;
-  }
 
 
 

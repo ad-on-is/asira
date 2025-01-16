@@ -4,6 +4,7 @@ import Hyprland from "gi://AstalHyprland";
 import { bind, GLib, Variable, derive } from "astal";
 import { Gdk } from "astal/gtk3";
 import { truncateString } from "core/utils/strings";
+import appIcon from "core/utils/appIcons";
 
 /**@param: {{textOnlyOn: []}} opts */
 
@@ -47,6 +48,7 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
                     return (
                       <button
                         className={`panelButton app ${c.floating && !c.pinned ? "floating" : ""} ${c.pinned ? "pinned" : ""} ${c.focused ? "focused" : ""} ${c.workspace.id < 0 ? "minimized" : ""}`}
+                        visible={!c.swallowed}
                         onClicked={(self) => {
                           if (c.workspace.id > 0) {
                             hypr.dispatch(
@@ -65,9 +67,9 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
                         <box>
                           <icon
                             className="icon"
-                            icon={taskbar.iconName(
+                            icon={appIcon.get([
                               c.initialTitle,
-                              c.initialClass,
+                              c.initialClass,]
                             )}
                           />
                           <label visible={showTitle}

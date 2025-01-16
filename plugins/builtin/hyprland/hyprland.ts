@@ -1,10 +1,10 @@
 import Hyprland from "gi://AstalHyprland";
 import GObject, { property, register } from "astal/gobject";
 import { Gdk } from "astal/gtk3";
-import Apps from "gi://AstalApps";
 
 interface MyClient extends Hyprland.Client {
   focused: boolean;
+  swallowed: boolean;
 }
 
 export function getMonitorName(gdkmonitor: Gdk.Monitor) {
@@ -34,24 +34,6 @@ export class HyprTaskbar extends GObject.Object {
     return this.#clients;
   }
 
-  iconName(title: string, className: string) {
-    if (this.cache[className]) {
-      return this.cache[className];
-    }
-    const apps = new Apps.Apps();
-    const app = apps.list.find(
-      (a) =>
-        a.name.toLowerCase().includes(title.toLowerCase()) ||
-        a.name.toLowerCase().includes(className.toLowerCase()),
-    );
-
-    if (app) {
-      this.cache[className] = app.iconName;
-      return app.iconName;
-    }
-
-    return "missing-symbolic";
-  }
 
   setInactive() {
     this.#clients.map((c) => {
@@ -61,20 +43,20 @@ export class HyprTaskbar extends GObject.Object {
   }
 
   filterAndNotify() {
+
     const swallowed = this.#clients
       .filter((c) => c.swallowing !== null && c.swallowing !== "0x0")
       .map((c) => c.swallowing.replaceAll("0x", ""));
-    const notSwallowed = this.#clients.filter((c) =>
-      !swallowed.includes(c.address)
-    );
-    this.#clients = notSwallowed;
+    this.#clients = this.#clients.map((c) => {
+      c.swallowed = swallowed.includes(c.address);
+      return c;
+    });
     this.notify("clients");
   }
 
   constructor() {
     super();
     const hypr = Hyprland.get_default();
-    const apps = new Apps.Apps();
 
     const focused = hypr.workspaces.map((w) => w.lastClient?.address);
 
@@ -109,7 +91,6 @@ export class HyprTaskbar extends GObject.Object {
     });
 
     hypr.connect("event", (_, event, details) => {
-      // console.log(event);
       const events = [
         "activewindow",
         "activewindowv2",

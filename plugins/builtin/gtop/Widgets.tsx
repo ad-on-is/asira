@@ -1,7 +1,9 @@
 import { Gdk } from "astal/gtk3";
 import Top from "./gtop";
 
-export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+export default function (
+  { gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor; opts?: any },
+) {
   const top = Top.get_default();
   return (
     <button className="panelButton gtop">
@@ -63,7 +65,8 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
                   <label className="icon" label="" />
                   <label
                     className="unit"
-                    label={`${Math.round(top.memory.used.size)}${top.memory.used.unit}`}
+                    label={`${Math.round(top.memory.used.size)
+                      }${top.memory.used.unit}`}
                   />
                   <label
                     className="value"
