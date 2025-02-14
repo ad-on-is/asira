@@ -1,6 +1,6 @@
 import { GLib } from "astal";
 import { togglePopup } from "core/Popup";
-import SystemWidget from "plugins/builtin/systemInfo/Widgets";
+import SystemWidget from "core/plugins/systemInfo/Widgets";
 import options from "init";
 
 export default function OsButton() {

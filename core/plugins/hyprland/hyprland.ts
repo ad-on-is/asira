@@ -54,6 +54,30 @@ export class HyprTaskbar extends GObject.Object {
     this.notify("clients");
   }
 
+  focus(address: string, minimizedWs: string) {
+    const hypr = Hyprland.get_default();
+
+    const c = hypr.get_client(address);
+    if (!c) {
+      this.#clients = hypr.get_clients().map((c) => c as MyClient);
+      return;
+    }
+    if (c.workspace.id > 0) {
+      hypr.dispatch(
+        "focuswindow",
+        `address:0x${c.address}`,
+      );
+    } else {
+      hypr.dispatch(
+        "togglespecialworkspace",
+        minimizedWs,
+      );
+      hypr.dispatch("movetoworkspace", "+0");
+    }
+
+  }
+
+
   constructor() {
     super();
     const hypr = Hyprland.get_default();
@@ -69,29 +93,37 @@ export class HyprTaskbar extends GObject.Object {
 
     this.filterAndNotify();
 
-    hypr.connect("client-added", (_, cl) => {
+    const addClient = (address: string) => {
+      const cl = hypr.get_client(address)!
       const mc = cl as MyClient;
       mc.focused = true;
       this.setInactive();
       this.#clients.push(mc);
       this.filterAndNotify();
-    });
-    hypr.connect("client-moved", (_, cl) => {
+
+    }
+    const moveClient = (address: string) => {
+      const cl = hypr.get_client(address)!
       this.#clients = this.#clients.filter((c) => c.address != cl.address);
       const mc = cl as MyClient;
       mc.focused = true;
       this.setInactive();
       this.#clients.push(mc);
       this.filterAndNotify();
-    });
+    }
+    const closeClient = (address: string) => {
 
-    hypr.connect("client-removed", (_, address) => {
       this.#clients = this.#clients.filter((c) => c.address != address);
       this.filterAndNotify();
-    });
+
+    }
 
     hypr.connect("event", (_, event, details) => {
+      // console.log(event)
       const events = [
+        "openwindow",
+        "closewindow",
+        "movewindowv2",
         "activewindow",
         "activewindowv2",
         "windowtitle",
@@ -105,8 +137,14 @@ export class HyprTaskbar extends GObject.Object {
       if (!events.includes(event)) {
         return;
       }
-
       const address = details.split(",")[0];
+
+      switch (event) {
+        case "openwindow": return addClient(address)
+        case "movewindow": return moveClient(address)
+        case "closewindow": return closeClient(address)
+      }
+
       const old = this.#clients.find((c) => (c?.address || "") === address);
       if (old) {
         const idx = this.#clients.indexOf(old);
@@ -120,6 +158,8 @@ export class HyprTaskbar extends GObject.Object {
     });
   }
 }
+
+
 
 export type TaskbarInfo = {
   [id: number]: Hyprland.Client[];

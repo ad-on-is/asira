@@ -3,8 +3,8 @@ import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
 import { DisplayNotifications } from "core/Notification";
 
-import { MicrophoneOSD, VolumeOSD } from "plugins/builtin/audio/OSD";
-import { BrightnessOSD } from "plugins/builtin/brightness/OSD";
+import { MicrophoneOSD, VolumeOSD } from "core/plugins/audio/OSD";
+import { BrightnessOSD } from "core/plugins/brightness/OSD";
 
 export function init() {
   const mainMonitor = App.get_monitors().find((m) => m.is_primary()) ||

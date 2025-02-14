@@ -98,6 +98,12 @@
     }
   }
 
+   &.easyeffects {
+     .icon {
+       color: vars.$green
+     }
+   }
+
   &.razer {
 
     .icon,

@@ -1,7 +1,7 @@
 import { App } from "astal/gtk3";
 import style from "./scss/core/main.scss";
 
-import { handler, initLauncher } from "init";
+import { handlerLauncher, initLauncher } from "init";
 
 
 App.start({
@@ -11,14 +11,13 @@ App.start({
     initLauncher();
   },
   requestHandler(request: string, res: (response: any) => void) {
-    handler(request, res);
+    handlerLauncher(request, res);
     // if (request === "theme") {
     //   exec("sass --silent ./scss/main.scss ./style.css");
     //   App.apply_css("./style.css");
     //   res("ags theme applied");
     // } else if (request === "appLauncher") {
-    App.toggle_window("launcher");
-    res("ok");
+
     //   res("app launcher toggled");
     // } else if (request === "screenshot") {
     //   App.toggle_window(ScreenshotWindowName);

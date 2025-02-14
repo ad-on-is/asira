@@ -1,19 +1,19 @@
-import DateTime from "plugins/builtin/datetime/Widgets";
+import DateTime from "core/plugins/datetime/Widgets";
 
 import OsButton from "common/OsButton";
 import { App, Astal, Gdk } from "astal/gtk3";
 import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
-import { ConnectionButton } from "plugins/builtin/connection/Widgets";
-import HyprlandWorkspaces from "plugins/builtin/hyprland/Workspaces";
-import Storage from "plugins/builtin/storage/Widgets";
-import { MicrophoneButton, VolumeButton } from "plugins/builtin/audio/Widgets";
+import { ConnectionButton } from "core/plugins/connection/Widgets";
+import HyprlandWorkspaces from "core/plugins/hyprland/Workspaces";
+import Storage from "core/plugins/storage/Widgets";
+import { MicrophoneButton, VolumeButton } from "core/plugins/audio/Widgets";
 
 import SysTray from "core/SysTray";
-import Razer from "plugins/builtin/razer/Widgets";
-import Gtop from "plugins/builtin/gtop/Widgets";
-import TaskBar from "plugins/builtin/hyprland/TaskBar";
-import MediaPlayer from "plugins/builtin/mediaplayer/Widgets";
+import Razer from "core/plugins/razer/Widgets";
+import Gtop from "core/plugins/gtop/Widgets";
+import TaskBar from "core/plugins/hyprland/TaskBar";
+import MediaPlayer from "core/plugins/mediaplayer/Widgets";
 
 import _ from "lodash";
 import coreOptions from "core/init";

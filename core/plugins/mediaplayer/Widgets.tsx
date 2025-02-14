@@ -13,9 +13,9 @@ function lengthStr(length: number) {
 }
 
 export function MediaPlayerWidget({ player }: { player: Mpris.Player }) {
-  const title = bind(player, "title").as((t) => t || "Unknown Track");
+  const title = bind(player, "title").as((t) => t || "");
 
-  const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
+  const artist = bind(player, "artist").as((a) => a || "");
   const coverCss = bind(player, "coverArt").as((a) =>
     `
           background-image: url("${a}");
@@ -37,7 +37,7 @@ export function MediaPlayerWidget({ player }: { player: Mpris.Player }) {
   });
 
   return (
-    <box className="mediaPlayer">
+    <box className="mediaPlayer" visible={artist.as((a) => a !== "")}>
       <box
         className="icon"
         css={coverCss}

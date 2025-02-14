@@ -3,14 +3,15 @@ import { interval } from "astal";
 import { execAsync, exec } from "astal/process";
 import options from "init"
 
-const get = () => execAsync(`bash -c "${exec("pwd")}/plugins/builtin/weather/openweather.sh ${options.openweatherApiKey}"`);
+
+
+const get = () => execAsync(`bash -c "${exec("pwd")}/core/plugins/weather/openweather.sh ${options.openweatherApiKey}"`);
 
 @register({ GTypeName: "Weather" })
 export default class Weather extends GObject.Object {
   static instance: Weather;
   static get_default() {
     if (!this.instance) this.instance = new Weather();
-
     return this.instance;
   }
 

@@ -3,7 +3,7 @@ import { interval } from "astal";
 import { execAsync, exec } from "astal/process";
 
 const get = () =>
-  execAsync(`python3 ${exec("pwd")}/plugins/builtin/razer/razer.py`);
+  execAsync(`python3 ${exec("pwd")}/core/plugins/razer/razer.py`);
 
 @register({ GTypeName: "Razer" })
 export default class Razer extends GObject.Object {
@@ -42,7 +42,7 @@ export default class Razer extends GObject.Object {
   constructor() {
     super();
     this.getInfo();
-    const timer = interval(3_000, () => {
+    const timer = interval(1_000, () => {
       this.getInfo();
     });
   }
