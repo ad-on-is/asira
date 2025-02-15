@@ -1,5 +1,5 @@
 import Hyprland from "gi://AstalHyprland";
-import { bind, GLib, Variable } from "astal";
+import { bind } from "astal";
 import { Gdk } from "astal/gtk3";
 import { getMonitorName } from "./hyprland";
 
@@ -29,8 +29,8 @@ export default function HyprlandWorkspaces({
             label={bind(workspace.monitor, "activeWorkspace").as(
               (activeWorkspace) =>
                 activeWorkspace.id == workspace.id
-                  ? icons[workspace.id] || ""
-                  : icons[workspace.id] || "",
+                  ? icons[workspace.id] || "●"
+                  : icons[workspace.id] || "○",
             )}
             className={bind(workspace.monitor, "activeWorkspace").as(
               (activeWorkspace) =>

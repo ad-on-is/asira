@@ -49,8 +49,40 @@
 
 
 
-
 .panelButton {
+
+  // border: 1px solid transparent;
+  &:not(:hover):not(.focused) {
+
+    background-color: transparent;
+
+
+    //
+    //
+    // &.storage {
+    //   border: 1px solid vars.$yellow;
+    //  }
+    // &.razer {
+    //   border: 1px solid vars.$green;
+    //
+    // }
+    // &.gtop {
+    //   border: 1px solid vars.$blue;
+    //
+    // }
+    // &.audio {
+    //   border: 1px solid vars.$blue;
+    //
+    // }
+    // &.connection {
+    //   border: 1px solid vars.$mauve;
+    //
+    //
+    // }
+
+  }
+
+
   transition: background-color 0.3s ease-out;
 
   &.focused {
@@ -78,6 +110,12 @@
     }
   }
 
+  &.camera {
+    .icon {
+      color: vars.$red;
+    }
+  }
+
   &.connection {
     .icon {
       color: vars.$mauve;
@@ -98,11 +136,11 @@
     }
   }
 
-   &.easyeffects {
-     .icon {
-       color: vars.$green
-     }
-   }
+  &.easyeffects {
+    .icon {
+      color: vars.$green
+    }
+  }
 
   &.razer {
 
@@ -128,6 +166,7 @@
     }
   }
 
+
   &.audio {
 
     .icon,
@@ -141,20 +180,27 @@
       .volume {
         color: vars.$sky;
       }
+
+      &.used {
+        .icon {
+          color: vars.$red
+        }
+      }
     }
   }
 
   &.workspace {
     font-size: 1.2rem;
     padding: 0 3px;
-    min-width: 25px;
+    min-width: 20px;
 
     &.active {
       label {
-        color: vars.$mauve;
+        color: vars.$red;
       }
 
-      background-color: color.adjust(vars.$mauve, $alpha: -0.8);
+      // background-color: color.adjust(vars.$mauve, $alpha: -0.8);
+
     }
 
     &.empty:not(.active) label {
@@ -163,11 +209,7 @@
   }
 }
 
-.bar {
-  .panelButton:not(:hover):not(.focused) {
-    background-color: transparent;
-  }
-}
+
 
 .calendar {
   &.button {

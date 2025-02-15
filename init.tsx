@@ -7,7 +7,7 @@ import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 import { ConnectionButton } from "core/plugins/connection/Widgets";
 import HyprlandWorkspaces from "core/plugins/hyprland/Workspaces";
 import Storage from "core/plugins/storage/Widgets";
-import { MicrophoneButton, VolumeButton } from "core/plugins/audio/Widgets";
+import { CameraButton, MicrophoneButton, VolumeButton } from "core/plugins/audio/Widgets";
 
 import SysTray from "core/SysTray";
 import Razer from "core/plugins/razer/Widgets";
@@ -74,20 +74,6 @@ export default _.merge(
               <HyprlandWorkspaces
                 gdkmonitor={m}
                 opts={{
-                  icons: {
-                    1: "󰈸", // bottom
-                    2: "󰄖",
-                    3: " ",
-                    4: "", // top
-                    5: "󱋊",
-                    6: "",
-                    7: "", // left
-                    8: "󱋊",
-                    9: "",
-                    10: "", // right
-                    11: "",
-                    12: "",
-                  },
                 }}
               />
             ),
@@ -119,6 +105,7 @@ export default _.merge(
                   gdkmonitor={m}
                   opts={{ showDescription: wideScreens.includes(m.model) }}
                 />
+                <CameraButton />
               </box>
             ),
             (m: Gdk.Monitor) => <ConnectionButton />,

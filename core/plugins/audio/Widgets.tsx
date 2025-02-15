@@ -1,10 +1,41 @@
 import Wp from "gi://AstalWp";
-import { bind, Variable } from "astal";
+import { bind, exec, Variable } from "astal";
 import { getMicrophoneIcon, getVolumeIcon, truncateDescription } from "./audio";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";
 import { Gdk } from "astal/gtk3";
+
+export function CameraButton() {
+  const video = Wp.get_default()!.video
+  const inUse = Variable([]).poll(1000, ["bash", "-c", "lsof /dev/video* 2> /dev/null | tail -n +2 | awk '{print $NF}' | uniq"], (o) => {
+
+    if (o === "") {
+      return []
+    }
+    const d = o.split("\n")
+    return d as []
+
+  })
+  const listener = Variable.derive([bind(video, "devices"), inUse])
+  return <button className="panelButton camera" visible={bind(inUse).as((use) => use.length > 0)}><box>
+    {listener().as(([devices, inUse]) => inUse.length === 0 ? <></> : devices.map((d) => {
+      const i = exec(`wpctl inspect ${d.id}`)
+
+      let used = false;
+      inUse.forEach((u) => {
+        if (i.toLowerCase().includes(u)) {
+          used = true;
+        }
+      })
+      if (used) {
+
+        return <><label label=" " className="icon" /><label label={`${d.description}`} /></>
+      }
+      return <></>
+    }))}
+  </box></button>
+}
 
 function AudioButton(
   label: string,
@@ -15,6 +46,9 @@ function AudioButton(
     ? Wp.get_default()!.audio.default_speaker
     : Wp.get_default()!.audio.default_microphone;
 
+  const inUse = Variable(false).poll(1000, ["bash", "-c", "pw-cli info $(pactl get-default-source) | grep 'state' | { grep 'running' || true; }"], (o) => o !== "");
+
+
   const listener = Variable.derive([
     bind(device, "description"),
     bind(device, "volume"),
@@ -23,7 +57,7 @@ function AudioButton(
 
   return (
     <button
-      className={`panelButton audio ${label}`}
+      className={label !== 'microphone' ? `panelButton audio ${label}` : bind(inUse).as((used) => `panelButton audio ${label} ${used === true ? 'used' : ''}`)}
       onClicked={() => {
         togglePopup(
           `${label}:audio`,
@@ -73,5 +107,6 @@ export function MicrophoneButton(
     opts?: { showDescription: boolean };
   },
 ) {
+
   return AudioButton("microphone", gdkmonitor, opts);
 }
