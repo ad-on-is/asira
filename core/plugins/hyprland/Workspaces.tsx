@@ -21,20 +21,20 @@ export default function HyprlandWorkspaces({
           .get_monitors()
           .find((m) => m.name === getMonitorName(gdkmonitor!));
         const monitorWorkspaces = workspaces
-          .filter((w) => w.monitor.id === monitor!.id && w.id > 0)
+          .filter((w) => w.monitor?.id === monitor?.id && w.id > 0)
           .sort((a, b) => a.id - b.id);
 
         return monitorWorkspaces.map((workspace) => (
           <button
             label={bind(workspace.monitor, "activeWorkspace").as(
               (activeWorkspace) =>
-                activeWorkspace.id == workspace.id
+                activeWorkspace?.id == workspace.id
                   ? icons[workspace.id] || "●"
                   : icons[workspace.id] || "○",
             )}
             className={bind(workspace.monitor, "activeWorkspace").as(
               (activeWorkspace) =>
-                `panelButton workspace ws-${workspace.id} ${workspace.lastClient ? "" : "empty"} ${activeWorkspace.id == workspace.id ? "active" : ""}`,
+                `panelButton workspace ws-${workspace.id} ${workspace.lastClient ? "" : "empty"} ${activeWorkspace?.id == workspace.id ? "active" : ""}`,
             )}
             onClicked={() => {
               hypr.dispatch("workspace", `${workspace.id}`);

@@ -6,6 +6,7 @@ const source = "customCommands"
 
 const items = [
   { source: source, prefix: "󰑓", title: "Reboot", subtitle: "Reboot system", onEnter: () => { execAsync(`systemctl reboot --now`) }, detail: () => <box /> },
+  { source: source, prefix: "󰑓", title: "Reboot to BIOS", subtitle: "Reboot to BIOS", onEnter: () => { execAsync(`systemctl reboot --firmware-setup`) }, detail: () => <box /> },
   { source: source, prefix: "", title: "Shut down", subtitle: "Fully shut down", onEnter: () => { execAsync(`systemctl shutdown`) }, detail: () => <box /> },
   { source: source, prefix: "󰗽", title: "Logout", subtitle: "Logout current user", onEnter: () => { execAsync(`uwsm stop`) }, detail: () => <box /> },
   { source: source, prefix: "󰌾", title: "Lock", subtitle: "Lock screen", onEnter: () => { execAsync(`systemctl reboot now`) }, detail: () => <box /> }

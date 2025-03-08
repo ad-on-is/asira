@@ -1,7 +1,7 @@
 import DateTime from "core/plugins/datetime/Widgets";
 
 import OsButton from "common/OsButton";
-import { App, Astal } from "astal/gtk3";
+import { App, Astal, Gtk } from "astal/gtk3";
 import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
 import { ConnectionButton } from "core/plugins/connection/Widgets";
@@ -36,14 +36,20 @@ export function initLauncher() {
 
 export function init() {
   coreInit();
-  const mainMonitor = App.get_monitors().find((m) => m.is_primary()) ||
-    App.get_monitors()[0];
 
-  App.get_monitors().map((m) =>
-    BottomBar(
-      m,
-    )
-  );
+  const bars = new Map<Gdk.Monitor, Gtk.Widget>()
+  for (const m of App.get_monitors()) {
+    bars.set(m, BottomBar(m))
+  }
+
+  App.connect("monitor-added", (_, m) => {
+    bars.set(m, BottomBar(m))
+  })
+  App.connect("monitor-removed", (_, m) => {
+    bars.get(m)?.destroy()
+    bars.delete(m)
+  })
+
 
 }
 

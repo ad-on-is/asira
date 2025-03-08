@@ -3,7 +3,8 @@ import { interval } from "astal";
 import { execAsync } from "astal/process";
 import { bytesToHumanReadable, Unit } from "core/utils/helpers";
 
-const get = () => execAsync(`bash -c "df | jc --df"`);
+const get = () => execAsync(`bash -c "df -l | jc --df"`);
+const getMounted = () => execAsync(`bash -c "df | jc --df"`);
 
 @register({ GTypeName: "Storage" })
 export default class Storage extends GObject.Object {
@@ -23,6 +24,20 @@ export default class Storage extends GObject.Object {
 
   getInfo() {
     get().then((info) => {
+      this.#info = (JSON.parse(info) as []).map(
+        (d) =>
+          ({
+            name: d["mounted_on"],
+            free: bytesToHumanReadable(d["available"]),
+            used: bytesToHumanReadable(d["used"]),
+            total: bytesToHumanReadable(d["available"] + d["used"]),
+            freePercent: 100 - d["use_percent"],
+            usedPercent: d["use_percent"],
+          }) as UnitInfo,
+      );
+      this.notify("info");
+    });
+    getMounted().then((info) => {
       this.#info = (JSON.parse(info) as []).map(
         (d) =>
           ({

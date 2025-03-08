@@ -1,12 +1,14 @@
 import GObject from "gi://GObject";
-import Hyprland from "gi://AstalHyprland";
-import { App, Astal, astalify, ConstructProps, Gtk, Gdk } from "astal/gtk3";
-import { bind, GLib, Variable } from "astal";
-import { OverviewWindowName } from "constants";
+import { astalify, ConstructProps, Gtk, Gdk } from "astal/gtk3";
+import { GLib, Variable } from "astal";
 import { NotificationHistory } from "core/Notification";
-import options from "init";
 import { BigWeather } from "../weather/Widgets";
-import Divider from "common/Divider";
+
+const dateTime = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
+  1000,
+  () => GLib.DateTime.new_now_local(),
+);
+
 
 class CalendarWidget extends astalify(Gtk.Calendar) {
   static {
@@ -21,10 +23,6 @@ class CalendarWidget extends astalify(Gtk.Calendar) {
 }
 
 export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
-  const time = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
-    1000,
-    () => GLib.DateTime.new_now_local(),
-  );
 
   return (
     <box vertical={false} className="overview">
@@ -53,13 +51,13 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
         ></box>
         <label
           className="xxxlarge"
-          label={time().as((t) => {
+          label={dateTime().as((t) => {
             return t.format("%H:%M")!;
           })}
         />
         <label
           className="large"
-          label={time().as((t) => {
+          label={dateTime().as((t) => {
             return t.format("%B %-d, %Y")!;
           })}
         />

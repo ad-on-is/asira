@@ -1,4 +1,4 @@
-import { App, Astal } from "astal/gtk3";
+import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
 import { DisplayNotifications } from "core/Notification";
@@ -9,25 +9,29 @@ import { BrightnessOSD } from "core/plugins/brightness/OSD";
 export function init() {
   const mainMonitor = App.get_monitors().find((m) => m.is_primary()) ||
     App.get_monitors()[0];
+  const bars = new Map<Gdk.Monitor, Gtk.Widget>()
+  const osds = new Map<Gdk.Monitor, Array<Gtk.Widget>>()
 
-  // TopBar(mainMonitor);
-  // Use TopBar|BottomBar|SieBarLeft|SideBarRight
-  App.get_monitors().map((m) =>
-    TopBar(
-      m,
-    )
-  );
+  for (const m of App.get_monitors()) {
+    bars.set(m, TopBar(m))
+    osds.set(m, [VolumeOSD(m), MicrophoneOSD(m), BrightnessOSD(m)])
+  }
 
-  // App.get_monitors().map(DisplayNotifications);
+  App.connect("monitor-added", (_, m) => {
+    bars.set(m, TopBar(m))
+
+
+  })
+  App.connect("monitor-removed", (_, m) => {
+    bars.get(m)?.destroy()
+    bars.delete(m)
+    for (const osd of osds.get(m) || []) {
+      osd?.destroy()
+    }
+    osds.delete(m)
+  })
+
   DisplayNotifications(mainMonitor);
-  App.get_monitors().map(VolumeOSD);
-  // VolumeOSD(); // to display on the currently focused monitor
-  // VolumeOSD(mainMonitor)
-  App.get_monitors().map(MicrophoneOSD);
-  // MicrophoneOSD(); // to display on the currently focused monitor
-  // MicrophoneOSD(mainMonitor);
-  App.get_monitors().map(BrightnessOSD);
-  // BrightnessOSD(mainMonitor)
 }
 
 export function handler(request: string, res: (response: any) => void) {

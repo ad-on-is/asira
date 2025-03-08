@@ -6,19 +6,24 @@ import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";
 import { Gdk } from "astal/gtk3";
 
+const camInUse = Variable([]).poll(1000, ["bash", "-c", "lsof -Fn -- /dev/video* 2> /dev/null | sed 's/^n//' | uniq"], (o) => {
+  if (o === "") {
+    return []
+  }
+  o = o.replaceAll(" (stat: Operation not permitted)", "")
+  const d = o.split("\n")
+  return d as []
+
+})
+
+const micInUse = Variable(false).poll(1000, ["bash", "-c", "pw-cli info $(pactl get-default-source) | grep 'state' | { grep 'running' || true; }"], (o) => o !== "");
+
+
+
 export function CameraButton() {
   const video = Wp.get_default()!.video
-  const inUse = Variable([]).poll(1000, ["bash", "-c", "lsof /dev/video* 2> /dev/null | tail -n +2 | awk '{print $NF}' | uniq"], (o) => {
-
-    if (o === "") {
-      return []
-    }
-    const d = o.split("\n")
-    return d as []
-
-  })
-  const listener = Variable.derive([bind(video, "devices"), inUse])
-  return <button className="panelButton camera" visible={bind(inUse).as((use) => use.length > 0)}><box>
+  const listener = Variable.derive([bind(video, "devices"), camInUse])
+  return <button className="panelButton camera" visible={bind(camInUse).as((use) => use.length > 0)}><box>
     {listener().as(([devices, inUse]) => inUse.length === 0 ? <></> : devices.map((d) => {
       const i = exec(`wpctl inspect ${d.id}`)
 
@@ -46,7 +51,6 @@ function AudioButton(
     ? Wp.get_default()!.audio.default_speaker
     : Wp.get_default()!.audio.default_microphone;
 
-  const inUse = Variable(false).poll(1000, ["bash", "-c", "pw-cli info $(pactl get-default-source) | grep 'state' | { grep 'running' || true; }"], (o) => o !== "");
 
 
   const listener = Variable.derive([
@@ -57,7 +61,7 @@ function AudioButton(
 
   return (
     <button
-      className={label !== 'microphone' ? `panelButton audio ${label}` : bind(inUse).as((used) => `panelButton audio ${label} ${used === true ? 'used' : ''}`)}
+      className={label !== 'microphone' ? `panelButton audio ${label}` : bind(micInUse).as((used) => `panelButton audio ${label} ${used === true ? 'used' : ''}`)}
       onClicked={() => {
         togglePopup(
           `${label}:audio`,

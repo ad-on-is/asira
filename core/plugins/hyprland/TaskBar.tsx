@@ -23,14 +23,14 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
           .get_monitors()
           .find((m) => m.name === getMonitorName(gdkmonitor!));
         const monitorWorkspaces = workspaces
-          .filter((w) => w.monitor.id === monitor!.id)
+          .filter((w) => w.monitor?.id === monitor!.id)
           .sort((a, b) => a.id - b.id);
 
         return monitorWorkspaces.map((workspace) => {
           return (
             <box
               visible={bind(workspace.monitor, "activeWorkspace").as(
-                (activeWorkspace) => activeWorkspace.id === workspace.id,
+                (activeWorkspace) => activeWorkspace?.id === workspace.id,
               )}
             >
               {bind(taskbar, "clients").as((clients) =>

@@ -5,6 +5,14 @@ import { MiniWeather } from "../weather/Widgets";
 import { togglePopup } from "core/Popup";
 import OverView from "../overview/Widgets";
 import { Astal } from "astal/gtk3";
+
+const dateTime = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
+  1000,
+  () =>
+    GLib.DateTime.new_now_local(),
+);
+
+
 export default function DateTime(
   { gdkmonitor, opts }: {
     gdkmonitor?: Gdk.Monitor;
@@ -16,16 +24,6 @@ export default function DateTime(
     };
   },
 ): Gtk.Widget {
-  const time = Variable<string>("").poll(
-    1000,
-    () => GLib.DateTime.new_now_local().format(opts?.timeFormat || "%H-%M:%S")!,
-  );
-
-  const date = Variable<string>("").poll(
-    1000,
-    () =>
-      GLib.DateTime.new_now_local().format(opts?.dateFormat || "%a, %d.%b %Y")!,
-  );
 
   return (
     <button
@@ -41,9 +39,9 @@ export default function DateTime(
     >
       <box>
         <label label="󰸗" className="date icon" />
-        <label className="date" label={date()} />
+        <label className="date" label={bind(dateTime).as((time) => time.format(opts?.dateFormat || "%a, %d.%b %Y")!)} />
         <label label="" className="time icon" />
-        <label className="time" label={time()} />
+        <label className="time" label={bind(dateTime).as((time) => time.format(opts?.timeFormat || "%H-%M:%S")!)} />
 
         {opts?.showWeather || true ? <MiniWeather /> : <box />}
       </box>
