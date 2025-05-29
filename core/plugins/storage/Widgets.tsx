@@ -25,9 +25,10 @@ export default function (
             self.children = itemsToShow.map(
               (s: { name: string; label: string; isNetwork: boolean }) => {
                 let i = storage.info.find((i) => i.name == s.name);
+                let freePercent = -99
 
-                if (!i) {
-                  return <label label={`Invalid: ${s.name}`} />;
+                if (i) {
+                  freePercent = i.freePercent;
                 }
                 const isNetwork = s.isNetwork || false;
                 const icon = isNetwork ? "󰒍" : "";
@@ -35,7 +36,7 @@ export default function (
                   <box className={`section ${isNetwork ? "network" : ""} `}>
                     <label className="icon" label={icon} />
                     <label className="name" label={s.label} />
-                    <label className="value" label={` ${i.freePercent}%`} />
+                    <label className="value" label={` ${freePercent}%`} />
                   </box>
                 );
               },

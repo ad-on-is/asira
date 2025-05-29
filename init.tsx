@@ -1,7 +1,7 @@
 import DateTime from "core/plugins/datetime/Widgets";
 
 import OsButton from "common/OsButton";
-import { App, Astal, Gtk } from "astal/gtk3";
+import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import { BottomBar, SideBarLeft, SideBarRight, TopBar } from "core/Bar";
 
 import { ConnectionButton } from "core/plugins/connection/Widgets";
@@ -18,21 +18,11 @@ import MediaPlayer from "core/plugins/mediaplayer/Widgets";
 import _ from "lodash";
 import coreOptions from "core/init";
 import { handler as coreHandler, init as coreInit } from "core/init";
-import { Gdk } from "astal/gtk3";
-import Launcher from "core/Launcher";
-import { init as appsInit, register as appsRegister } from "core/plugins/launcher/Apps"
-import { init as customCommandsInit, register as customCommandsRegister } from "core/plugins/launcher/CustomCommands"
 import { bind, execAsync, Variable } from "astal";
 
 const wideScreens = ["34GP950G", "LG ULTRAWIDE"];
 
 const easyvar = Variable(false).poll(1000, ["bash", "-c", "ps aux | grep easyeffects | { grep -v grep || true; }"], (o) => o !== "")
-
-export function initLauncher() {
-  Launcher();
-  appsRegister()
-  customCommandsRegister()
-}
 
 export function init() {
   coreInit();
@@ -57,13 +47,6 @@ export function handler(request: string, res: (response: any) => void) {
   coreHandler(request, res);
 }
 
-export function handlerLauncher(request: string, res: (response: any) => void) {
-  App.toggle_window("launcher");
-  appsInit()
-  customCommandsInit()
-  res("ok");
-
-}
 
 export default _.merge(
   coreOptions, // add your custom options

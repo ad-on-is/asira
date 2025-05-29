@@ -25,6 +25,31 @@ export function MiniWeather(
   );
 }
 
+export function Forecast({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
+  const weather = Weather.get_default();
+
+
+
+  return (<box className="weather forecast">
+    {bind(weather, "info").as((info) => info.forecast.list.map((f) => (
+      <box vertical={true} widthRequest={70}>
+        <icon
+          className="icon"
+          icon={bind(weather, "info").as(
+            (info) =>
+              `/home/adonis/.local/share/ow-icons/images/${f.weather[0].icon
+              }_t.png`,
+          )}
+        />
+
+        <label label={`${f.date.format("%a")}`} />
+        <label label={`${Math.round(f.main.temp)}°C`} />
+
+      </box>
+    )))}
+  </box>)
+}
+
 export function BigWeather(
   { gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor; opts?: any },
 ) {

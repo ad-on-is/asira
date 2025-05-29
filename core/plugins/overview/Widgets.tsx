@@ -2,7 +2,8 @@ import GObject from "gi://GObject";
 import { astalify, ConstructProps, Gtk, Gdk } from "astal/gtk3";
 import { GLib, Variable } from "astal";
 import { NotificationHistory } from "core/Notification";
-import { BigWeather } from "../weather/Widgets";
+import { BigWeather, Forecast } from "../weather/Widgets";
+import Divider from "common/Divider";
 
 const dateTime = Variable<GLib.DateTime>(GLib.DateTime.new_now_local()).poll(
   1000,
@@ -20,6 +21,28 @@ class CalendarWidget extends astalify(Gtk.Calendar) {
   ) {
     super(props as any);
   }
+}
+
+function BigDateTime() {
+  return (<><box
+    css={`
+            min-height: 3rem;
+          `}
+  ></box>
+    <label
+      className="xxxlarge"
+      label={dateTime().as((t) => {
+        return t.format("%H:%M")!;
+      })}
+    />
+    <label
+      className="large"
+      label={dateTime().as((t) => {
+        return t.format("%a, %-d. %B %Y")!;
+      })}
+    /></>)
+
+
 }
 
 export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?: any }) {
@@ -43,24 +66,21 @@ export default function ({ gdkmonitor, opts }: { gdkmonitor?: Gdk.Monitor, opts?
           padding: 0.5rem;
         `}
       >
+        <BigDateTime />
+        <box
+          css={`
+            min-height: 2rem;
+          `}
+        ></box>
+
         <BigWeather />
         <box
           css={`
-            min-height: 3rem;
+            min-height: 1rem;
           `}
         ></box>
-        <label
-          className="xxxlarge"
-          label={dateTime().as((t) => {
-            return t.format("%H:%M")!;
-          })}
-        />
-        <label
-          className="large"
-          label={dateTime().as((t) => {
-            return t.format("%B %-d, %Y")!;
-          })}
-        />
+
+        <Forecast />
 
         <box
           css={`

@@ -1,3 +1,4 @@
+import { Variable } from "astal";
 import Wp from "gi://AstalWp";
 
 export function getVolumeIcon(speaker?: Wp.Endpoint) {
@@ -72,3 +73,17 @@ export function getMicrophoneIcon(mic?: Wp.Endpoint): string {
 export function toggleMuteEndpoint(endpoint?: Wp.Endpoint) {
   endpoint?.set_mute(!endpoint?.mute);
 }
+
+
+export const camInUse = Variable([]).poll(1000, ["bash", "-c", "lsof -Fn -- /dev/video* 2> /dev/null | sed 's/^n//' | uniq"], (o) => {
+  if (o === "") {
+    return []
+  }
+  o = o.replaceAll(" (stat: Operation not permitted)", "")
+  const d = o.split("\n")
+  return d as []
+
+})
+
+export const micInUse = Variable(false).poll(1000, ["bash", "-c", "pw-cli info $(pactl get-default-source) | grep 'state' | { grep 'running' || true; }"], (o) => o !== "");
+

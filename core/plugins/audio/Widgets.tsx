@@ -1,22 +1,11 @@
 import Wp from "gi://AstalWp";
 import { bind, exec, Variable } from "astal";
-import { getMicrophoneIcon, getVolumeIcon, truncateDescription } from "./audio";
+import { getMicrophoneIcon, getVolumeIcon, truncateDescription, camInUse, micInUse } from "./audio";
 import { togglePopup } from "core/Popup";
 import { MicrophoneControls, SpeakerControls } from "./Controls";
 import { Astal } from "astal/gtk3";
 import { Gdk } from "astal/gtk3";
 
-const camInUse = Variable([]).poll(1000, ["bash", "-c", "lsof -Fn -- /dev/video* 2> /dev/null | sed 's/^n//' | uniq"], (o) => {
-  if (o === "") {
-    return []
-  }
-  o = o.replaceAll(" (stat: Operation not permitted)", "")
-  const d = o.split("\n")
-  return d as []
-
-})
-
-const micInUse = Variable(false).poll(1000, ["bash", "-c", "pw-cli info $(pactl get-default-source) | grep 'state' | { grep 'running' || true; }"], (o) => o !== "");
 
 
 

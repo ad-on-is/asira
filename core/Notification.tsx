@@ -5,7 +5,7 @@ import Mpris from "gi://AstalMpris";
 
 import { insertNewlines } from "core/utils/strings";
 import options from "init";
-import appIcons from "core/utils/appIcons"
+import appIcons from "core/utils/appIcons";
 import { type Subscribable } from "astal/binding";
 import { execAsync, exec } from "astal";
 
@@ -38,25 +38,24 @@ class NotifiationMap implements Subscribable {
      */
     // notifd.ignoreTimeout = true;
 
-
     mpris.players.map((player) => {
-
-
-      const listener = Variable.derive([bind(player, "title"),
-      bind(player, "coverArt"),
-      bind(player, "artist"),
-      bind(player, "album"),
-      bind(player, "playback_status")
-      ])
-
+      const listener = Variable.derive([
+        bind(player, "title"),
+        bind(player, "coverArt"),
+        bind(player, "artist"),
+        bind(player, "album"),
+        bind(player, "playback_status"),
+      ]);
 
       listener.subscribe(async ([t, c, ar, al]) => {
         timeout(300, async () => {
-          const id = await execAsync(`notify-send "${t}" "${ar}\n${al}" --icon "${c}" --app-name "${player.identity}" --print-id ${this.current !== 0 ? `--replace-id=${this.current}` : ""}`)
-          this.current = parseInt(id)
-        })
-      })
-    })
+          const id = await execAsync(
+            `notify-send "${t}" "${ar}\n${al}" --icon "${c}" --app-name "${player.identity}" --print-id ${this.current !== 0 ? `--replace-id=${this.current}` : ""}`,
+          );
+          this.current = parseInt(id);
+        });
+      });
+    });
 
     notifd.connect("notified", (_, id) => {
       let hideTimeout: GLib.Source | null = null;
@@ -73,7 +72,7 @@ class NotifiationMap implements Subscribable {
     notifd.connect("resolved", (_, id) => {
       this.delete(id);
       if (this.current === id) {
-        this.current = 0
+        this.current = 0;
       }
     });
   }
@@ -152,7 +151,7 @@ export function Notification(props: Props) {
 
   let setup,
     onHover,
-    onHoverLost = () => { };
+    onHoverLost = () => {};
 
   if (autoDismiss) {
     let hideTimeout: GLib.Source | null = null;
@@ -180,26 +179,34 @@ export function Notification(props: Props) {
     };
   }
 
-  const appIcon = appIcons.get([n.appName])
-
-
-
+  const appIcon = appIcons.get([n.appName]);
+  const dismissClass = Variable("");
   return (
     <eventbox
       // className={`notification window  ${urgency(n)}`}
       setup={setup}
       onHoverLost={onHoverLost}
       onHover={onHover}
-      onClick={() => n.dismiss()}
+      onClick={() => {
+        dismissClass.set("dismissed");
+        let dt: GLib.Source | null = setTimeout(() => {
+          n.dismiss();
+          dt?.destroy();
+          dt = null;
+        }, 200);
+      }}
     >
-      <box vertical={true} className={`notification window  ${urgency(n)}`}>
+      <box
+        vertical={true}
+        className={bind(dismissClass).as(
+          (d: string) => `notification window ${urgency(n)}  ${d}`,
+        )}
+      >
         <box vertical={false} className="header">
-
-          {appIcon === "" ? (<label className="icon appicon" label="" />
-          ) : (<icon
-            className="icon appicon"
-            icon={appIcon}
-          />
+          {appIcon === "" ? (
+            <label className="icon appicon" label="" />
+          ) : (
+            <icon className="icon appicon" icon={appIcon} />
           )}
 
           <label
@@ -217,7 +224,16 @@ export function Notification(props: Props) {
             halign={END}
             label={time(n.time)}
           />
-          <button className="icon close" onClicked={() => n.dismiss()} label="" />
+          <button
+            className="icon close"
+            onClicked={() => {
+              dismissClass.set("dismissed");
+              setTimeout(() => {
+                n.dismiss();
+              }, 500);
+            }}
+            label=""
+          />
         </box>
         <box
           vertical={true}
@@ -257,7 +273,6 @@ export function Notification(props: Props) {
                     margin: 4px 8px 8px 8px;
                   `}
                   onClicked={() => {
-                    console.log(id);
                     n.invoke(id);
                   }}
                   label={label}
@@ -270,9 +285,9 @@ export function Notification(props: Props) {
   );
 }
 
+// notifications popup list
 export function DisplayNotifications(gdkmonitor: Gdk.Monitor) {
   const notifs = new NotifiationMap();
-  const notifications = Notifd.get_default();
 
   return (
     <window
@@ -324,12 +339,28 @@ export function NotificationHistory() {
                 </box>
               );
             } else {
-              return notificationsList.map((notification) => {
+              const groups: any = {};
+              notificationsList.forEach((n) => {
+                if (!groups[n.appName]) {
+                  groups[n.appName] = [];
+                }
+                console.log(n.time);
+                groups[n.appName].push(n);
+                groups[n.appName].sort((a: any, b: any) => a.time > b.time);
+              });
+
+              return Object.keys(groups).map((appName) => {
                 return (
-                  <Notification
-                    autoDismiss={false}
-                    notification={notification}
-                  />
+                  <stack
+                    name={appName}
+                    className={`stack ${groups[appName].length > 1 ? "not-empty" : ""}`}
+                  >
+                    {groups[appName].reverse().map((n: any) => {
+                      return (
+                        <Notification notification={n} autoDismiss={false} />
+                      );
+                    })}
+                  </stack>
                 );
               });
             }

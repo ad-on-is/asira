@@ -1,7 +1,5 @@
 @use "variables" as vars;
 
-
-
 menu {
   background-color: vars.$bg;
   color: vars.$primary;
@@ -67,17 +65,13 @@ menubutton {
   margin: 1rem 0;
 }
 
-box>.icon {
+box > .icon {
   margin: 0 0.7rem;
-
 }
 
-button>box {
-
-
-  &>.icon,
-  & box>.icon {
-
+button > box {
+  & > .icon,
+  & box > .icon {
     &:first-child:not(:last-child) {
       margin-left: 0;
     }
@@ -86,14 +80,23 @@ button>box {
       margin-right: 0;
     }
   }
-
-
-
-
 }
 
-
-
+.stack {
+  .notification {
+    margin-right: 10px;
+  }
+  &.not-empty {
+    .notification {
+      /* margin-right: 10px; */
+      box-shadow:
+        9px 9px 0px vars.$bgHover,
+        8px 8px 0px vars.$bg,
+        4px 4px 0px vars.$bgHover,
+        3px 3px 0px vars.$bg;
+    }
+  }
+}
 
 label,
 entry {
@@ -198,21 +201,22 @@ scrollable {
   }
 }
 
-
 .notification {
   // eventboxes can not take margins so we style its inner box instead
   min-width: 300px;
   margin: 0.3rem 0;
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+  &.dismissed {
+    opacity: 0;
+  }
 
   .header {
     margin: 0.4rem 0;
 
     button {
       background-color: transparent;
-
     }
-
-
   }
 
   .image {
@@ -245,8 +249,6 @@ scrollable {
 }
 
 .osdIconWithTextAndSlider {
-
-
   .title {
     margin-bottom: 0.5rem;
   }
@@ -271,8 +273,6 @@ scrollable {
 .popUp .inner {
   margin: 1rem;
   min-width: vars.$popupWidth;
-
-
 }
 
 .storagePopup {
@@ -287,7 +287,6 @@ scrollable {
 
 .mediaPlayer {
   .seekContainer {
-
     label,
     slider {
       margin: 0 1rem;
